@@ -83,8 +83,8 @@ class ProductController extends Controller
             ];
         });
 
-        // dd($variants[0]['qty']);
+        $products = Product::take(4)->get();
 
-        return view('customer.products.show', compact('product', 'sizes', 'colors','variants'));
+        return view('customer.products.show', compact('product', 'sizes', 'colors','variants','products'));
     }
 }

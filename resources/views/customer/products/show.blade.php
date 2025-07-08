@@ -6,10 +6,12 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-auto object-cover">
+                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+
 
                     <div>
-                        <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter font-semibold">{{ $product->name }}</h1>
+                        <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter fontse">{{ $product->name }}
+                        </h1>
 
                         <p class="text-sm text-gray-600 mb-4">
                             {{ $product->description }}
@@ -122,6 +124,18 @@
                         <p class="text-xs text-gray-500">Delivery in 3-5 working days</p>
                     </div>
                 </div>
+
+
+                <div>
+                    <x-customer.page-header title="More Products" description="Discover our complete collection" />
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
+                        @foreach ($products as $product)
+                        <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
+                            :description="Str::limit($product->description, 60)" :price="$product->price" />
+                        @endforeach
+                    </div>
+                </div>
+
             </div>
         </div>
 

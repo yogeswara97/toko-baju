@@ -15,7 +15,8 @@
     --font-roboto-condensed: "Roboto Condensed", sans-serif;
     /* --font-anton:     */
             /* 'Anton', ui-sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
-    --color-primary: #2D4F2B;
+    --color-primary: #437057;
+    --color-primary-light: #DCEFD8;
     --color-secondary: #FAF7F0;
 }
 

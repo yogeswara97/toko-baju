@@ -41,7 +41,7 @@
                     class="relative hover:text-gray-700 transition {{ $iconClass }}">
                     <i class="fas fa-shopping-bag"></i>
                     <div
-                        class="absolute -top-2 -right-2 w-4 h-4 bg-blue-400 text-white text-[10px] rounded-full flex items-center justify-center">
+                        class="absolute -top-2 -right-2 w-4 h-4 bg-primary text-white text-[10px] rounded-full flex items-center justify-center">
                         {{ session('cart_count', 0) }}
                     </div>
                 </a>

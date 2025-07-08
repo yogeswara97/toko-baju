@@ -33,7 +33,7 @@
     <div class="border-t border-gray-200 pt-3">
         <div class="flex justify-between">
             <span class="text-lg font-semibold">Total</span>
-            <span class="text-lg font-semibold text-blue-600" id="total-amount"
+            <span class="text-lg font-semibold text-primary" id="total-amount"
                 data-subtotal="{{ $subtotal }}" data-discount="{{ $discount }}">
                 Rp{{ number_format($total, 0, ',', '.') }}
             </span>

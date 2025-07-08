@@ -1,9 +1,9 @@
 @props(['addresses'])
 
 <div id="default-modal" tabindex="-1" aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[900] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black/50 h-screen">
+    class=" hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[900] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black/50 h-screen">
     <div class="relative p-4 w-[50%] max-h-full">
-        <div class="relative bg-white rounded-lg shadow">
+        <div class="relative bg-secondary rounded-lg shadow">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t">
                 <h3 class="text-xl font-semibold text-gray-900">
@@ -46,7 +46,7 @@
                                     </span>
                                 </div>
                                 <button type="submit"
-                                    class="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                                    class="text-sm bg-primary text-white px-3 py-1 rounded hover:bg-primary">
                                     Pilih
                                 </button>
                             </div>
@@ -58,7 +58,7 @@
             <!-- Modal Footer -->
             <div class="flex justify-end items-center p-4 border-t border-gray-200 rounded-b">
                 <button data-modal-hide="default-modal" type="button"
-                    class="text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-blue-600 font-medium rounded-lg text-sm px-4 py-2">
+                    class="text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-primary font-medium rounded-lg text-sm px-4 py-2">
                     Tutup
                 </button>
             </div>

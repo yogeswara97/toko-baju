@@ -13,7 +13,7 @@
             <div>
                 <label for="courier" class="block text-sm font-medium text-gray-700 mb-1">Kurir</label>
                 <select id="courier" name="courier"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-sm">
                     @foreach ([
                         'jne','tiki','pos','sicepat','jnt','anteraja','wahana','lion','ninja',
                         'indah','rex','sap','idl','jet','first'
@@ -28,14 +28,14 @@
             <div>
                 <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Berat (gram)</label>
                 <input type="number" id="weight" name="weight" min="1" value="{{ $weight }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-sm" />
             </div>
         </div>
 
         <div id="ongkir-result" class="mt-4 text-sm text-gray-800"></div>
 
         <button type="submit"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition text-sm">
+            class="w-full bg-primary hover:bg-primary text-white font-medium py-2 px-4 rounded-lg transition text-sm">
             Cek Ongkir
         </button>
     </div>
@@ -53,7 +53,7 @@
 
             resultDiv.innerHTML = `
                 <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <svg class="h-5 w-5 animate-spin text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="h-5 w-5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                             stroke-width="4"></circle>
@@ -83,12 +83,12 @@
                             <label for="${id}" class="shipping-option block border border-gray-300 rounded-lg p-4 mb-2 cursor-pointer transition">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <div class="font-medium text-blue-800">${service.service} - ${service.description}</div>
+                                        <div class="font-medium text-primary">${service.service} - ${service.description}</div>
                                         <div class="text-sm text-gray-600">Kurir: ${service.name}</div>
                                         <div class="text-sm">Biaya: <span class="font-semibold text-green-600">Rp${Number(service.cost).toLocaleString('id-ID')}</span></div>
                                         <div class="text-sm">Estimasi: ${service.etd || 'Tidak tersedia'} hari</div>
                                     </div>
-                                    <input type="radio" name="selected_shipping" id="${id}" class="shipping-radio" value="${service.cost}" />
+                                    <input type="radio" name="selected_shipping" id="${id}" class="shipping-radio accent-primary " value="${service.cost}" />
                                 </div>
                             </label>`;
                     });
@@ -100,13 +100,13 @@
                     radios.forEach(radio => {
                         radio.addEventListener('change', (e) => {
                             document.querySelectorAll('.shipping-option').forEach(el => {
-                                el.classList.remove('border-blue-900', 'bg-blue-100');
-                                el.classList.add('border-gray-300', 'bg-white');
+                                el.classList.remove('border-primary', 'bg-primary-light');
+                                el.classList.add('border-gray-300');
                             });
 
                             const selectedLabel = e.target.closest('.shipping-option');
-                            selectedLabel.classList.add('border-blue-900', 'bg-blue-100');
-                            selectedLabel.classList.remove('border-gray-300', 'bg-white');
+                            selectedLabel.classList.add('border-primary', 'bg-primary-light');
+                            selectedLabel.classList.remove('border-gray-300');
 
                             const shippingCost = parseInt(e.target.value);
                             document.getElementById('shipping_cost').value = shippingCost;

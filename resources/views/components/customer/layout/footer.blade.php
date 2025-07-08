@@ -1,5 +1,5 @@
 <!-- Footer Component -->
-<footer class="bg-gray-800 text-white pt-12 pb-6">
+<footer class="bg-gray-900 text-white pt-12 pb-6">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
             <h3 class="text-xl font-medium mb-3">StyleHub</h3>

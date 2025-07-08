@@ -20,15 +20,16 @@
                     class="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-prbg-primary to-transparent z-10">
                 </div>
 
-                <!-- Slogan & Button -->
+                <!-- Button -->
                 <div
-                    class="absolute z-20 text-white drop-shadow-lg flex flex-col items-center gap-4 top-[80%] w-full text-center ">
+                    class="absolute z-20 text-white drop-shadow-lg flex flex-col items-center gap-4 top-[80%] w-full text-center">
 
-                    <a href="#"
-                        class="px-6 py-3 bg-white text-black text-sm font-medium rounded-full shadow-lg hover:bg-black hover:text-white transition-all duration-300">
+                    <a href="{{ route('customer.products.index') }}"
+                        class="w-3/4 sm:w-60 md:w-70 px-6 py-3 bg-white text-black text-sm font-semibold tracking-wide shadow-lg rounded-md hover:bg-black hover:text-white transition-all duration-300">
                         Shop Now
                     </a>
                 </div>
+
 
                 <!-- Gambar -->
                 <img src="{{ asset('assets/static-images/hero_no_bg.png') }}" alt="Man Sitting"
@@ -38,51 +39,63 @@
     </div>
 
 
-
     {{-- Shirts Section --}}
-    <section class="container-custom mx-auto  lg:px-10 py-20 flex flex-col ">
-        <div class="flex gap-20">
-            <!-- Gambar -->
-            <div class="flex justify-between w-1/2">
-                <div class="max-w-[500px] w-full">
-                    <img src="{{ asset('assets/static-images/category/man.png') }}" alt="Shirts"
-                        class="w-full h-auto object-cover shadow-lg" />
+    @php
+        $categories = [
+            [
+                'title' => 'SHIRTS, T-SHIRTS & POLO SHIRTS',
+                'desc' => 'Explore our versatile collection of shirts, t-shirts, and polo shirts. Whether you’re going for a
+            classic, casual, or sporty look, we’ve got you covered with the latest styles and best fits.',
+                'image' => asset('assets/static-images/category/man.png'),
+                'alt' => 'Shirts',
+                'reverse' => false,
+                'textAlign' => 'lg:text-right'
+            ],
+            [
+                'title' => 'BLOUSES, TOPS & CHIC TEE STYLES',
+                'desc' => 'Discover our latest picks of blouses, casual tops, and chic tees for every mood. From elegant staples to
+            laid-back weekend vibes — express your style your way.',
+                'image' => asset('assets/static-images/category/women.png'),
+                'alt' => 'Blouses',
+                'reverse' => true,
+                'textAlign' => 'lg:text-left'
+            ],
+            [
+                'title' => 'BAGS, HATS & ACCESSORIES',
+                'desc' => 'Complete your look with stylish bags, cool hats, and must-have accessories. Perfect for adding that final
+            touch to your outfit.',
+                'image' => asset('assets/static-images/category/accessories.jpg'),
+                'alt' => 'Accessories',
+                'reverse' => false,
+                'textAlign' => 'lg:text-right'
+            ],
+        ];
+    @endphp
+
+    <section class="container-custom mx-auto lg:px-10 py-20 flex flex-col space-y-20">
+        @foreach ($categories as $cat)
+            <div class="flex flex-col {{ $cat['reverse'] ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-10">
+                <!-- Gambar -->
+                <div class="w-full lg:w-1/2">
+                    <div class="max-w-[500px] w-full mx-auto lg:mx-0">
+                        <img src="{{ $cat['image'] }}" alt="{{ $cat['alt'] }}"
+                            class="w-full h-auto object-cover shadow-lg" />
+                    </div>
+                </div>
+
+                <!-- Teks -->
+                <div class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $cat['textAlign'] }}">
+                    <h2 class="text-3xl sm:text-4xl md:text-8xl font-black tracking-tight leading-tight">
+                        {!! nl2br(e($cat['title'])) !!}
+                    </h2>
+                    <p class="mt-6 text-gray-700 text-lg sm:text-xl">
+                        {{ $cat['desc'] }}
+                    </p>
                 </div>
             </div>
-
-            <!-- Teks -->
-            <div class="text-center md:text-right w-1/2 mt-10">
-                <h2 class="text-3xl sm:text-4xl md:text-9xl font-black tracking-tight">
-                    SHIRTS, T-SHIRTS & POLO SHIRTS
-                </h2>
-                <p class="mt-6 text-gray-100 md:text-gray-700 text-xl">
-                    Explore our versatile collection of shirts, t-shirts, and polo shirts.
-                    Whether you’re going for a classic, casual, or sporty look,
-                    we’ve got you covered with the latest styles and best fits.
-                </p>
-            </div>
-        </div>
-        <div class="flex gap-20">
-            <!-- Teks -->
-            <div class="text-center md:text-left w-1/2 mt-10">
-                <h2 class="text-3xl sm:text-4xl md:text-9xl font-black tracking-tight">
-                    BLOUSES, TOPS<br />& CHIC TEE STYLES
-                </h2>
-                <p class="mt-6 text-gray-100 md:text-gray-700 text-xl">
-                    Discover our latest picks of blouses, casual tops, and chic tees for every mood.
-                    From elegant staples to laid-back weekend vibes — express your style your way.
-                </p>
-            </div>
-            <!-- Gambar -->
-            <div class="flex justify-between w-1/2">
-                <div class="max-w-[500px] w-full">
-                    <img src="{{ asset('assets/static-images/category/women.png') }}" alt="Shirts"
-                        class="w-full h-auto object-cover  shadow-lg" />
-                </div>
-            </div>
-
-
-        </div>
+        @endforeach
     </section>
+
+
 
 </x-customer.layout.layout>

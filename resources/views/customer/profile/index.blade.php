@@ -13,8 +13,7 @@
 
                         @if ($photo)
                         <img class="w-24 h-24 rounded-full ring-2 ring-gray-200 object-cover bg-gray-200"
-                            src="{{ $photo }}" alt="Profile"
-                            onerror="this.onerror=null; this.src='https://via.placeholder.com/150/cccccc/ffffff?text=No+Image'; this.classList.add('bg-gray-200');">
+                            src="{{ $photo }}" alt="Profile">
                         @else
                         <div
                             class="w-24 h-24 rounded-full ring-2 ring-gray-200 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
@@ -64,7 +63,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-900">Addresses</h2>
                         <a href="{{ route('customer.address.create') }}"
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm transition">
+                            class="bg-primary text-white px-4 py-2 rounded hover:bg-primary text-sm transition">
                             + Tambah Alamat
                         </a>
                     </div>
@@ -74,7 +73,7 @@
                     @else
                     <ul class="space-y-6">
                         @foreach ($addresses as $address)
-                        <li class="border-t pt-4 flex justify-between items-start">
+                        <li class="border-t border-gray-200 pt-4 flex justify-between items-start">
                             <div class="text-sm text-gray-800 space-y-1">
                                 <p class="font-semibold text-base">{{ $address->name }}</p>
                                 <p>{{ $address->address_line1 }}</p>
@@ -93,7 +92,7 @@
 
                             <div class="flex flex-col items-end gap-2 text-sm">
                                 <a href="{{ route('customer.address.edit', $address->id) }}"
-                                    class="text-blue-600 hover:underline">Edit</a>
+                                    class="text-primary hover:underline">Edit</a>
                                 <form action="{{ route('customer.address.destroy', $address->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin mau hapus alamat ini?')">
                                     @csrf
@@ -111,23 +110,14 @@
                 <div>
                     <h2 class="text-xl font-semibold text-gray-900 mb-4">Orders</h2>
                     <ul class="space-y-6">
-                        <li class="border-t pt-4 flex justify-between items-start">
+                        <li class="border-t border-gray-200 pt-4 flex justify-between items-start">
                             <div>
                                 <p class="text-gray-900 font-medium">Order #1001 - <span
                                         class="text-green-600 font-bold">$49.99</span></p>
                                 <p class="text-gray-500 text-sm">Placed: 2025-05-20 | Status: Delivered</p>
                             </div>
                             <a href="{{ route('customer.profile.order', ['slug' => '1001']) }}"
-                                class="text-blue-600 hover:underline text-sm">View Details</a>
-                        </li>
-                        <li class="border-t pt-4 flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-900 font-medium">Order #1002 - <span
-                                        class="text-green-600 font-bold">$29.99</span></p>
-                                <p class="text-gray-500 text-sm">Placed: 2025-06-01 | Status: Shipped</p>
-                            </div>
-                            <a href="{{ route('customer.profile.order', ['slug' => '1002']) }}"
-                                class="text-blue-600 hover:underline text-sm">View Details</a>
+                                class="text-primary hover:underline text-sm">View Details</a>
                         </li>
                     </ul>
                     <button class="mt-6 text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition">

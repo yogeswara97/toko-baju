@@ -28,7 +28,7 @@
                                     Color: {{ $item->variant->color->name ?? '-' }},
                                     Size: {{ $item->variant->size->name ?? '-' }}
                                 </p>
-                                <p class="text-blue-600 font-semibold mt-1">
+                                <p class="text-primary font-semibold mt-1">
                                     Rp.{{ number_format($item->variant->price ?? $item->product->price, 2) }}
                                 </p>
                             </div>
@@ -86,13 +86,13 @@
                             {{-- ⬇️ Tambahkan di sini --}}
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Discount {{ $discount > 0 ? '('.$promo['code'].')' : '' }}</span>
-                                <span class="font-semibold text-green-600">- Rp.{{ $discount > 0 ? number_format($discount, 2) : '0'}}</span>
+                                <span class="font-semibold text-red-600">- Rp.{{ $discount > 0 ? number_format($discount, 2) : '0'}}</span>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3">
                                 <div class="flex justify-between">
                                     <span class="text-lg font-semibold">Total</span>
-                                    <span class="text-lg font-semibold text-blue-600">Rp.{{ number_format($total, 2)
+                                    <span class="text-lg font-semibold text-primary">Rp.{{ number_format($total, 2)
                                         }}</span>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Promo Code</label>
                             <div class="flex">
                                 <input type="text" name="promo_code" placeholder="Enter code"
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary">
                                 <button type="submit"
                                     class="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg hover:bg-gray-300">Apply</button>
                             </div>
@@ -153,7 +153,7 @@
                             @endif
 
                             <button type="submit"
-                                class="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition duration-300 mb-4">
+                                class="block w-full bg-primary text-white py-3 rounded-lg font-semibold text-center hover:bg-primary transition duration-300 mb-4">
                                 Proceed to Checkout
                             </button>
                         </form>
