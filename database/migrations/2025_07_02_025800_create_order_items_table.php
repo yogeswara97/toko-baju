@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('variant_size')->nullable();
             $table->string('variant_color')->nullable();
-            $table->decimal('price', 10, 2); // harga saat order dibuat
+            $table->decimal('price', 10, 2);
             $table->integer('quantity');
             $table->decimal('subtotal', 12, 2);
             $table->timestamps();

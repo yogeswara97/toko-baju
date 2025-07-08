@@ -1,11 +1,12 @@
-{{-- resources/views/components/nav-link.blade.php --}}
-@props(['href', 'active' => false])
+@props(['href'])
+
 @php
-    $classes = $active
-        ? 'font-semibold underline underline-offset-4'
-        : 'hover:underline hover:underline-offset-4';
+    $isHome = request()->routeIs('home');
+    $baseClass = $isHome ? 'text-secondary' : 'text-black';
 @endphp
 
-<a href="{{ $href }}" {{ $attributes->merge(['class' => "$classes transition text-sm"]) }}>
+<a href="{{ $href }}" {{ $attributes->merge([
+    'class' => "$baseClass hover:underline hover:underline-offset-4 transition text-sm whitespace-nowrap"
+]) }}>
     {{ $slot }}
 </a>

@@ -6,7 +6,7 @@
             </h2>
 
             @if ($mode !== 'show')
-            <form action="{{ $mode === 'edit' ? route('address.update', $address->id) : route('address.store') }}"
+            <form action="{{ $mode === 'edit' ? route('address.update', $address->id) : route('customer.address.store') }}"
                 method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @csrf
                 @if($mode === 'edit') @method('PUT') @endif

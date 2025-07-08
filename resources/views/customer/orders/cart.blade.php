@@ -7,7 +7,7 @@
 
 
         <!-- Checkout Progress -->
-        <x-customer.checkout-progress :current="1" />
+        <x-customer.orders.checkout-progress :current="1" />
 
         <!-- Cart Content -->
         <div class="">

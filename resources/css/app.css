@@ -1,5 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
+
 /* @import 'flowbite'; */
+
+/* @layer utilities {
+    body,
+    html {
+        --font-sans:
+            'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    }
+} */
+
+@theme {
+    --font-roboto-condensed: "Roboto Condensed", sans-serif;
+    /* --font-anton:     */
+            /* 'Anton', ui-sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --color-primary: #2D4F2B;
+    --color-secondary: #FAF7F0;
+}
+
+
+.font-anton {
+    @apply tracking-widest;
+  }
 
 .container-custom{
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-15

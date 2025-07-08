@@ -7,9 +7,22 @@
             <div class="p-0 flex flex-col">
                 <div>
                     <div class="flex justify-center mb-4">
-                        <img class="w-24 h-24 rounded-full ring-2 ring-gray-200" src="https://via.placeholder.com/150"
-                            alt="Profile">
+                        @php
+                        $photo = auth()->user()->photo ?? null;
+                        @endphp
+
+                        @if ($photo)
+                        <img class="w-24 h-24 rounded-full ring-2 ring-gray-200 object-cover bg-gray-200"
+                            src="{{ $photo }}" alt="Profile"
+                            onerror="this.onerror=null; this.src='https://via.placeholder.com/150/cccccc/ffffff?text=No+Image'; this.classList.add('bg-gray-200');">
+                        @else
+                        <div
+                            class="w-24 h-24 rounded-full ring-2 ring-gray-200 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                            No Image
+                        </div>
+                        @endif
                     </div>
+
                     <h2 class="text-xl font-bold text-center text-gray-900">{{ auth()->user()->name }}</h2>
                     <p class="text-sm text-gray-500 text-center">{{ '@' . Str::slug(auth()->user()->name) }}</p>
 
@@ -42,7 +55,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
 
             <!-- Address & Orders -->
@@ -51,7 +63,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-900">Addresses</h2>
-                        <a href="{{ route('address.create') }}"
+                        <a href="{{ route('customer.address.create') }}"
                             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm transition">
                             + Tambah Alamat
                         </a>
@@ -80,9 +92,9 @@
                             </div>
 
                             <div class="flex flex-col items-end gap-2 text-sm">
-                                <a href="{{ route('address.edit', $address->id) }}"
+                                <a href="{{ route('customer.address.edit', $address->id) }}"
                                     class="text-blue-600 hover:underline">Edit</a>
-                                <form action="{{ route('address.destroy', $address->id) }}" method="POST"
+                                <form action="{{ route('customer.address.destroy', $address->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin mau hapus alamat ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -105,7 +117,7 @@
                                         class="text-green-600 font-bold">$49.99</span></p>
                                 <p class="text-gray-500 text-sm">Placed: 2025-05-20 | Status: Delivered</p>
                             </div>
-                            <a href="{{ route('profile.order', ['slug' => '1001']) }}"
+                            <a href="{{ route('customer.profile.order', ['slug' => '1001']) }}"
                                 class="text-blue-600 hover:underline text-sm">View Details</a>
                         </li>
                         <li class="border-t pt-4 flex justify-between items-start">
@@ -114,7 +126,7 @@
                                         class="text-green-600 font-bold">$29.99</span></p>
                                 <p class="text-gray-500 text-sm">Placed: 2025-06-01 | Status: Shipped</p>
                             </div>
-                            <a href="{{ route('profile.order', ['slug' => '1002']) }}"
+                            <a href="{{ route('customer.profile.order', ['slug' => '1002']) }}"
                                 class="text-blue-600 hover:underline text-sm">View Details</a>
                         </li>
                     </ul>

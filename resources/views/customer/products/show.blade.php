@@ -1,116 +1,132 @@
 <x-customer.layout.layout>
-    <section class="container-custom py-10 relative flex flex-col lg:flex-row gap-16">
-        {{-- Gambar Produk --}}
-        <div class="w-full lg:w-1/2 lg:sticky top-20 h-max">
-            <div class="h-[500px] relative">
-                <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                    class="w-full h-full object-cover rounded-md">
-            </div>
-        </div>
+    <section class=" ">
 
-        {{-- Info Produk --}}
-        <div class="w-full lg:w-1/2 flex flex-col gap-6">
-            {{-- Error dari server --}}
-            @if ($errors->any())
-                <div class="text-red-600 text-sm mb-2 bg-red-100 px-4 py-2 rounded-md">
-                    {{ $errors->first() }}
-                </div>
-            @endif
+        <div class="container-custom">
+            <div class="py-8 md:py-12">
 
-            <h1 class="text-4xl font-medium text-gray-900">{{ $product->name }}</h1>
-            <p class="text-gray-500">{{ $product->description }}</p>
-            <hr class="h-[1.5px] bg-gray-200 border-0">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-            <div class="text-2xl font-semibold text-pink-600">
-                Rp {{ number_format($product->price, 0, ',', '.') }}
-            </div>
+                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-auto object-cover">
 
-            {{-- Size Options --}}
-            @if ($sizes->isNotEmpty())
-                <div>
-                    <label class="block font-medium mb-2">Ukuran:</label>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($sizes as $size)
-                            <button type="button"
-                                class="size-btn px-4 py-2 border rounded-lg text-sm transition border-gray-300 hover:bg-blue-100"
-                                data-size-id="{{ $size->id }}">
-                                {{ $size->name }}
-                            </button>
-                        @endforeach
-                    </div>
-                    <p id="size-error" class="text-red-500 text-sm mt-1 hidden">Pilih ukuran dulu ya 🤏</p>
-                </div>
-                <hr class="h-[1.5px] bg-gray-200 border-0">
-            @endif
+                    <div>
+                        <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter font-semibold">{{ $product->name }}</h1>
 
-            {{-- Color Options --}}
-            @if ($colors->isNotEmpty())
-                <div id="color-section">
-                    <label class="block font-medium mb-2">Warna:</label>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($colors as $color)
-                            <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
-                                <div class="color-circle w-8 h-8 rounded-full border-2"
-                                    style="background-color: {{ $color->hex_code ?? '#ccc' }};"></div>
-                                <div
-                                    class="slash hidden absolute inset-0 flex justify-center items-center text-red-600 text-xl font-bold pointer-events-none">
-                                    /
+                        <p class="text-sm text-gray-600 mb-4">
+                            {{ $product->description }}
+                        </p>
+
+
+                        @if ($sizes->isNotEmpty())
+                        <hr class="my-6 border-gray-300">
+                        <div class="mb-3">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
+                            <div class="flex space-x-2 mb-2">
+                                @foreach ($sizes as $size)
+                                <button
+                                    class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
+                                    data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                                @endforeach
+                            </div>
+                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                        </div>
+                        @endif
+
+                        @if ($colors->isNotEmpty())
+                        <div id="color-section">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
+                            <div class="flex flex-col space-x-2 mb-2">
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    @foreach ($colors as $color)
+                                    <div class="color-btn relative group cursor-pointer"
+                                        data-color-id="{{ $color->id }}">
+                                        <div class="w-10 h-10 border-2 rounded-full"
+                                            style="background-color: {{ $color->hex_code ?? '#ccc' }};">
+                                        </div>
+
+                                        <!-- Slash (disable mark) -->
+                                        <div
+                                            class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
+                                            <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
+                                        </div>
+                                    </div>
+                                    @endforeach
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Warnanya juga pilih dong 🌈</p>
-                </div>
-            @endif
-
-            {{-- Form --}}
-            <form action="{{ route('customer.cart.store') }}" method="POST" id="add-to-cart-form"
-                class="flex flex-col gap-4 mt-4">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="size_id" id="selected-size-id">
-                <input type="hidden" name="color_id" id="selected-color-id">
-                <input type="hidden" name="qty" id="qty" value="{{ $quantity ?? 1 }}">
-
-                <div>
-                    <h4 class="font-medium mb-1">Jumlah</h4>
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-gray-100 py-2 px-4 rounded-3xl flex items-center justify-between w-32">
-                                <button type="button" class="text-xl" onclick="updateQuantity('decrement')">-</button>
-                                <span id="quantity-display">{{ $quantity ?? 1 }}</span>
-                                <button type="button" class="text-xl" onclick="updateQuantity('increment')">+</button>
-                            </div>
-                            <div class="text-sm">
-                                Tersisa <span class="text-orange-500">{{ $stockNumber ?? 10 }}</span> item<br>
-                                Buruan sebelum kehabisan!
+                                <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                             </div>
                         </div>
-                        <button type="submit"
-                            class="w-36 text-sm rounded-3xl bg-pink-500 text-white py-2 px-4 hover:bg-pink-600 transition disabled:cursor-not-allowed disabled:bg-pink-200"
-                            @if(($stockNumber ?? 10) <= 0) disabled @endif>
-                            Tambah ke Keranjang
-                        </button>
+                        @endif
+
+
+                        <hr class="my-6 border-gray-300">
+
+                        <div class="flex items-end space-x-3 mb-6">
+                            {{-- <p class="text-gray-400 line-through text-2xl">$ 129.00</p> --}}
+                            <p class="text-gray-800 font-bold text-4xl">Rp {{ number_format($product->price, 0, ',',
+                                '.') }}</p>
+                        </div>
+
+                        <h4 class="font-medium mb-1 text-lg">Jumlah</h4>
+
+                        <div class=" mb-6">
+                            <div class="flex items-center gap-4">
+                                {{-- Tombol - --}}
+                                <button type="button" onclick="updateQuantity('decrement')"
+                                    class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
+                                    -
+                                </button>
+
+                                {{-- Jumlah --}}
+                                <div id="quantity-display"
+                                    class="w-12 h-10 border border-gray-300 text-center flex items-center justify-center text-lg font-medium">
+                                    {{ $quantity ?? 1 }}
+                                </div>
+
+                                {{-- Tombol + --}}
+                                <button type="button" onclick="updateQuantity('increment')"
+                                    class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+
+
+
+
+                        {{-- Form --}}
+                        <form action="{{ route('customer.cart.store') }}" method="POST" id="add-to-cart-form"
+                            class="flex flex-col gap-4 mt-4">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}" readonly>
+                            <input type="hidden" name="size_id" id="selected-size-id">
+                            <input type="hidden" name="color_id" id="selected-color-id">
+                            <input type="hidden" name="qty" id="qty" value="{{ $quantity ?? 1 }}">
+
+                            <div>
+                                <h4 class="font-medium mb-1">Jumlah</h4>
+                                <div class="flex justify-between items-center">
+
+
+                                    <div class="flex items-center space-x-3 mb-2 w-full">
+                                        <button class="border border-gray-400 p-3 hover:bg-gray-200">
+                                            <i class="far fa-heart text-xl"></i>
+                                        </button>
+                                        <button type="submit"
+                                            class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 hover:bg-gray-700 text-center "
+                                            @if(($stockNumber ?? 10) <=0) disabled @endif>Add
+                                            to cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-xs text-gray-500">Delivery in 3-5 working days</p>
                     </div>
                 </div>
-            </form>
-        </div>
-    </section>
-
-    {{-- Produk Terkait --}}
-    <section class="bg-gray-50 py-16">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-gray-800 mb-8">Produk Terkait</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @for ($i = 0; $i < 4; $i++)
-                    <x-customer.product-card slug="produk-terkait-{{ $i }}"
-                        image="https://source.unsplash.com/featured/?fashion,clothes&sig={{ $i + 30 }}"
-                        name="Produk Terkait {{ $i + 1 }}" description="Produk lainnya yang mungkin kamu suka."
-                        :price="rand(150, 350) * 1000" />
-                @endfor
             </div>
         </div>
+
     </section>
+
 
     {{-- Scripts --}}
     @push('scripts')
@@ -160,7 +176,7 @@
 
                 sizeButtons.forEach(b => b.classList.remove('bg-blue-100', 'text-blue-700'));
                 btn.classList.add('bg-blue-100', 'text-blue-700');
-
+                colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
                 selectedColor = null;
                 colorInput.value = '';
                 document.getElementById('size-error')?.classList.add('hidden');
@@ -174,8 +190,8 @@
             btn.addEventListener('click', () => {
                 if (btn.dataset.disabled === 'true') return;
 
-                colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-pink-500'));
-                btn.classList.add('ring-2', 'ring-pink-500');
+                colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
+                btn.classList.add('ring-2', 'ring-red-500');
 
                 selectedColor = btn.dataset.colorId;
                 colorInput.value = selectedColor;
