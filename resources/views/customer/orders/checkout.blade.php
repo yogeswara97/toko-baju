@@ -4,6 +4,16 @@
         <x-customer.page-header title="Shopping Cart" description="Review your items before checkout" />
         <x-customer.orders.checkout-progress :current="2" />
 
+        @if ($errors->any())
+        <div class="mb-4 p-4 bg-red-50 border border-red-300 text-red-800 rounded">
+            <ul class="list-disc list-inside text-sm space-y-1">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="flex flex-col lg:flex-row gap-8">
             {{-- Shipping Address Section --}}
             <div class="lg:w-2/3">
@@ -75,6 +85,9 @@
                     <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                     <input type="hidden" name="discount" value="{{ $discount }}">
                     <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{ session('ongkir') ?? 0 }}">
+                    <input type="hidden" name="shipping_address" id="shipping_address"
+                        value="{{ $defaultAddress->address_line1 }}{{ $defaultAddress->address_line2 ? ', ' . $defaultAddress->address_line2 : '' }}">
+
                     <input type="hidden" name="total" id="total-amount-value" value="{{ $total }}">
                     <button id="pay-button" type="submit"
                         class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition">Pay

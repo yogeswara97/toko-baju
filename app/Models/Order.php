@@ -15,6 +15,7 @@ class Order extends Model
         'total_amount',
         'status',
         'raja_ongkir_id',
+        'shipping_cost',
         'shipping_address',
         'payment_method',
     ];

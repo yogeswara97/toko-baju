@@ -1,151 +1,155 @@
 <x-customer.layout.layout>
-    <section class=" ">
-
-        <div class="container-custom">
-            <div class="py-8 md:py-12">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-
-                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
 
 
-                    <div>
-                        <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter fontse">{{ $product->name }}
-                        </h1>
+    <section class="container-custom">
+        @if ($errors->any())
+        <div class="mb-4 p-4 bg-red-50 border border-red-300 text-red-800 rounded">
+            <ul class="list-disc list-inside text-sm space-y-1">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
-                        <p class="text-sm text-gray-600 mb-4">
-                            {{ $product->description }}
-                        </p>
+        <section class="py-8 md:py-12">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                <div>
+                    <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter fontse">{{ $product->name }}
+                    </h1>
+
+                    <p class="text-sm text-gray-600 mb-4">
+                        {{ $product->description }}
+                    </p>
 
 
-                        @if ($sizes->isNotEmpty())
-                        <hr class="my-6 border-gray-300">
-                        <div class="mb-3">
-                            <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
-                            <div class="flex space-x-2 mb-2">
-                                @foreach ($sizes as $size)
-                                <button
-                                    class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
-                                    data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                    @if ($sizes->isNotEmpty())
+                    <hr class="my-6 border-gray-300">
+                    <div class="mb-3">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
+                        <div class="flex space-x-2 mb-2">
+                            @foreach ($sizes as $size)
+                            <button
+                                class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
+                                data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                            @endforeach
+                        </div>
+                        <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                    </div>
+                    @endif
+
+                    @if ($colors->isNotEmpty())
+                    <div id="color-section">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
+                        <div class="flex flex-col space-x-2 mb-2">
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                @foreach ($colors as $color)
+                                <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
+                                    <div class="w-10 h-10 border-2 rounded-full"
+                                        style="background-color: {{ $color->hex_code ?? '#ccc' }};">
+                                    </div>
+
+                                    <!-- Slash (disable mark) -->
+                                    <div
+                                        class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
+                                        <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
+                                    </div>
+                                </div>
                                 @endforeach
                             </div>
-                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                            <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                         </div>
-                        @endif
-
-                        @if ($colors->isNotEmpty())
-                        <div id="color-section">
-                            <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
-                            <div class="flex flex-col space-x-2 mb-2">
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    @foreach ($colors as $color)
-                                    <div class="color-btn relative group cursor-pointer"
-                                        data-color-id="{{ $color->id }}">
-                                        <div class="w-10 h-10 border-2 rounded-full"
-                                            style="background-color: {{ $color->hex_code ?? '#ccc' }};">
-                                        </div>
-
-                                        <!-- Slash (disable mark) -->
-                                        <div
-                                            class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
-                                            <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
-                            </div>
-                        </div>
-                        @endif
-
-
-                        <hr class="my-6 border-gray-300">
-
-                        <div class="flex items-end space-x-3 mb-6">
-                            {{-- <p class="text-gray-400 line-through text-2xl">$ 129.00</p> --}}
-                            <p class="text-gray-800 font-bold text-4xl">Rp {{ number_format($product->price, 0, ',',
-                                '.') }}</p>
-                        </div>
-
-                        <h4 class="font-medium mb-1 text-lg">Jumlah</h4>
-
-                        <div class=" mb-6">
-                            <div class="flex items-center gap-4">
-                                {{-- Tombol - --}}
-                                <button type="button" onclick="updateQuantity('decrement')"
-                                    class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
-                                    -
-                                </button>
-
-                                {{-- Jumlah --}}
-                                <div id="quantity-display"
-                                    class="w-12 h-10 border border-gray-300 text-center flex items-center justify-center text-lg font-medium">
-                                    {{ $quantity ?? 1 }}
-                                </div>
-
-                                {{-- Tombol + --}}
-                                <button type="button" onclick="updateQuantity('increment')"
-                                    class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
-                                    +
-                                </button>
-                            </div>
-                        </div>
-
-
-
-
-
-                        {{-- Form --}}
-                        <form action="{{ route('customer.cart.store') }}" method="POST" id="add-to-cart-form"
-                            class="flex flex-col gap-4 mt-4">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}" readonly>
-                            <input type="hidden" name="size_id" id="selected-size-id">
-                            <input type="hidden" name="color_id" id="selected-color-id">
-                            <input type="hidden" name="qty" id="qty" value="{{ $quantity ?? 1 }}">
-
-                            <div>
-                                <h4 class="font-medium mb-1">Jumlah</h4>
-                                <div class="flex justify-between items-center">
-
-
-                                    <div class="flex items-center space-x-3 mb-2 w-full">
-                                        <button class="border border-gray-400 p-3 hover:bg-gray-200">
-                                            <i class="far fa-heart text-xl"></i>
-                                        </button>
-                                        <button type="submit"
-                                            class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 hover:bg-gray-700 text-center "
-                                            @if(($stockNumber ?? 10) <=0) disabled @endif>Add
-                                            to cart</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <p class="text-xs text-gray-500">Delivery in 3-5 working days</p>
                     </div>
-                </div>
+                    @endif
 
 
-                <div>
-                    <x-customer.page-header title="More Products" description="Discover our complete collection" />
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
-                        @foreach ($products as $product)
-                        <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
-                            :description="Str::limit($product->description, 60)" :price="$product->price" />
-                        @endforeach
+                    <hr class="my-6 border-gray-300">
+
+                    <div class="flex items-end space-x-3 mb-6">
+                        {{-- <p class="text-gray-400 line-through text-2xl">$ 129.00</p> --}}
+                        <p class="text-gray-800 font-bold text-4xl">Rp {{ number_format($product->price, 0, ',',
+                            '.') }}</p>
                     </div>
+
+                    <h4 class="font-medium mb-1 text-lg">Jumlah</h4>
+
+                    <div class=" mb-6">
+                        <div class="flex items-center gap-4">
+                            {{-- Tombol - --}}
+                            <button type="button" onclick="updateQuantity('decrement')"
+                                class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
+                                -
+                            </button>
+
+                            {{-- Jumlah --}}
+                            <div id="quantity-display"
+                                class="w-12 h-10 border border-gray-300 text-center flex items-center justify-center text-lg font-medium">
+                                {{ $quantity ?? 1 }}
+                            </div>
+
+                            {{-- Tombol + --}}
+                            <button type="button" onclick="updateQuantity('increment')"
+                                class="w-10 h-10 border border-gray-300 text-xl font-bold flex items-center justify-center hover:bg-gray-200 transition">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+
+
+
+
+                    {{-- Form --}}
+                    <form action="{{ route('customer.cart.store') }}" method="POST" id="add-to-cart-form"
+                        class="flex flex-col gap-4 mt-4">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}" readonly>
+                        <input type="hidden" name="size_id" id="selected-size-id">
+                        <input type="hidden" name="color_id" id="selected-color-id">
+                        <input type="hidden" name="qty" id="qty" value="{{ $quantity ?? 1 }}">
+
+                        <div>
+                            <h4 class="font-medium mb-1">Jumlah</h4>
+                            <div class="flex justify-between items-center">
+
+
+                                <div class="flex items-center space-x-3 mb-2 w-full">
+                                    <button class="border border-gray-400 p-3 hover:bg-gray-200">
+                                        <i class="far fa-heart text-xl"></i>
+                                    </button>
+                                    <button type="submit"
+                                        class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 hover:bg-gray-700 text-center "
+                                        @if(($stockNumber ?? 10) <=0) disabled @endif>Add
+                                        to cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="text-xs text-gray-500">Delivery in 3-5 working days</p>
                 </div>
+            </div>
+            <div>
+                <x-customer.page-header title="More Products" description="Discover our complete collection" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
+                    @foreach ($products as $product)
+                    <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
+                        :description="Str::limit($product->description, 60)" :price="$product->price" />
+                    @endforeach
+                </div>
+            </div>
 
             </div>
-        </div>
-
-    </section>
+        </section>
 
 
-    {{-- Scripts --}}
-    @push('scripts')
-    <script>
-        const hasSizes = {{ $sizes->isNotEmpty() ? 'true' : 'false' }};
+
+        {{-- Scripts --}}
+        @push('scripts')
+        <script>
+            const hasSizes = {{ $sizes->isNotEmpty() ? 'true' : 'false' }};
         const hasColors = {{ $colors->isNotEmpty() ? 'true' : 'false' }};
 
         const form = document.getElementById('add-to-cart-form');
@@ -244,6 +248,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', updateColorsBySize);
-    </script>
-    @endpush
+        </script>
+        @endpush
 </x-customer.layout.layout>

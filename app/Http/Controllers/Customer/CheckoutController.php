@@ -84,8 +84,6 @@ class CheckoutController extends Controller
             'items.*.subtotal' => 'required|numeric|min:0',
         ]);
 
-        dd($data);
-
         $user = Auth::user();
 
         // Generate kode order
@@ -98,6 +96,7 @@ class CheckoutController extends Controller
             'status' => 'paid',
             'raja_ongkir_id' => $request->raja_ongkir_id,
             'shipping_cost' => $request->shipping_cost,
+            'shipping_address' => $request->shipping_address,
             'address_line1' => $request->address_line1,
             'address_line2' => $request->address_line2,
             'payment_method' => 'midtrans',
@@ -119,7 +118,7 @@ class CheckoutController extends Controller
         // (Opsional) hapus cart user setelah order sukses
         Cart::where('user_id', $user->id)->delete();
 
-        return redirect()->route('customer.orders.success')->with('success', 'Order berhasil dibuat!');
+        return redirect()->route('customer.profile')->with('success', 'Order berhasil dibuat!');
     }
 
     public function payment()
