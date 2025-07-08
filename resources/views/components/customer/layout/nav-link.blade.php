@@ -6,7 +6,7 @@
 @endphp
 
 <a href="{{ $href }}" {{ $attributes->merge([
-    'class' => "$baseClass hover:underline hover:underline-offset-4 transition text-sm whitespace-nowrap"
+    'class' => "flex flex-col items-center gap-1 $baseClass hover:underline hover:underline-offset-4 transition text-sm whitespace-nowrap"
 ]) }}>
     {{ $slot }}
 </a>

@@ -25,9 +25,10 @@
                     class="absolute z-20 text-white drop-shadow-lg flex flex-col items-center gap-4 top-[80%] w-full text-center">
 
                     <a href="{{ route('customer.products.index') }}"
-                        class="w-3/4 sm:w-60 md:w-70 px-6 py-3 bg-white text-black text-sm font-semibold tracking-wide shadow-lg rounded-md hover:bg-black hover:text-white transition-all duration-300">
+                        class="w-3/4 sm:w-60 md:w-70 px-6 py-3 bg-black text-white text-sm font-semibold tracking-wide shadow-lg rounded-md hover:bg-white hover:text-black transition-all duration-300">
                         Shop Now
                     </a>
+
                 </div>
 
 
@@ -43,34 +44,35 @@
     @php
         $categories = [
             [
-                'title' => 'SHIRTS, T-SHIRTS & POLO SHIRTS',
-                'desc' => 'Explore our versatile collection of shirts, t-shirts, and polo shirts. Whether you’re going for a
-            classic, casual, or sporty look, we’ve got you covered with the latest styles and best fits.',
+                'title' => 'MEN’S ESSENTIALS: SHIRTS, TEES & POLOS',
+                'desc' => 'Upgrade your wardrobe with timeless pieces for every occasion. From sleek polos to comfy tees — find your fit and stay effortlessly cool, all day every day.',
                 'image' => asset('assets/static-images/category/man.png'),
                 'alt' => 'Shirts',
                 'reverse' => false,
-                'textAlign' => 'lg:text-right'
+                'textAlign' => 'lg:text-right',
+                'slug' => 'men'
             ],
             [
-                'title' => 'BLOUSES, TOPS & CHIC TEE STYLES',
-                'desc' => 'Discover our latest picks of blouses, casual tops, and chic tees for every mood. From elegant staples to
-            laid-back weekend vibes — express your style your way.',
+                'title' => 'FOR HER: BLOUSES, TOPS & CHIC TEES',
+                'desc' => 'Style made simple. Dive into our curated picks of modern blouses, everyday tops, and trend-forward tees that fit every mood — from classy to casual.',
                 'image' => asset('assets/static-images/category/women.png'),
                 'alt' => 'Blouses',
                 'reverse' => true,
-                'textAlign' => 'lg:text-left'
+                'textAlign' => 'lg:text-left',
+                'slug' => 'women'
             ],
             [
-                'title' => 'BAGS, HATS & ACCESSORIES',
-                'desc' => 'Complete your look with stylish bags, cool hats, and must-have accessories. Perfect for adding that final
-            touch to your outfit.',
+                'title' => 'BAGS, HATS & ALL THE EXTRAS',
+                'desc' => 'Top off your look with must-have accessories. From statement bags to everyday hats — it’s the little things that make the biggest style impact.',
                 'image' => asset('assets/static-images/category/accessories.jpg'),
                 'alt' => 'Accessories',
                 'reverse' => false,
-                'textAlign' => 'lg:text-right'
+                'textAlign' => 'lg:text-right',
+                'slug' => 'accessories'
             ],
         ];
     @endphp
+
 
     <section class="container-custom mx-auto lg:px-10 py-20 flex flex-col space-y-20">
         @foreach ($categories as $cat)
@@ -84,6 +86,7 @@
                 </div>
 
                 <!-- Teks -->
+                <!-- Teks -->
                 <div class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $cat['textAlign'] }}">
                     <h2 class="text-3xl sm:text-4xl md:text-8xl font-black tracking-tight leading-tight">
                         {!! nl2br(e($cat['title'])) !!}
@@ -91,7 +94,13 @@
                     <p class="mt-6 text-gray-700 text-lg sm:text-xl">
                         {{ $cat['desc'] }}
                     </p>
+
+                    <a href="{{ route('customer.products.index', ['category[]' => $cat['slug']]) }}"
+                        class="inline-block mt-6 px-6 py-3 bg-primary text-white text-sm font-semibold rounded-md shadow hover:bg-primary-dark transition">
+                        Shop Now
+                    </a>
                 </div>
+
             </div>
         @endforeach
     </section>
