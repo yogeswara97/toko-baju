@@ -1,11 +1,13 @@
 <x-customer.layout.layout>
-    <section class="container-custom py-10">
+    <section class="container-custom pb-20">
         <x-customer.page-header title="Profile" description="Review your items before checkout" />
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Profile -->
-            <div class="p-0 flex flex-col">
-                <div>
+        <div class="flex flex-col lg:flex-row gap-10">
+
+            <!-- KIRI: Profile & Address -->
+            <div class="w-full lg:w-1/3 space-y-6">
+                <!-- Profile Card -->
+                <div class=" border border-gray-200 rounded-xl p-6">
                     <div class="flex justify-center mb-4">
                         @php
                         $photo = auth()->user()->photo ?? null;
@@ -54,12 +56,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Address & Orders -->
-            <div class="lg:col-span-2 space-y-12">
-                <!-- Addresses -->
-                <div>
+                <!-- Address Card -->
+                <div class=" border border-gray-200 rounded-xl p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-900">Addresses</h2>
                         <a href="{{ route('customer.address.create') }}"
@@ -85,7 +84,7 @@
                                 <p>{{ $address->country }}</p>
                                 <span
                                     class="inline-block mt-2 text-xs font-medium px-2 py-1 rounded
-                                            {{ $address->is_default ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                                {{ $address->is_default ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                     {{ $address->is_default ? '✅ Alamat Utama' : '📦 Alamat Lainnya' }}
                                 </span>
                             </div>
@@ -105,26 +104,52 @@
                     </ul>
                     @endif
                 </div>
-
-                <!-- Orders -->
-                <div>
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Orders</h2>
-                    <ul class="space-y-6">
-                        <li class="border-t border-gray-200 pt-4 flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-900 font-medium">Order #1001 - <span
-                                        class="text-green-600 font-bold">$49.99</span></p>
-                                <p class="text-gray-500 text-sm">Placed: 2025-05-20 | Status: Delivered</p>
-                            </div>
-                            <a href="{{ route('customer.profile.order', ['slug' => '1001']) }}"
-                                class="text-primary hover:underline text-sm">View Details</a>
-                        </li>
-                    </ul>
-                    <button class="mt-6 text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition">
-                        View All Orders
-                    </button>
-                </div>
             </div>
+
+
+            <!-- KANAN: Orders -->
+            <div class="w-full lg:w-2/3">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Orders</h2>
+
+                @if ($orders->isEmpty())
+                <p class="text-gray-500">Belum ada pesanan yang dibuat.</p>
+                @else
+                <ul class="space-y-6">
+                    @foreach ($orders as $order)
+                    <li class="border-b border-gray-200 py-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-base font-semibold text-gray-900">
+                                    Order #{{ $order->order_code }}
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    Tanggal: {{ $order->created_at->format('d M Y') }}
+                                </p>
+                                <p class="text-sm mt-1">
+                                    <span class="text-gray-500">Total: </span>
+                                    <span class="text-green-600 font-bold">
+                                        Rp{{ number_format($order->total_amount, 0, ',', '.') }}
+                                    </span>
+                                </p>
+                                @php $statusColors = getStatusColors(); @endphp
+                                <span
+                                    class="inline-block mt-2 {{ $statusColors[$order->status] ?? 'bg-gray-100 text-gray-800' }} px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ ucfirst($order->status) }}
+                                </span>
+                            </div>
+                            <div>
+                                <a href="{{ route('customer.profile.order', $order->order_code) }}"
+                                    class="text-sm text-primary hover:underline hover:text-primary-dark font-medium">
+                                    Lihat Detail →
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
+                @endif
+            </div>
+
         </div>
     </section>
 </x-customer.layout.layout>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,13 +55,14 @@ class CustomerController extends Controller
     {
         $user = Auth::user();
 
-        $addresses = \App\Models\Address::where('user_id', $user->id)->get();
+        $addresses = Address::where('user_id', $user->id)->get();
 
-        return view('customer.profile.index', compact('user', 'addresses'));
-    }
+        // Ambil order terbaru dari user
+        $orders = $user->orders()
+            ->latest()
+            ->take(5) // ambil 5 terakhir, bisa disesuaikan
+            ->get();
 
-    public function orders($slug)
-    {
-        return view('customer.profile.orders', ['slug' => $slug]);
+        return view('customer.profile.index', compact('user', 'addresses', 'orders'));
     }
 }

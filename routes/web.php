@@ -21,7 +21,7 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class, 'registra
 // === CUSTOMER Routes (auth + role: customer) ===
 Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function () {
 
-    // Cart
+    // === CART ===
     Route::prefix('cart')->name('cart.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Customer\CartController::class, 'index'])->name('index');
         Route::post('/add', [\App\Http\Controllers\Customer\CartController::class, 'store'])->name('store');
@@ -33,25 +33,33 @@ Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function 
         Route::post('/remove-promo', [\App\Http\Controllers\Customer\PromoController::class, 'remove'])->name('removePromo');
     });
 
-    // Checkout
+    // === CHECKOUT ===
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('index');
         Route::post('/set-address', [\App\Http\Controllers\Customer\CheckoutController::class, 'setAddress'])->name('set-address');
         Route::get('/order', [\App\Http\Controllers\Customer\CheckoutController::class, 'order'])->name('order');
-        Route::get('/payment', [\App\Http\Controllers\Customer\CheckoutController::class, 'payment'])->name('payment');
+        Route::get('/payment', [\App\Http\Controllers\Customer\PaymentController::class, 'index'])->name('payment');
+        Route::get('/checkout/status/{status}/{order_code}', [\App\Http\Controllers\Customer\CheckoutController::class, 'status'])->name('status');
+
     });
 
-    // Address
+    // === ADDRESS ===
     Route::resource('address', \App\Http\Controllers\Customer\AddressController::class);
 
-    // RajaOngkir API
-    Route::get('/search-destination', [\App\Http\Controllers\Customer\RajaOngkirController::class, 'searchDestination'])->name('search-destination');
-    Route::post('/cek-ongkir', [\App\Http\Controllers\Customer\RajaOngkirController::class, 'cekOngkir'])->name('cek-ongkir');
+    // === RAJA ONGKIR ===
+    Route::prefix('shipping')->group(function () {
+        Route::get('/search-destination', [\App\Http\Controllers\Customer\RajaOngkirController::class, 'searchDestination'])->name('search-destination');
+        Route::post('/cek-ongkir', [\App\Http\Controllers\Customer\RajaOngkirController::class, 'cekOngkir'])->name('cek-ongkir');
+    });
 
-    // Profile & Orders
-    Route::get('/profile', [\App\Http\Controllers\Customer\CustomerController::class, 'profile'])->name('profile');
-    Route::get('/profile/orders/{slug}', [\App\Http\Controllers\Customer\CustomerController::class, 'orders'])->name('profile.order');
+    // === PROFILE & ORDER ===
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Customer\CustomerController::class, 'profile'])->name('index');
+        Route::get('/order/{order_code}', [\App\Http\Controllers\Customer\OrderController::class, 'show'])->name('order');
+    });
+
 });
+
 
 
 // === ADMIN Routes ===

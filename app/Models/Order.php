@@ -12,6 +12,8 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'order_code',
+        'subtotal',
+        'discount',
         'total_amount',
         'status',
         'raja_ongkir_id',
@@ -33,5 +35,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-}
 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'shipping_address');
+    }
+}

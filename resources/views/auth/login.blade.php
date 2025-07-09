@@ -1,9 +1,9 @@
 <x-auth-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="min-h-screen flex flex-col lg:flex-row">
+    <div class="min-h-screen flex flex-col lg:flex-row bg-secondary">
         <!-- Gambar (sembunyi di layar kecil) -->
-        <div class="hidden lg:block lg:w-1/2 relative">
+        <div class="hidden lg:block lg:w-[40%] relative">
             <div class="absolute inset-0 bg-cover bg-center z-0"
                 style="background-image: url('{{ asset('assets/static-images/category/man.png') }}');"></div>
             <!-- Optional overlay, tapi set opacity-nya tipis banget atau hapus kalau mau full terlihat -->
@@ -12,7 +12,7 @@
 
 
         <!-- Form Login -->
-        <div class="flex items-center justify-center w-full lg:w-1/2 px-4 bg-secondary min-h-screen">
+        <div class="flex items-center justify-center w-full lg:w-1/2 px-4  min-h-screen">
 
             <div class="w-full max-w-md p-8 sm:p-10 ">
                 <h2 class="text-3xl font-medium text-gray-800 mb-6">Login ke</h2>

@@ -16,12 +16,14 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_variant_id')->nullable()->constrained()->onDelete('set null');
+
             $table->string('product_name');
             $table->string('variant_size')->nullable();
             $table->string('variant_color')->nullable();
-            $table->decimal('price', 10, 2);
+
+            $table->unsignedBigInteger('price');
             $table->integer('quantity');
-            $table->decimal('subtotal', 12, 2);
+            $table->unsignedBigInteger('subtotal');
             $table->timestamps();
         });
     }

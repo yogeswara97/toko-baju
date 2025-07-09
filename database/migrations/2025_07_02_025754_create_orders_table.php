@@ -15,10 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_code')->unique(); // misal: ORD-20250702-XYZ
-            $table->decimal('total_amount', 12, 2);
+
+            $table->unsignedBigInteger('total_amount');
+            $table->unsignedBigInteger('subtotal');
+            $table->unsignedBigInteger('discount')->default(0);
+
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->integer('raja_ongkir_id');
-            $table->decimal('shipping_cost', 10, 2);
+            $table->unsignedBigInteger('shipping_cost');
+
             $table->text('shipping_address');
             $table->string('payment_method')->nullable();
             $table->timestamps();

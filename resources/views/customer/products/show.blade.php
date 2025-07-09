@@ -1,6 +1,42 @@
 <x-customer.layout.layout>
 
+    <!-- ALERT FROM TOP -->
+    <div id="top-alert"
+        class="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 mt-4 w-full max-w-md px-4 hidden animate-slide-down">
+        <div class="flex items-center justify-between p-4 text-green-800 rounded-lg bg-green-100 shadow-md border border-green-200"
+            role="alert">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m2 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-medium">Success!</span> Pesanan kamu berhasil dibuat.
+            </div>
+            <button type="button" class="ml-2 text-green-500 hover:text-green-900"
+                onclick="document.getElementById('top-alert').classList.add('hidden')">
+                ✕
+            </button>
+        </div>
+    </div>
 
+    <!-- BUTTON TRIGGER -->
+    <button onclick="showAlert()"
+        class="bg-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition duration-300">
+        Tampilkan Alert
+    </button>
+
+    <!-- SCRIPT -->
+    <script>
+        function showAlert() {
+            const alert = document.getElementById('top-alert');
+            alert.classList.remove('hidden');
+
+            // Auto hide setelah 3 detik
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
     <section class="container-custom">
         @if ($errors->any())
         <div class="mb-4 p-4 bg-red-50 border border-red-300 text-red-800 rounded">

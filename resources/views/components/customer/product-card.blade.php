@@ -37,7 +37,7 @@
     <!-- CTA -->
     <div class="px-2">
         <a href="{{ route('customer.products.show', ['slug' => $slug]) }}"
-            class="rounded-full ring-1 ring-primary text-primary w-max py-2 px-4 text-xs hover:bg-primary hover:text-white transition">
+            class="rounded-md ring-1 ring-primary text-primary w-max py-2 px-4 text-xs hover:bg-primary hover:text-white transition">
             Lihat Detail
         </a>
     </div>

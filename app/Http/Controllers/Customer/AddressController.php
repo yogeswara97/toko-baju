@@ -38,7 +38,7 @@ class AddressController extends Controller
 
         Address::create($validated);
 
-        return redirect()->route('address.index')->with('success', 'Alamat berhasil ditambahkan');
+        return redirect()->route('customer.profile.index')->with('success', 'Alamat berhasil ditambahkan');
     }
 
     public function show(int $id)
@@ -74,7 +74,7 @@ class AddressController extends Controller
 
         $address->update($validated);
 
-        return redirect()->route('address.index')->with('success', 'Alamat berhasil diperbarui');
+        return redirect()->route('customer.profile.index')->with('success', 'Alamat berhasil diperbarui');
     }
 
 
@@ -84,7 +84,7 @@ class AddressController extends Controller
 
         $address->delete();
 
-        return redirect()->route('address.index')->with('success', 'Alamat berhasil dihapus');
+        return redirect()->route('customer.profile.index')->with('success', 'Alamat berhasil dihapus');
     }
 
     private function validateAddress(Request $request)
@@ -107,7 +107,7 @@ class AddressController extends Controller
         $address = Address::findOrFail($id);
 
         if ($address->user_id !== Auth::id()) {
-            abort(403, 'Lu ngapain buka alamat orang 😤');
+            abort(403, 'Alamat Tidak valid');
         }
 
         return $address;

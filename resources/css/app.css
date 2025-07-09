@@ -14,17 +14,44 @@
 @theme {
     --font-roboto-condensed: "Roboto Condensed", sans-serif;
     /* --font-anton:     */
-            /* 'Anton', ui-sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    /* 'Anton', ui-sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
     --color-primary: #437057;
     --color-primary-light: #DCEFD8;
     --color-secondary: #FAF7F0;
+
+    --animate-fade-in-scale: fade-in-scale 0.3s ease-out;
+    --animate-slide-down: slide-down 0.4s ease-out;
+
+    @keyframes fade-in-scale {
+        0% {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes slide-down {
+        0% {
+            opacity: 0;
+            transform: translateY(-1rem);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 }
 
 
 .font-anton {
     @apply tracking-widest;
-  }
+}
 
-.container-custom{
+.container-custom {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-15
 }

@@ -45,7 +45,7 @@
                 <a href="#" class="hover:text-gray-700 transition {{ $iconClass }}">
                     <i class="fas fa-search"></i>
                 </a>
-                <a href="{{ route('customer.profile') }}" class="hover:text-gray-700 transition {{ $iconClass }}">
+                <a href="{{ route('customer.profile.index') }}" class="hover:text-gray-700 transition {{ $iconClass }}">
                     <i class="fas fa-user"></i>
                 </a>
                 <a href="{{ route('customer.cart.index') }}"
@@ -60,7 +60,7 @@
                 </a>
                 @else
                 <a href="{{ route('login') }}"
-                    class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
+                    class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
                     Login
                 </a>
                 @endif
@@ -93,7 +93,7 @@
             <div class="flex items-center gap-4 mt-4">
                 @if (auth()->check())
                 <a href="#"><i class="fas fa-search"></i></a>
-                <a href="{{ route('customer.profile') }}"><i class="fas fa-user"></i></a>
+                <a href="{{ route('customer.profile.index') }}"><i class="fas fa-user"></i></a>
                 <a href="{{ route('customer.cart.index') }}" class="relative">
                     <i class="fas fa-shopping-bag"></i>
                     <div
@@ -103,7 +103,7 @@
                 </a>
                 @else
                 <a href="{{ route('login') }}"
-                    class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
+                    class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
                     Login
                 </a>
                 @endif
