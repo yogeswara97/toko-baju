@@ -34,7 +34,7 @@
 
                 <!-- Gambar -->
                 <img src="{{ asset('assets/static-images/hero_no_bg.png') }}" alt="Man Sitting"
-                    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-[600px] md:h-[90vh] object-cover z-10" />
+                    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-[600px] md:h-[90vh] object-cover xl:object-contain z-10" />
             </section>
         </div>
     </div>

@@ -58,7 +58,7 @@
     @php $color = $colors[$activeType]; @endphp
 
     <div id="top-alert"
-        class="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 mt-4 w-full max-w-xl px-4 animate-slide-down">
+        class="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 mt-20 w-full max-w-xl px-4 animate-slide-down">
         <div class="flex items-center justify-between p-4 rounded-lg shadow-md border {{ $color['bg'] }} {{ $color['text'] }} {{ $color['border'] }}"
             role="alert">
             <div class="flex items-center gap-2">

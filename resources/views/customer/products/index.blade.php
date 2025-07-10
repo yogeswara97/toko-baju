@@ -67,7 +67,7 @@
                                             class="sr-only peer" {{ $isChecked ? 'checked' : '' }}>
                                         <div
                                             class="peer-checked:bg-white peer-checked:text-primary peer-checked:font-semibold
-                text-white text-xs border border-white/30 rounded px-4 py-1.5 cursor-pointer transition-all duration-200 hover:bg-white/10">
+                                        text-white text-xs border border-white/30 rounded px-4 py-1.5 cursor-pointer transition-all duration-200 hover:bg-white/10">
                                             {{ $size->name }}
                                         </div>
                                     </label>
@@ -123,7 +123,7 @@
                     </div>
 
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
                         @foreach ($products as $product)
                         <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
                             :description="Str::limit($product->description, 60)" :price="$product->price" />
@@ -150,21 +150,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        const sizeLabels = document.querySelectorAll('label input[name="size[]"]');
+                const sizeLabels = document.querySelectorAll('label input[name="size[]"]');
 
-        sizeLabels.forEach(input => {
-            input.addEventListener('change', () => {
-                const label = input.parentElement;
-                if (input.checked) {
-                    label.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
-                    label.classList.remove('border-gray-300', 'hover:bg-gray-100');
-                } else {
-                    label.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
-                    label.classList.add('border-gray-300', 'hover:bg-gray-100');
-                }
+                sizeLabels.forEach(input => {
+                    input.addEventListener('change', () => {
+                        const label = input.parentElement;
+                        if (input.checked) {
+                            label.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                            label.classList.remove('border-gray-300', 'hover:bg-gray-100');
+                        } else {
+                            label.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                            label.classList.add('border-gray-300', 'hover:bg-gray-100');
+                        }
+                    });
+                });
             });
-        });
-    });
     </script>
     @endpush
 </x-customer.layout.layout>

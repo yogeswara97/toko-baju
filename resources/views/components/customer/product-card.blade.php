@@ -8,6 +8,7 @@
 
 @php
     $finalImage = empty($image) ? asset('/assets/images/product.png') : asset($image);
+    $finalImage2 = asset('/assets/static-images/no-image.jpg');
 @endphp
 
 <div class="w-full flex flex-col gap-4">

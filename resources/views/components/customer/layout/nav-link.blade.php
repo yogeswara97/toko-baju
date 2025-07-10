@@ -2,7 +2,7 @@
 
 @php
     $isHome = request()->routeIs('customer.home');
-    $baseClass = $isHome ? 'text-secondary' : 'text-black';
+    $baseClass = $isHome ? 'md:text-secondary text-black' : 'text-black';
 @endphp
 
 <a href="{{ $href }}" {{ $attributes->merge([

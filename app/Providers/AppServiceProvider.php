@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Cart;
+use App\Models\Category;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $view->with('navbarCategories', Category::all());
+
+            $cartCount = auth()->check()
+                ? Cart::where('user_id', auth()->id())->count()
+                : session('cart_count', 0);
+
+            $view->with('cartCount', $cartCount);
+        });
     }
 }
