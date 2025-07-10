@@ -55,11 +55,11 @@ class CartController extends Controller
         ];
 
         if ($product->sizes->isNotEmpty()) {
-            $rules['size_id'] = 'required|exists:sizes,id';
+            $rules['size_id'] = 'required|exists:product_sizes,id';
         }
 
         if ($product->colors->isNotEmpty()) {
-            $rules['color_id'] = 'required|exists:colors,id';
+            $rules['color_id'] = 'required|exists:product_colors,id';
         }
 
         $validated = $request->validate($rules);
@@ -78,13 +78,16 @@ class CartController extends Controller
         $variantQuery = ProductVariant::where('product_id', $product->id);
 
         if ($product->sizes->isNotEmpty()) {
-            $variantQuery->where('size_id', $validated['size_id']);
-        } else {
-            $variantQuery->whereNull('size_id');
+            $variantQuery->where('product_size_id', $validated['size_id']);
         }
 
         if ($product->colors->isNotEmpty()) {
-            $variantQuery->where('color_id', $validated['color_id']);
+            $variantQuery->where('product_color_id', $validated['color_id']);
+        }
+
+
+        if ($product->colors->isNotEmpty()) {
+            $variantQuery->where('product_color_id', $validated['color_id']);
         } else {
             $variantQuery->whereNull('color_id');
         }

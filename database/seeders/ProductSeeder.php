@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Models\Color;
-use App\Models\Size;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -14,8 +14,8 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         // Ambil ukuran dan warna tertentu secara berurutan
-        $selectedSizes = Size::whereIn('name', ['S', 'M'])->get(); // Tetap
-        $selectedColors = Color::whereIn('name', ['Black', 'White'])->get(); // Tetap
+        $selectedSizes = ProductSize::whereIn('name', ['S', 'M'])->get(); // Tetap
+        $selectedColors = ProductColor::whereIn('name', ['Black', 'White'])->get(); // Tetap
 
         $products = [
             [
@@ -55,6 +55,13 @@ class ProductSeeder extends Seeder
             ]);
 
             if (!$item['has_variant']) {
+                ProductVariant::create([
+                    'product_id' => $product->id,
+                    'product_size_id' => null,
+                    'product_color_id' => null,
+                    'qty' => 20,
+                    'price' => 250000,
+                ]);
                 $product->update(['qty' => 20]);
                 continue;
             }
@@ -69,8 +76,8 @@ class ProductSeeder extends Seeder
 
                     ProductVariant::create([
                         'product_id' => $product->id,
-                        'size_id' => $size->id,
-                        'color_id' => $color->id,
+                        'product_size_id' => $size->id,
+                        'product_color_id' => $color->id,
                         'qty' => $qty,
                         'price' => $variantPrice,
                     ]);
@@ -82,4 +89,5 @@ class ProductSeeder extends Seeder
             $product->update(['qty' => $totalQty]);
         }
     }
+
 }

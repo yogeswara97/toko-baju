@@ -40,70 +40,35 @@
     </div>
 
 
-    {{-- Shirts Section --}}
-    @php
-        $categories = [
-            [
-                'title' => 'MEN’S ESSENTIALS: SHIRTS, TEES & POLOS',
-                'desc' => 'Upgrade your wardrobe with timeless pieces for every occasion. From sleek polos to comfy tees — find your fit and stay effortlessly cool, all day every day.',
-                'image' => asset('assets/static-images/category/man.png'),
-                'alt' => 'Shirts',
-                'reverse' => false,
-                'textAlign' => 'lg:text-right',
-                'slug' => 'men'
-            ],
-            [
-                'title' => 'FOR HER: BLOUSES, TOPS & CHIC TEES',
-                'desc' => 'Style made simple. Dive into our curated picks of modern blouses, everyday tops, and trend-forward tees that fit every mood — from classy to casual.',
-                'image' => asset('assets/static-images/category/women.png'),
-                'alt' => 'Blouses',
-                'reverse' => true,
-                'textAlign' => 'lg:text-left',
-                'slug' => 'women'
-            ],
-            [
-                'title' => 'BAGS, HATS & ALL THE EXTRAS',
-                'desc' => 'Top off your look with must-have accessories. From statement bags to everyday hats — it’s the little things that make the biggest style impact.',
-                'image' => asset('assets/static-images/category/accessories.jpg'),
-                'alt' => 'Accessories',
-                'reverse' => false,
-                'textAlign' => 'lg:text-right',
-                'slug' => 'accessories'
-            ],
-        ];
-    @endphp
-
-
     <section class="container-custom mx-auto lg:px-10 py-20 flex flex-col space-y-20">
-        @foreach ($categories as $cat)
-            <div class="flex flex-col {{ $cat['reverse'] ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-10">
-                <!-- Gambar -->
-                <div class="w-full lg:w-1/2">
-                    <div class="max-w-[500px] w-full mx-auto lg:mx-0">
-                        <img src="{{ $cat['image'] }}" alt="{{ $cat['alt'] }}"
-                            class="w-full h-auto object-cover shadow-lg" />
-                    </div>
+    @foreach ($categories as $cat)
+        <div class="flex flex-col {{ $loop->index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-10">
+            <!-- Gambar -->
+            <div class="w-full lg:w-1/2">
+                <div class="max-w-[500px] w-full mx-auto lg:mx-0">
+                    <img src="{{ asset($cat->image) }}" alt="{{ $cat->name }}"
+                        class="w-full h-auto object-cover shadow-lg" />
                 </div>
-
-                <!-- Teks -->
-                <!-- Teks -->
-                <div class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $cat['textAlign'] }}">
-                    <h2 class="text-3xl sm:text-4xl md:text-8xl font-black tracking-tight leading-tight">
-                        {!! nl2br(e($cat['title'])) !!}
-                    </h2>
-                    <p class="mt-6 text-gray-700 text-lg sm:text-xl">
-                        {{ $cat['desc'] }}
-                    </p>
-
-                    <a href="{{ route('customer.products.index', ['category[]' => $cat['slug']]) }}"
-                        class="inline-block mt-6 px-6 py-3 bg-primary text-white text-sm font-semibold rounded-md shadow hover:bg-primary-dark transition">
-                        Shop Now
-                    </a>
-                </div>
-
             </div>
-        @endforeach
-    </section>
+
+            <!-- Teks -->
+            <div class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $loop->index % 2 === 1 ? 'lg:text-left' : 'lg:text-right' }}">
+                <h2 class="text-3xl sm:text-4xl md:text-8xl font-black tracking-tight leading-tight">
+                    {!! nl2br(e($cat->title)) !!}
+                </h2>
+                <p class="mt-6 text-gray-700 text-lg sm:text-xl">
+                    {{ $cat->description }}
+                </p>
+
+                <a href="{{ route('customer.products.index', ['category[]' => $cat->slug]) }}"
+                    class="inline-block mt-6 px-6 py-3 bg-primary text-white text-sm font-semibold rounded-md shadow hover:bg-primary-dark transition">
+                    Shop Now
+                </a>
+            </div>
+        </div>
+    @endforeach
+</section>
+
 
 
 

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Size;
+use App\Models\ProductSize;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +15,7 @@ class SizeSeeder extends Seeder
     {
         $sizes = ['S', 'M', 'L', 'XL'];
         foreach ($sizes as $size) {
-            Size::create(['name' => $size]);
+            ProductSize::create(['name' => $size]);
         }
     }
 }

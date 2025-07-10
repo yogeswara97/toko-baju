@@ -3,7 +3,7 @@
 
 
         {{-- Desktop Navbar --}}
-        <div class="hidden md:flex items-center justify-between h-full px-4 sm:px-6 lg:px-0 relative">
+        <div class="hidden lg:flex items-center justify-between h-full px-4 sm:px-6 lg:px-0 relative">
 
             {{-- LEFT: Product Categories --}}
             <div class="flex gap-4 sm:gap-6 overflow-x-auto">
@@ -68,7 +68,7 @@
 
 
         {{-- Mobile Navbar --}}
-        <div class="h-full flex items-center justify-between md:hidden px-1 py-2">
+        <div class="h-full flex items-center justify-between lg:hidden px-1 py-2">
             {{-- App Name --}}
             <div>
                 @if (!request()->routeIs('customer.home'))
@@ -94,7 +94,7 @@
 
         {{-- 🔹 Mobile Menu (From Top Navbar) --}}
         <div id="mobile-menu"
-            class="md:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-out
+            class="lg:hidden invisible opacity-0 -translate-y-full transition-all duration-300 ease-out
 flex flex-col gap-4 px-4 py-6 bg-white text-black fixed top-0 left-0 right-0 z-50 shadow-md rounded-b-xl overflow-y-auto">
 
 

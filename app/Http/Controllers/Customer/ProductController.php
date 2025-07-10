@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Color;
 use App\Models\Product;
-use App\Models\Size;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -28,13 +28,13 @@ class ProductController extends Controller
         // Filter by size (berdasarkan ID size dari tabel sizes)
         if ($request->filled('size')) {
             $query->whereHas('variants', function ($q) use ($request) {
-                $q->whereIn('size_id', $request->size);
+                $q->whereIn('product_size_id', $request->size);
             });
         }
 
         if ($request->filled('color')) {
             $query->whereHas('variants', function ($q) use ($request) {
-                $q->whereIn('color_id', $request->color);
+                $q->whereIn('product_color_id', $request->color);
             });
         }
 
@@ -59,8 +59,8 @@ class ProductController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
         $categories = Category::all();
-        $sizes = Size::all(); // ambil list size dari DB
-        $colors = Color::all(); // ambil list size dari DB
+        $sizes = ProductSize::all(); // ambil list size dari DB
+        $colors = ProductColor::all(); // ambil list size dari DB
 
         return view('customer.products.index', compact('products', 'categories', 'sizes', 'colors'));
     }
@@ -77,14 +77,15 @@ class ProductController extends Controller
 
         $variants = $product->variants->map(function ($variant) {
             return [
-                'size_id' => $variant->size_id,
-                'color_id' => $variant->color_id,
+                'size_id' => $variant->product_size_id,
+                'color_id' => $variant->product_color_id,
                 'qty' => $variant->qty,
+                'image' => $variant->image,
             ];
         });
 
         $products = Product::take(4)->get();
 
-        return view('customer.products.show', compact('product', 'sizes', 'colors','variants','products'));
+        return view('customer.products.show', compact('product', 'sizes', 'colors', 'variants', 'products'));
     }
 }

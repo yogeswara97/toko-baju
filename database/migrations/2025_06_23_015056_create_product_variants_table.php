@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->foreignId('color_id')->constrained()->onDelete('cascade');
-            $table->foreignId('size_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_size_id')->nullable()->constrained('product_sizes')->nullOnDelete();
+            $table->foreignId('product_color_id')->nullable()->constrained('product_colors')->nullOnDelete();
+            $table->string('image')->nullable();
             $table->integer('qty')->default(0);
             $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->unique(['product_id', 'color_id', 'size_id']);
+            $table->unique(['product_id', 'product_color_id', 'product_size_id']);
         });
     }
 

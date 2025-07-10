@@ -13,25 +13,39 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::insert([
+        $categories = [
             [
                 'name' => 'Men',
+                'title' => 'MEN’S ESSENTIALS: SHIRTS, TEES & POLOS',
                 'slug' => 'men',
-                'description' => 'Fashion pria keren, dari kasual sampe formal.',
-                'image' => 'assets/images/categories/men.jpg',
+                'image' => 'assets/static-images/category/man.png',
+                'description' => 'Upgrade your wardrobe with timeless pieces for every occasion. From sleek polos to comfy tees — find your fit and stay effortlessly cool, all day every day.',
             ],
             [
                 'name' => 'Women',
+                'title' => 'FOR HER: BLOUSES, TOPS & CHIC TEES',
                 'slug' => 'women',
-                'description' => 'Gaya stylish untuk para wanita kece.',
-                'image' => 'assets/images/categories/women.jpg',
+                'image' => 'assets/static-images/category/women.png',
+                'description' => 'Style made simple. Dive into our curated picks of modern blouses, everyday tops, and trend-forward tees that fit every mood — from classy to casual.',
             ],
             [
                 'name' => 'Accessories',
+                'title' => 'BAGS, HATS & ALL THE EXTRAS',
                 'slug' => 'accessories',
-                'description' => 'Lengkapi outfit loe dengan aksesoris kece.',
-                'image' => 'assets/images/categories/accessories.jpg',
+                'image' => 'assets/static-images/category/accessories.jpg',
+                'description' => 'Top off your look with must-have accessories. From statement bags to everyday hats — it’s the little things that make the biggest style impact.',
             ],
-        ]);
+        ];
+
+        foreach ($categories as $cat) {
+            Category::create([
+                'name' => $cat['name'],
+                'title' => $cat['title'],
+                'slug' => $cat['slug'],
+                'image' => $cat['image'],
+                'description' => $cat['description'],
+                'is_display' => true,
+            ]);
+        }
     }
 }

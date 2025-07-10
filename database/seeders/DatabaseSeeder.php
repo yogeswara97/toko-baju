@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ColorSeeder::class,
             SizeSeeder::class,
-            ProductSeeder::class,
+            StaticProductSeeder::class,
             // CartSeeder::class,
             // OrderSeeder::class,
             PromoCodeSeeder::class,

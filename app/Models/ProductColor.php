@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Size extends Model
+class ProductColor extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'hex_code'];
 
     public function productVariants()
     {

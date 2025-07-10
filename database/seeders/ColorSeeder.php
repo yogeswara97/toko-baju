@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Color;
+use App\Models\ProductColor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,10 +18,11 @@ class ColorSeeder extends Seeder
             ['name' => 'White', 'hex_code' => '#FFFFFF'],
             ['name' => 'Blue', 'hex_code' => '#0000FF'],
             ['name' => 'Gray', 'hex_code' => '#808080'],
+            ['name' => 'Brown', 'hex_code' => '#A52A2A'],
         ];
 
         foreach ($colors as $color) {
-            Color::create($color);
+            ProductColor::create($color);
         }
     }
 }
