@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function show($order_code)
     {
-        $order = Order::with(['items', 'payment'])
+        $order = Order::with(['items.product', 'payment'])
             ->where('order_code', $order_code)
             ->where('user_id', Auth::id())
             ->firstOrFail();

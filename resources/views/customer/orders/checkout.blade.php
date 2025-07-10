@@ -67,8 +67,7 @@
                             value="{{ $item->variant->price * $item->quantity }}">
                         @endforeach
                     </div>
-
-                    <x-customer.orders.price-summary :subtotal="$subtotal" :shipping="session('ongkir') ?? 0"
+                    <x-customer.orders.price-summary :subtotal="$subtotal" :shipping="0"
                         :discount="$discount" :total="$total" />
 
                     @if ($defaultAddress)
@@ -78,7 +77,7 @@
                     @endif
                     <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                     <input type="hidden" name="discount" value="{{ $discount }}">
-                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{ session('ongkir') ?? 0 }}">
+                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="0">
 
 
                     <input type="hidden" name="total" id="total-amount-value" value="{{ $total }}">

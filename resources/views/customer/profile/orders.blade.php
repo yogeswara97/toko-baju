@@ -56,13 +56,17 @@
                         <div class="space-y-4">
                             @foreach ($order->items as $item)
                             <div class="flex items-center border-b border-gray-200 pb-4">
-                                <img src="/placeholder.svg?height=80&width=80" alt="{{ $item->product_name }}"
-                                    class="w-16 h-16 object-cover rounded">
+
+                                <img src="{{ $item->product->image ? asset($item->product->image) : asset('assets/static-images/no-image.jpg') }}"
+                                    alt="{{ $item->product->name }}"
+                                    class="w-24 h-24 object-cover rounded border border-gray-200" />
+
                                 <div class="ml-4 flex-1">
                                     <h3 class="font-semibold text-gray-900">{{ $item->product_name }}</h3>
                                     <p class="text-gray-600 text-sm">Color: {{ $item->variant_color ?? '-' }},
                                         Size: {{ $item->variant_size ?? '-' }}</p>
                                     <p class="text-gray-600 text-sm">Quantity: {{ $item->quantity }}</p>
+                                    <p class="text-gray-600 text-sm">Quantity: {{ $item->product->image }}</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="font-semibold">Rp{{ number_format($item->subtotal, 0, ',', '.') }}
@@ -75,20 +79,6 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-6 pt-4 flex space-x-4">
-                            <button
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                                <i class="fas fa-redo mr-2"></i>Reorder
-                            </button>
-                            <button
-                                class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition duration-200">
-                                <i class="fas fa-star mr-2"></i>Write Review
-                            </button>
-                            <button
-                                class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition duration-200">
-                                <i class="fas fa-download mr-2"></i>Download Invoice
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -127,6 +117,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- 👇 Tambahkan tombol-tombol di sini -->
+                        <div class="mt-6 pt-4 flex flex-col w-full gap-4">
+                            <button
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                <i class="fas fa-redo mr-2"></i>Reorder
+                            </button>
+                            <button
+                                class="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition duration-200">
+                                <i class="fas fa-star mr-2"></i>Write Review
+                            </button>
+                            <button
+                                class="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition duration-200">
+                                <i class="fas fa-download mr-2"></i>Download Invoice
+                            </button>
+                        </div>
                     </div>
 
                     <div class="rounded-lg border border-gray-200 p-6">
@@ -144,7 +150,7 @@
                             <i class="fas fa-credit-card text-gray-400 mr-3"></i>
                             <div>
                                 <p class="font-medium">{{ ucfirst($payment->payment_type ?? 'Midtrans') }}</p>
-                                <p class="text-sm text-gray-600">Transaction ID: {{ $payment->transaction_id ?? '-' }}
+                                <p class="text-sm text-gray-600">Transaction ID: {{ $payment->snap_token ?? '-' }}
                                 </p>
                             </div>
                         </div>

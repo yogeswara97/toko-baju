@@ -69,6 +69,15 @@ class CheckoutController extends Controller
 
     public function order(Request $request)
     {
+        $user = Auth::user();
+
+        $hasPendingOrder = Order::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        if ($hasPendingOrder) {
+            return back()->with('error', 'Kamu masih punya pesanan yang belum selesai. Selesaikan dulu sebelum melakukan pemesanan baru ya!');
+        }
         $request->validate([
             'total' => 'required|numeric|min:0',
             'subtotal' => 'required|numeric|min:0',
@@ -87,7 +96,13 @@ class CheckoutController extends Controller
             'items.*.subtotal' => 'required|numeric|min:0',
         ]);
 
-        $user = Auth::user();
+
+
+        if ((int) $request->shipping_cost <= 0) {
+            return back()->with('error', 'Silakan pilih layanan pengiriman terlebih dahulu.');
+        }
+
+
 
         $orderCode = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
 
@@ -139,13 +154,19 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function status($status, $order_code)
+    public function status($status, $order_code, Request $request)
     {
+
+        if ($request->query('closed')) {
+            session()->flash('warning', 'Kamu menutup pembayaran sebelum selesai 😢');
+        }
         $status = strtolower($status);
+
 
         if (!in_array($status, ['success', 'pending', 'failed'])) {
             abort(404);
         }
+
 
         $order = Order::where('order_code', $order_code)
             ->where('user_id', Auth::id())

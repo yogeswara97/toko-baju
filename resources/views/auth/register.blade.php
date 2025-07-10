@@ -7,7 +7,7 @@
         <div class="flex items-center justify-center w-full lg:w-[60%] px-4 min-h-screen">
             <div class="w-full max-w-lg p-8 sm:p-10">
                 <h2 class="text-3xl font-medium text-gray-800 mb-6">Register ke</h2>
-                <h2 class="text-7xl font-medium text-gray-800 mb-6">StyleHub</h2>
+                <h2 class="text-7xl font-medium text-primary mb-6 uppercase"> {{ config('app.name') }}</h2>
 
                 {{-- Error Handling --}}
                 @if ($errors->any())

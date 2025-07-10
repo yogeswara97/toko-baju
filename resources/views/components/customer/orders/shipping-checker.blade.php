@@ -1,8 +1,4 @@
-@props([
-    'destinationId',
-    'weight' => 1000,
-    'defaultCourier' => 'jne',
-])
+@props(['destinationId', 'weight' => 1000, 'defaultCourier' => 'jne'])
 
 <form id="ongkir-form" action="{{ route('customer.cek-ongkir') }}" method="POST" class="mb-4">
     @csrf
@@ -14,10 +10,7 @@
                 <label for="courier" class="block text-sm font-medium text-gray-700 mb-1">Kurir</label>
                 <select id="courier" name="courier"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none text-sm">
-                    @foreach ([
-                        'jne','tiki','pos','sicepat','jnt','anteraja','wahana','lion','ninja',
-                        'indah','rex','sap','idl','jet','first'
-                    ] as $courier)
+                    @foreach (['jne', 'tiki', 'pos', 'sicepat', 'jnt', 'anteraja', 'wahana', 'lion', 'ninja', 'indah', 'rex', 'sap', 'idl', 'jet', 'first'] as $courier)
                         <option value="{{ $courier }}" @selected($courier == $defaultCourier)>
                             {{ strtoupper($courier) }}
                         </option>
@@ -43,8 +36,8 @@
 
 
 @push('scripts')
-<script>
-        document.getElementById('ongkir-form').addEventListener('submit', async function (e) {
+    <script>
+        document.getElementById('ongkir-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const form = e.target;
@@ -94,7 +87,8 @@
                     radios.forEach(radio => {
                         radio.addEventListener('change', (e) => {
                             document.querySelectorAll('.shipping-option').forEach(el => {
-                                el.classList.remove('border-primary', 'bg-primary-light');
+                                el.classList.remove('border-primary',
+                                    'bg-primary-light');
                                 el.classList.add('border-gray-300');
                             });
 
@@ -108,14 +102,18 @@
                             // Update shipping summary
                             const shippingSummary = document.getElementById('summary-shipping');
                             if (shippingSummary) {
-                                shippingSummary.innerText = 'Rp' + shippingCost.toLocaleString('id-ID');
+                                shippingSummary.innerText = 'Rp' + shippingCost.toLocaleString(
+                                    'id-ID');
                             }
 
-                            const subtotal = parseInt(document.getElementById('total-amount').dataset.subtotal);
-                            const discount = parseInt(document.getElementById('total-amount').dataset.discount || 0);
+                            const subtotal = parseInt(document.getElementById('total-amount')
+                                .dataset.subtotal);
+                            const discount = parseInt(document.getElementById('total-amount')
+                                .dataset.discount || 0);
                             const newTotal = subtotal + shippingCost - discount;
 
-                            document.getElementById('total-amount').innerText = 'Rp' + newTotal.toLocaleString('id-ID');
+                            document.getElementById('total-amount').innerText = 'Rp' + newTotal
+                                .toLocaleString('id-ID');
                             document.getElementById('total-amount-value').value = newTotal;
                         });
                     });
@@ -123,7 +121,8 @@
                     resultDiv.innerHTML = '<p class="text-red-500">❌ Tidak ada opsi pengiriman tersedia.</p>';
                 }
             } catch (err) {
-                resultDiv.innerHTML = '<p class="text-red-500">⚠️ Gagal mengambil data ongkir. Coba lagi nanti.</p>';
+                resultDiv.innerHTML =
+                    '<p class="text-red-500">⚠️ Gagal mengambil data ongkir. Coba lagi nanti.</p>';
                 console.error(err);
             }
         });
