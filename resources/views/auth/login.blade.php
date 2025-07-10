@@ -12,9 +12,9 @@
 
 
         <!-- Form Login -->
-        <div class="flex items-center justify-center w-full lg:w-1/2 px-4  min-h-screen">
+        <div class="flex items-center justify-center w-full lg:w-[60%] px-4  min-h-screen">
 
-            <div class="w-full max-w-md p-8 sm:p-10 ">
+            <div class="w-full max-w-lg p-8 sm:p-10 ">
                 <h2 class="text-3xl font-medium text-gray-800 mb-6">Login ke</h2>
                 <h2 class="text-7xl font-medium text-gray-800 mb-6"> StyleHub</h2>
 
@@ -59,7 +59,7 @@
                 </form>
 
                 <div class="mt-4 ">
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('customer.home') }}"
                         class="inline-block mt-2 text-sm text-gray-700 hover:text-primary underline transition">
                         Kembali ke Dashboard
                     </a>

@@ -21,14 +21,18 @@ class CheckoutController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('customer.cart.index')->with('error', 'Keranjang kamu kosong, yuk belanja dulu!');
+        }
+
         $addresses = $user->addresses;
 
         $addressId = session('default_address');
         $defaultAddress = $addresses->firstWhere('id', $addressId) ?? $addresses->firstWhere('is_default', true);
 
         $subtotal = $cartItems->sum(fn($item) => $item->variant->price * $item->quantity);
-        // $tax = round($subtotal * 0.1); // 10%
-        $shippingCost = 999;
+        $shippingCost = session('shipping_cost', 0);
+
         $promo = session('promo');
         $discount = 0;
 
@@ -38,15 +42,11 @@ class CheckoutController extends Controller
                 : $promo['value'];
         }
 
-        // $total = $subtotal - $discount + $shippingCost + $tax;
         $total = $subtotal - $discount + $shippingCost;
-
-
 
         return view('customer.orders.checkout', compact(
             'cartItems',
             'subtotal',
-            // 'tax',
             'discount',
             'total',
             'shippingCost',

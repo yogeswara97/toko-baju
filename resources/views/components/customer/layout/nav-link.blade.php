@@ -1,7 +1,7 @@
 @props(['href'])
 
 @php
-    $isHome = request()->routeIs('home');
+    $isHome = request()->routeIs('customer.home');
     $baseClass = $isHome ? 'text-secondary' : 'text-black';
 @endphp
 
