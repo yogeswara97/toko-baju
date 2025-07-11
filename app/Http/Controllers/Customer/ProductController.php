@@ -15,8 +15,7 @@ class ProductController extends Controller
     {
         // Mulai query produk
         $query = Product::with(['category', 'variants'])
-            ->where('is_active', true)
-            ->where('is_stock', true);
+            ->where('is_active', true);
 
         // Filter kategori
         if ($request->has('category')) {
@@ -70,6 +69,10 @@ class ProductController extends Controller
         $product = Product::where('slug', $slug)
             ->with(['variants.size', 'variants.color'])
             ->firstOrFail();
+
+        if (!$product->is_stock) {
+            return redirect()->back()->with('error', 'Produk sedang out of stock!');
+        }
 
         $sizes = $product->variants->pluck('size')->unique('id');
         $colors = $product->variants->pluck('color')->unique('id');

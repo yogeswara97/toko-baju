@@ -20,40 +20,40 @@
 
 
                     @if ($sizes->filter()->isNotEmpty())
-                        <hr class="my-6 border-gray-300">
-                        <div class="mb-3">
-                            <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
-                            <div class="flex space-x-2 mb-2">
-                                @foreach ($sizes->filter() as $size)
-                                    <button
-                                        class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
-                                        data-size-id="{{ $size->id }}">{{ $size->name }}</button>
-                                @endforeach
-                            </div>
-                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                    <hr class="my-6 border-gray-300">
+                    <div class="mb-3">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
+                        <div class="flex space-x-2 mb-2">
+                            @foreach ($sizes->filter() as $size)
+                            <button
+                                class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
+                                data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                            @endforeach
                         </div>
+                        <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                    </div>
                     @endif
 
                     @if ($colors->filter()->isNotEmpty())
-                        <div id="color-section">
-                            <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
-                            <div class="flex flex-col space-x-2 mb-2">
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    @foreach ($colors->filter() as $color)
-                                        <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
-                                            <div class="w-10 h-10 border-2 rounded-full"
-                                                style="background-color: {{ $color->hex_code ?? '#ccc' }};">
-                                            </div>
-                                            <div
-                                                class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
-                                                <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                    <div id="color-section">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
+                        <div class="flex flex-col space-x-2 mb-2">
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                @foreach ($colors->filter() as $color)
+                                <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
+                                    <div class="w-10 h-10 border-2 rounded-full"
+                                        style="background-color: {{ $color->hex_code ?? '#ccc' }};">
+                                    </div>
+                                    <div
+                                        class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
+                                        <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
+                                    </div>
                                 </div>
-                                <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
+                                @endforeach
                             </div>
+                            <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                         </div>
+                    </div>
                     @endif
 
 
@@ -121,8 +121,9 @@
                 <x-customer.page-header title="More Products" description="Discover our complete collection" />
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
                     @foreach ($products as $product)
-                        <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
-                            :description="Str::limit($product->description, 60)" :price="$product->price" />
+                    <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
+                        :description="Str::limit($product->description, 60)" :price="$product->price"
+                        :is_stock="$product->is_stock" />
                     @endforeach
                 </div>
             </div>
@@ -134,8 +135,8 @@
 
         {{-- Scripts --}}
         @push('scripts')
-            <script>
-                const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
+        <script>
+            const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
                 const hasColors = {{ $colors->filter()->isNotEmpty() ? 'true' : 'false' }};
 
                 const form = document.getElementById('add-to-cart-form');
@@ -302,7 +303,7 @@
                     updateColorsBySize();
                     updateStock();
                 });
-            </script>
+        </script>
         @endpush
 
 

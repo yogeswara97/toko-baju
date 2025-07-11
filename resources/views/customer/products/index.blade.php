@@ -126,7 +126,8 @@
                     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
                         @foreach ($products as $product)
                         <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
-                            :description="Str::limit($product->description, 60)" :price="$product->price" />
+                            :description="$product->description" :price="$product->price"
+                            :is_stock="$product->is_stock" />
                         @endforeach
                     </div>
 
