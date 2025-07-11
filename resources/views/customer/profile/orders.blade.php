@@ -59,14 +59,13 @@
 
                                 <img src="{{ $item->product->image ? asset($item->product->image) : asset('assets/static-images/no-image.jpg') }}"
                                     alt="{{ $item->product->name }}"
-                                    class="w-24 h-24 object-cover rounded border border-gray-200" />
+                                    class="w-20 h-28 object-cover rounded border border-gray-200" />
 
                                 <div class="ml-4 flex-1">
                                     <h3 class="font-semibold text-gray-900">{{ $item->product_name }}</h3>
                                     <p class="text-gray-600 text-sm">Color: {{ $item->variant_color ?? '-' }},
                                         Size: {{ $item->variant_size ?? '-' }}</p>
                                     <p class="text-gray-600 text-sm">Quantity: {{ $item->quantity }}</p>
-                                    <p class="text-gray-600 text-sm">Quantity: {{ $item->product->image }}</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="font-semibold">Rp{{ number_format($item->subtotal, 0, ',', '.') }}

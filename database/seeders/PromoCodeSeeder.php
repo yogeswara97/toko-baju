@@ -17,16 +17,18 @@ class PromoCodeSeeder extends Seeder
         PromoCode::create([
             'code' => 'DISKON10',
             'type' => 'percentage',
-            'value' => 10, // 10%
+            'value' => 10,
             'max_uses' => 100,
+            'max_uses_per_user' => 1,
             'expires_at' => Carbon::now()->addDays(30),
         ]);
 
         PromoCode::create([
             'code' => 'ONGKIRFREE',
             'type' => 'fixed',
-            'value' => 9.99, // potongan tetap
+            'value' => 50000,
             'max_uses' => null,
+            'max_uses_per_user' => 1,
             'expires_at' => null,
         ]);
 
@@ -35,6 +37,7 @@ class PromoCodeSeeder extends Seeder
             'type' => 'percentage',
             'value' => 20,
             'max_uses' => 50,
+            'max_uses_per_user' => 2,
             'expires_at' => Carbon::now()->addDays(7),
         ]);
     }

@@ -9,15 +9,16 @@ class PromoCodeUsage extends Model
     protected $fillable = [
         'user_id',
         'promo_code_id',
+        'uses',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function promoCode()
     {
         return $this->belongsTo(PromoCode::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

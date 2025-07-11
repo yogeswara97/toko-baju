@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 // === Auth Routes ===
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login.post');

@@ -13,20 +13,27 @@
         <div class="">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Cart Items -->
-                <div class="lg:w-2/3">
+                <div class="lg:w-[60%]">
                     <div class="p-6">
                         <h2 class="text-xl font-semibold mb-6">Cart Items ({{ $cartItems->count() }})</h2>
 
                         @forelse ($cartItems as $item)
+
                         <div class="flex items-center border-b border-gray-200 pb-6 mb-6">
-                            <img src="{{ $item->product->image ?? '/placeholder.svg?height=120&width=120' }}"
-                                alt="{{ $item->product->name }}" class="w-20 h-20 object-cover rounded">
+                            <img src="{{ $item->variant->image ?? asset('assets/static-images/no-image.jpg') }}"
+                                alt="{{ $item->product->name }}" class="w-20 h-28 object-cover rounded">
 
                             <div class="ml-4 flex-1">
                                 <h3 class="font-semibold text-gray-900">{{ $item->product->name }}</h3>
                                 <p class="text-gray-600 text-sm">
-                                    Color: {{ $item->variant->color->name ?? '-' }},
-                                    Size: {{ $item->variant->size->name ?? '-' }}
+                                    @if ($item->variant->color)
+                                    Color: {{ $item->variant->color->name }}<br>
+                                    @endif
+
+                                    @if ($item->variant->size)
+                                    Size: {{ $item->variant->size->name }}
+                                    @endif
+
                                 </p>
                                 <p class="text-primary font-semibold mt-1">
                                     Rp.{{ number_format($item->variant->price ?? $item->product->price, 2) }}
@@ -66,14 +73,14 @@
                             </form>
                         </div>
                         @empty
-                        <p class="text-gray-500">Your cart is empty. 😥</p>
+                        <p class="text-gray-500">Your cart is empty.</p>
                         @endforelse
 
                     </div>
                 </div>
 
                 <!-- Order Summary -->
-                <div class="lg:w-1/3">
+                <div class="lg:w-[40%]">
                     <div class="p-6">
                         <h2 class="text-xl font-semibold mb-6">Order Summary</h2>
 
@@ -85,8 +92,10 @@
 
                             {{-- ⬇️ Tambahkan di sini --}}
                             <div class="flex justify-between">
-                                <span class="text-gray-600">Discount {{ $discount > 0 ? '('.$promo['code'].')' : '' }}</span>
-                                <span class="font-semibold text-red-600">- Rp.{{ $discount > 0 ? number_format($discount, 2) : '0'}}</span>
+                                <span class="text-gray-600">Discount {{ $discount > 0 ? '('.$promo['code'].')' : ''
+                                    }}</span>
+                                <span class="font-semibold text-red-600">- Rp.{{ $discount > 0 ?
+                                    number_format($discount, 2) : '0'}}</span>
                             </div>
 
                             <div class="border-t border-gray-200 pt-3">
@@ -102,8 +111,8 @@
                         @if(session('promo.success'))
                         <div class="text-green-600 mb-4">{{ session('promo.success') }}</div>
                         @endif
-                        @if(session('promo.'))
-                        <div class="text-red-600 mb-4">{{ session('promo.') }}</div>
+                        @if(session('promo.error'))
+                        <div class="text-red-600 mb-4">{{ session('promo.error') }}</div>
                         @endif
 
                         <!-- Promo Code -->

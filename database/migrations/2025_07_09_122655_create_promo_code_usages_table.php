@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('promo_code_id')->constrained()->onDelete('cascade');
+            $table->integer('uses')->default(1);
             $table->timestamps();
 
-            $table->unique(['user_id', 'promo_code_id']);
+            $table->unique(['user_id', 'promo_code_id']); // biar 1 user gak bisa input promo yang sama berulang
         });
     }
 

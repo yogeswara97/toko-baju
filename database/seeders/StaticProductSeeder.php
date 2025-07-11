@@ -178,7 +178,7 @@ class StaticProductSeeder extends Seeder
             'product_color_id' => null,
             'qty' => 20,
             'price' => 250000,
-            'image' => null,
+            'image' => 'assets/static-images/category/accessories.jpg',
         ]);
     }
 }

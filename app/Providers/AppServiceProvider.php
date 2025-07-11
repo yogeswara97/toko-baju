@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            $view->with('navbarCategories', Category::all());
+            $view->with('navbarCategories', Category::where('is_displayed', true)->get());
 
             $cartCount = auth()->check()
                 ? Cart::where('user_id', auth()->id())->count()

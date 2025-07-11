@@ -55,47 +55,43 @@ class CartController extends Controller
         ];
 
         if ($product->sizes->isNotEmpty()) {
-            $rules['size_id'] = 'required|exists:product_sizes,id';
+            $rules['product_size_id'] = 'required|exists:product_sizes,id';
         }
 
         if ($product->colors->isNotEmpty()) {
-            $rules['color_id'] = 'required|exists:product_colors,id';
+            $rules['product_color_id'] = 'required|exists:product_colors,id';
         }
 
         $validated = $request->validate($rules);
-
         // Cek kalau produk tidak punya size, tapi user ngirim size
-        if ($product->sizes->isEmpty() && $request->filled('size_id')) {
-            return back()->withErrors(['size_id' => 'Produk ini tidak memiliki ukuran'])->withInput();
+        if ($product->sizes->isEmpty() && $request->filled('product_size_id')) {
+            return back()->withErrors(['product_size_id' => 'Produk ini tidak memiliki ukuran'])->withInput();
         }
 
         // Cek kalau produk tidak punya color, tapi user ngirim color
-        if ($product->colors->isEmpty() && $request->filled('color_id')) {
-            return back()->withErrors(['color_id' => 'Produk ini tidak memiliki warna'])->withInput();
+        if ($product->colors->isEmpty() && $request->filled('product_color_id')) {
+            return back()->withErrors(['product_color_id' => 'Produk ini tidak memiliki warna'])->withInput();
         }
 
         // Cari variant yang match berdasarkan kombinasi size & color
         $variantQuery = ProductVariant::where('product_id', $product->id);
 
         if ($product->sizes->isNotEmpty()) {
-            $variantQuery->where('product_size_id', $validated['size_id']);
-        }
-
-        if ($product->colors->isNotEmpty()) {
-            $variantQuery->where('product_color_id', $validated['color_id']);
-        }
-
-
-        if ($product->colors->isNotEmpty()) {
-            $variantQuery->where('product_color_id', $validated['color_id']);
+            $variantQuery->where('product_size_id', $validated['product_size_id']);
         } else {
-            $variantQuery->whereNull('color_id');
+            $variantQuery->whereNull('product_size_id');
+        }
+
+        if ($product->colors->isNotEmpty()) {
+            $variantQuery->where('product_color_id', $validated['product_color_id']);
+        } else {
+            $variantQuery->whereNull('product_color_id');
         }
 
         $variant = $variantQuery->first();
 
         // Jika tidak ketemu variant, atau stok kurang
-        if (!$variant || $variant->qty < $validated['qty']) {
+        if ($variant->qty < $validated['qty']) {
             return back()->withErrors(['qty' => 'Stok tidak tersedia!'])->withInput();
         }
 

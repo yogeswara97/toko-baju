@@ -1,24 +1,14 @@
 <x-customer.layout.layout>
 
 
-    <section class="container-custom">
-        @if ($errors->any())
-        <div class="mb-4 p-4 bg-red-50 border border-red-300 text-red-800 rounded">
-            <ul class="list-disc list-inside text-sm space-y-1">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-
+    <section class="container-custom ">
+        <x-alert.default />
         <section class="py-8 md:py-12">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
                 <img id="main-product-image" src="{{ asset($product->image) }}" alt="{{ $product->name }}"
                     class="w-full max-w-md mx-auto object-cover rounded-xl shadow-md">
-
 
                 <div>
                     <h1 class="text-right text-gray-800 text-6xl mb-4 tracking-tighter fontse">{{ $product->name }}
@@ -72,7 +62,8 @@
                     <div class="flex items-end space-x-3 mb-6">
                         {{-- <p class="text-gray-400 line-through text-2xl">$ 129.00</p> --}}
                         <p class="text-gray-800 font-bold text-4xl">Rp
-                            {{ number_format($product->price, 0, ',', '.') }}</p>
+                            {{ number_format($product->price, 0, ',', '.') }}
+                        </p>
                     </div>
 
                     <h4 class="font-medium mb-1 text-lg">Jumlah</h4>
@@ -104,8 +95,8 @@
                         class="flex flex-col gap-4 mt-4">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}" readonly>
-                        <input type="hidden" name="size_id" id="selected-size-id">
-                        <input type="hidden" name="color_id" id="selected-color-id">
+                        <input type="hidden" name="product_size_id" id="selected-size-id">
+                        <input type="hidden" name="product_color_id" id="selected-color-id">
                         <input type="hidden" name="qty" id="qty" value="{{ $quantity ?? 1 }}">
 
                         <div>
@@ -146,8 +137,8 @@
         {{-- Scripts --}}
         @push('scripts')
         <script>
-            const hasSizes = {{ $sizes->isNotEmpty() ? 'true' : 'false' }};
-                const hasColors = {{ $colors->isNotEmpty() ? 'true' : 'false' }};
+            const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
+                const hasColors = {{ $colors->filter()->isNotEmpty() ? 'true' : 'false' }};
 
                 const form = document.getElementById('add-to-cart-form');
                 const sizeButtons = document.querySelectorAll('.size-btn');

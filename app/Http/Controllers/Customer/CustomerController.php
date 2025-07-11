@@ -12,7 +12,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $categories = Category::where('is_display', true)->get();
+        $categories = Category::where('is_displayed', true)->get();
 
         return view('customer.index', compact('categories'));
     }

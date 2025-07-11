@@ -36,9 +36,9 @@
 
             <div class="flex items-center gap-4 shrink-0">
                 @if (auth()->check())
-                <a href="#" class="hover:text-gray-700 transition {{ $iconClass }}">
+                {{-- <a href="#" class="hover:text-gray-700 transition {{ $iconClass }}">
                     <i class="fas fa-search"></i>
-                </a>
+                </a> --}}
                 <a href="{{ route('customer.profile.index') }}" class="hover:text-gray-700 transition {{ $iconClass }}">
                     <i class="fas fa-user"></i>
                 </a>
@@ -113,7 +113,7 @@ flex flex-col gap-4 px-4 py-6 bg-white text-black fixed top-0 left-0 right-0 z-5
             {{-- USER / LOGIN --}}
             <div class="flex items-center gap-4 mt-4">
                 @if (auth()->check())
-                <a href="#"><i class="fas fa-search"></i></a>
+                {{-- <a href="#"><i class="fas fa-search"></i></a> --}}
                 <a href="{{ route('customer.profile.index') }}"><i class="fas fa-user"></i></a>
                 <a href="{{ route('customer.cart.index') }}" class="relative">
                     <i class="fas fa-shopping-bag"></i>

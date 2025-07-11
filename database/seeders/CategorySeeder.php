@@ -44,7 +44,7 @@ class CategorySeeder extends Seeder
                 'slug' => $cat['slug'],
                 'image' => $cat['image'],
                 'description' => $cat['description'],
-                'is_display' => true,
+                'is_displayed' => true,
             ]);
         }
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('type', ['percentage', 'fixed']);
             $table->decimal('value', 8, 2);
             $table->integer('max_uses')->nullable();
+            $table->integer('max_uses_per_user')->default(1);
             $table->date('expires_at')->nullable();
             $table->timestamps();
         });

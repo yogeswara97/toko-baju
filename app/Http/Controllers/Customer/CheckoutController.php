@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\ProductVariant;
+use App\Models\PromoCode;
+use App\Models\PromoCodeUsage;
 use App\Services\MidtransService;
 use App\Services\RajaOngkirService;
 use Illuminate\Http\Request;
@@ -130,8 +133,23 @@ class CheckoutController extends Controller
                 'quantity' => $item['quantity'],
                 'subtotal' => (int) $item['subtotal'],
             ]);
+
+            $variant = ProductVariant::find($item['product_variant_id']);
+            if ($variant) {
+                $variant->decrement('qty', $item['quantity']);
+            }
         }
 
+        if (session()->has('promo')) {
+            $promoData = session('promo');
+            $promo = PromoCode::find($promoData['id']);
+
+            if ($promo) {
+                $promo->incrementUsageForUser($user->id);
+            }
+
+            session()->forget('promo');
+        }
 
         Cart::where('user_id', $user->id)->delete();
 
@@ -153,6 +171,7 @@ class CheckoutController extends Controller
             'order' => $order,
         ]);
     }
+
 
     public function status($status, $order_code, Request $request)
     {
