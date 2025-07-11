@@ -1,10 +1,16 @@
-<a
-    {{ $attributes }}
-    class="{{ $active ? 'text-white bg-gray-800' : 'text-gray-900 hover:bg-gray-100' }} flex items-center p-2 rounded-lg"
->
-    <i class="{{ $icon }}"></i>
-    <span class="flex-1 ms-3 whitespace-nowrap">{{ $slot }}</span>
-    @if($badge === 'true')
-        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">{{ $count }}</span>
-    @endif
+@props([
+    'href',
+    'active' => false,
+    'icon' => '',
+])
+
+@php
+$classes = $active
+    ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-semibold'
+    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white';
+@endphp
+
+<a href="{{ $href }}" class="flex items-center px-3 py-2 rounded-lg transition-colors {{ $classes }}">
+    <i class="{{ $icon }} text-sm w-5"></i>
+    <span class="ml-3">{{ $slot }}</span>
 </a>

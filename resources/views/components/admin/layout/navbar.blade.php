@@ -1,69 +1,65 @@
-<nav class="bg-gray-50 border border-gray-200 fixed top-0 w-full h-16 z-20">
-    <div class=" flex flex-wrap items-center justify-end mx-auto sm:px-10 py-4">
-        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative text-black">
-            <button type="button"
-                class="flex items-center text-sm rounded-full"
+<nav class="bg-white fixed top-0 w-full h-16 z-20 border-b border-gray-200">
+    <div class="flex items-center justify-end mx-auto sm:px-10 h-full">
+        <div class="flex items-center space-x-4 relative text-gray-800"> <!-- Ganti dari text-white -->
+
+            <!-- Profile Dropdown Button -->
+            <button type="button" class="flex items-center text-sm rounded-full focus:outline-none"
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
-                data-dropdown-placement="bottom">
+                data-dropdown-placement="bottom-end">
+
+                <!-- Profile Image -->
                 <span class="h-9 w-9 rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover rounded-full bg-gray-200 p-2" src="{{ asset('img/user2.png') }}"
-                        alt="user photo">
+                    <img class="w-full h-full object-cover rounded-full bg-gray-300 p-1"
+                        src="{{ asset('assets/static-images/no-image.jpg') }}" alt="User Photo">
                 </span>
-                <span class="ml-4 flex flex-col items-start">
-                    <div class="block text-sm font-medium text-black ">
-                        {{ session('user')['name'] }}
-                    </div>
-                    <div class="block text-xs text-gray-500">
+
+                <!-- User Info -->
+                <span class="ml-4 flex flex-col items-start leading-tight hidden sm:block">
+                    <span class="text-sm font-semibold text-gray-800">
+                        {{ session('user')['name'] ?? 'Guest' }}
+                    </span>
+                    <span class="text-xs text-gray-500 mt-0.5">
                         {{ session('user')['role'] == 'super.admin' ? 'Super Admin' : 'Admin' }}
-                    </div>
+                    </span>
                 </span>
-                <i class="hidden sm:block ml-4 fa fa-angle-down text-gray-500"></i>
+
+                <i class="fa fa-angle-down ml-3 text-gray-500 hidden sm:block"></i>
             </button>
 
-
-            <!-- Dropdown menu -->
-            <form action="{{ route('logout.post') }}" method="POST" style="display: inline;">
+            <!-- Dropdown Menu -->
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <div class="z-50 hidden absolute right-5 sm:right-0 top-full mt-2 text-base list-none bg-gray-100 border border-gray-200 divide-y divide-gray-100 rounded-lg shadow-sm"
+                <div class="z-50 hidden absolute right-0 top-full mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg"
                     id="user-dropdown">
-                    <ul class="py-2" aria-labelledby="user-menu-button">
+                    <ul class="py-2 text-sm text-gray-700" aria-labelledby="user-menu-button">
                         <li>
-                            <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Sign
-                                out</button>
+                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                                Sign out
+                            </button>
                         </li>
                     </ul>
                 </div>
-                <button data-collapse-toggle="navbar-user" type="submit"
-                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
-                    aria-controls="navbar-user" aria-expanded="false">
-                </button>
             </form>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            userMenuButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle('hidden');
+            });
+
+            window.addEventListener('click', function (e) {
+                if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    @endpush
 </nav>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleButton = document.querySelector('[data-collapse-toggle="navbar-user"]');
-        const navbar = document.getElementById('navbar-user');
-        const userMenuButton = document.getElementById('user-menu-button');
-        const userDropdown = document.getElementById('user-dropdown');
-
-        // Toggle the main navbar
-        toggleButton.addEventListener('click', function() {
-            navbar.classList.toggle('hidden');
-        });
-
-        // Toggle the user dropdown menu
-        userMenuButton.addEventListener('click', function() {
-            userDropdown.classList.toggle('hidden');
-        });
-
-        // Close the dropdown if clicked outside
-        window.addEventListener('click', function(event) {
-            if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
-                userDropdown.classList.add('hidden');
-            }
-        });
-    });
-</script>

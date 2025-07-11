@@ -43,25 +43,28 @@
     </style>
 
     @stack('head')
+    @stack('css')
 
     @stack('styles')
 </head>
 
-<body class="h-full text-white flex flex-col">
+<body class="h-full bg-secondary/40 text-slate-800 flex flex-col font-inter-sans">
     <div class="flex-grow flex flex-col">
         <x-admin.layout.navbar></x-admin.layout.navbar>
         <x-admin.layout.sidebar></x-admin.layout.sidebar>
 
-        <main class="mt-10 sm:mt-20 min-h-[calc(100vh-138px)]">
+        <main class="mt-10 sm:mt-17 min-h-[calc(100vh-138px)] ">
             <div class="p-4 sm:ml-52 xl:ml-64">
                 {{ $slot }}
             </div>
         </main>
 
-        <x-admin.layout.footer></x-admin.layout.footer>
+        {{-- <x-admin.layout.footer></x-admin.layout.footer> --}}
     </div>
 
     @stack('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         // Select all input fields of type number
