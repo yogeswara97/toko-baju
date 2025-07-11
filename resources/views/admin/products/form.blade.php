@@ -1,12 +1,9 @@
 <x-admin.layout.layout :title="$product ? 'Edit Product' : 'Create Product'">
-     <x-admin.layout.header
-    :title="$product ? 'Edit Product' : 'Add Product'"
-    :breadcrumbs="[
+    <x-admin.layout.header :title="$product ? 'Edit Product' : 'Add Product'" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('admin.dashboard')],
         ['label' => 'Products', 'url' => route('admin.products.index')],
         ['label' => $product ? 'Edit Product' : 'Add Product'],
-    ]"
-/>
+    ]" />
 
     <div class="wrapper">
         <form method="POST"
@@ -47,12 +44,29 @@
                         value="{{ old('price', $product->price ?? '') }}" class="input" required>
                 </div>
 
-                {{-- QTY --}}
-                <div>
-                    <label for="qty" class="block mb-1 font-semibold">Quantity</label>
-                    <input type="number" name="qty" id="qty" value="{{ old('qty', $product->qty ?? '') }}" class="input"
-                        required>
+                {{-- TOGGLES --}}
+                <div class="flex flex-col gap-4 mt-2">
+                    {{-- Is Active --}}
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="is_active" class="sr-only peer" {{ old('is_active',
+                            $product->is_active ?? true) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                        </div>
+                        <span class="ml-3 text-sm font-medium text-gray-900">Active</span>
+                    </label>
+
+                    {{-- Is Stock --}}
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="is_stock" class="sr-only peer" {{ old('is_stock',
+                            $product->is_stock ?? true) ? 'checked' : '' }}>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                        </div>
+                        <span class="ml-3 text-sm font-medium text-gray-900">Stock</span>
+                    </label>
                 </div>
+
             </div>
 
             {{-- === DESCRIPTION + IMAGE === --}}

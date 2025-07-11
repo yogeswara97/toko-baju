@@ -46,10 +46,12 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'qty' => 'required|integer',
             'description' => 'nullable',
             'image' => 'nullable|image|max:2048',
         ]);
+
+        $data['is_active'] = $request->has('is_active');
+        $data['is_stock'] = $request->has('is_stock');
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
@@ -78,10 +80,12 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'qty' => 'required|integer',
             'description' => 'nullable',
             'image' => 'nullable|image|max:2048',
         ]);
+
+        $data['is_active'] = $request->has('is_active');
+        $data['is_stock'] = $request->has('is_stock');
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
