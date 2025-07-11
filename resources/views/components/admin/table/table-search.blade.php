@@ -1,27 +1,28 @@
 @props([
     'dataset' => [],
+    'placeholder' => 'Search by name',
+    'name' => 'search',
 ])
 
-<search>
-    <div class=" w-full relative">
-        <input type="text" id="simple-search" name="search"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-56 p-2.5"
-            placeholder="Search by name" value="{{ request('search') }}" autocomplete="off">
-        <div id="dropdown"
-            class="hidden absolute z-10 bg-gray-100 divide-y divide-gray-100 rounded-b-lg shadow-sm w-56 max-h-32 overflow-y-scroll overflow-x-hidden">
-            <ul class="py-2 text-sm text-gray-900" id="dropdownList">
-                @foreach ($dataset as $name)
-                    <li>
-                        <a href="#" class="dropdown-item block px-4 py-2 hover:bg-gray-200 font-semibold"
-                            data-name="{{ $name }}">
-                            {{ $name }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+<div class="w-full relative">
+    <input type="text" id="simple-search" name="{{ $name }}"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-56 p-2.5"
+        placeholder="{{ $placeholder }}" value="{{ request($name) }}" autocomplete="off">
+
+    <div id="dropdown"
+        class="hidden absolute z-10 bg-gray-100 divide-y divide-gray-100 rounded-b-lg shadow-sm w-56 max-h-32 overflow-y-scroll overflow-x-hidden">
+        <ul class="py-2 text-sm text-gray-900" id="dropdownList">
+            @foreach ($dataset as $item)
+                <li>
+                    <a href="#" class="dropdown-item block px-4 py-2 hover:bg-gray-200 font-semibold"
+                        data-name="{{ $item }}">
+                        {{ $item }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
     </div>
-</search>
+</div>
 
 @push('scripts')
     <script>
@@ -36,16 +37,10 @@
 
             searchInput.addEventListener("input", () => {
                 const filter = searchInput.value.toLowerCase();
-
                 dropdownItems.forEach(item => {
                     const name = item.dataset.name.toLowerCase();
-                    if (name.includes(filter)) {
-                        item.parentElement.style.display = 'block';
-                    } else {
-                        item.parentElement.style.display = 'none';
-                    }
+                    item.parentElement.style.display = name.includes(filter) ? 'block' : 'none';
                 });
-
                 dropdown.classList.remove("hidden");
             });
 

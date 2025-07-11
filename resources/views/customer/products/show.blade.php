@@ -20,40 +20,40 @@
 
 
                     @if ($sizes->filter()->isNotEmpty())
-                    <hr class="my-6 border-gray-300">
-                    <div class="mb-3">
-                        <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
-                        <div class="flex space-x-2 mb-2">
-                            @foreach ($sizes->filter() as $size)
-                            <button
-                                class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
-                                data-size-id="{{ $size->id }}">{{ $size->name }}</button>
-                            @endforeach
+                        <hr class="my-6 border-gray-300">
+                        <div class="mb-3">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
+                            <div class="flex space-x-2 mb-2">
+                                @foreach ($sizes->filter() as $size)
+                                    <button
+                                        class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
+                                        data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                                @endforeach
+                            </div>
+                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
                         </div>
-                        <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
-                    </div>
                     @endif
 
                     @if ($colors->filter()->isNotEmpty())
-                    <div id="color-section">
-                        <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
-                        <div class="flex flex-col space-x-2 mb-2">
-                            <div class="flex flex-wrap gap-2 mb-2">
-                                @foreach ($colors->filter() as $color)
-                                <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
-                                    <div class="w-10 h-10 border-2 rounded-full"
-                                        style="background-color: {{ $color->hex_code ?? '#ccc' }};">
-                                    </div>
-                                    <div
-                                        class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
-                                        <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
-                                    </div>
+                        <div id="color-section">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
+                            <div class="flex flex-col space-x-2 mb-2">
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    @foreach ($colors->filter() as $color)
+                                        <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
+                                            <div class="w-10 h-10 border-2 rounded-full"
+                                                style="background-color: {{ $color->hex_code ?? '#ccc' }};">
+                                            </div>
+                                            <div
+                                                class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
+                                                <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
+                                <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                             </div>
-                            <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                         </div>
-                    </div>
                     @endif
 
 
@@ -101,30 +101,28 @@
 
                         <div>
                             <h4 class="font-medium mb-1">Jumlah</h4>
+                            {{-- Stock Info --}}
+                            <p id="stock-info" class="text-sm text-red-600 font-medium transition-all duration-200"></p>
                             <div class="flex justify-between items-center">
 
-
-                                <div class="flex items-center space-x-3 mb-2 w-full">
-                                    <button class="border border-gray-400 p-3 hover:bg-gray-200">
-                                        <i class="far fa-heart text-xl"></i>
-                                    </button>
-                                    <button type="submit"
-                                        class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 hover:bg-gray-700 text-center "
-                                        @if (($stockNumber ?? 10) <=0) disabled @endif>Add
-                                        to cart</button>
-                                </div>
+                                <p id="stock-info" class="text-sm text-gray-600 mt-1"></p>
+                                <button id="add-to-cart-btn" type="submit"
+                                    class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 hover:bg-gray-700 text-center"
+                                    disabled>
+                                    Add to cart
+                                </button>
                             </div>
                         </div>
                     </form>
-                    <p class="text-xs text-gray-500">Delivery in 3-5 working days</p>
+                    {{-- <p class="text-xs text-gray-500">Delivery in 3-5 working days</p> --}}
                 </div>
             </div>
             <div>
                 <x-customer.page-header title="More Products" description="Discover our complete collection" />
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
                     @foreach ($products as $product)
-                    <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
-                        :description="Str::limit($product->description, 60)" :price="$product->price" />
+                        <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
+                            :description="Str::limit($product->description, 60)" :price="$product->price" />
                     @endforeach
                 </div>
             </div>
@@ -136,8 +134,8 @@
 
         {{-- Scripts --}}
         @push('scripts')
-        <script>
-            const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
+            <script>
+                const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
                 const hasColors = {{ $colors->filter()->isNotEmpty() ? 'true' : 'false' }};
 
                 const form = document.getElementById('add-to-cart-form');
@@ -146,40 +144,43 @@
                 const sizeInput = document.getElementById('selected-size-id');
                 const colorInput = document.getElementById('selected-color-id');
                 const imgEl = document.getElementById('main-product-image');
+                const qtyInput = document.getElementById('qty');
+                const qtyDisplay = document.getElementById('quantity-display');
+                const addToCartBtn = document.getElementById('add-to-cart-btn');
+                const stockInfo = document.getElementById('stock-info');
 
                 let selectedSize = null;
                 let selectedColor = null;
 
-                const variants = @json($variants); // Format harus punya image, size_id, color_id
-                // console.log(variants);
+                const variants = @json($variants);
 
-                // --- Update colors based on selected size
                 function updateColorsBySize() {
                     if (!selectedSize) {
                         colorButtons.forEach(btn => {
                             btn.classList.add('opacity-50', 'cursor-not-allowed');
-                            btn.querySelector('.slash').classList.remove('hidden');
+                            btn.querySelector('.slash')?.classList.remove('hidden');
                             btn.setAttribute('data-disabled', 'true');
                         });
                         return;
                     }
 
-                    const availableColors = variants
-                        .filter(v => v.size_id == selectedSize)
-                        .map(v => v.color_id);
-
                     colorButtons.forEach(btn => {
                         const cid = parseInt(btn.dataset.colorId);
-                        const isAvailable = availableColors.includes(cid);
+
+                        const variant = variants.find(v =>
+                            v.size_id == selectedSize && v.color_id == cid
+                        );
+
+                        const isAvailable = variant && variant.qty > 0;
 
                         btn.classList.toggle('opacity-50', !isAvailable);
                         btn.classList.toggle('cursor-not-allowed', !isAvailable);
-                        btn.querySelector('.slash').classList.toggle('hidden', isAvailable);
+                        btn.querySelector('.slash')?.classList.toggle('hidden', isAvailable);
                         btn.setAttribute('data-disabled', isAvailable ? 'false' : 'true');
                     });
                 }
 
-                // --- Update product image based on selected size & color
+
                 function updateProductImage() {
                     if (!selectedSize || !selectedColor) return;
 
@@ -192,7 +193,47 @@
                     }
                 }
 
-                // --- Size button event
+                function updateStock() {
+                    if (!selectedSize || !selectedColor) {
+                        addToCartBtn.disabled = true;
+                        stockInfo.textContent = '';
+                        return;
+                    }
+
+                    const variant = variants.find(v =>
+                        v.size_id == selectedSize && v.color_id == selectedColor
+                    );
+
+                    if (!variant) {
+                        addToCartBtn.disabled = true;
+                        stockInfo.textContent = '';
+                        return;
+                    }
+
+                    const stock = variant.qty;
+
+                    if (stock > 0) {
+                        addToCartBtn.disabled = false;
+
+                        // Tampilkan info sisa stok hanya jika ≤ 10
+                        if (stock <= 10) {
+                            stockInfo.textContent = `Stock sisa ${stock}`;
+                        } else {
+                            stockInfo.textContent = '';
+                        }
+
+                    } else {
+                        addToCartBtn.disabled = true;
+                        stockInfo.textContent = 'Out of stock';
+                    }
+
+                    qtyInput.max = stock;
+                    if (parseInt(qtyInput.value) > stock) {
+                        qtyInput.value = stock;
+                        qtyDisplay.textContent = stock;
+                    }
+                }
+
                 sizeButtons.forEach(btn => {
                     btn.addEventListener('click', () => {
                         selectedSize = btn.dataset.sizeId;
@@ -201,36 +242,35 @@
                         sizeButtons.forEach(b => b.classList.remove('bg-blue-100', 'text-blue-700'));
                         btn.classList.add('bg-blue-100', 'text-blue-700');
 
-                        // Reset color
-                        colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
                         selectedColor = null;
                         colorInput.value = '';
+                        colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
 
                         document.getElementById('size-error')?.classList.add('hidden');
 
                         updateColorsBySize();
                         updateProductImage();
+                        updateStock();
                     });
                 });
 
-                // --- Color button event
                 colorButtons.forEach(btn => {
                     btn.addEventListener('click', () => {
                         if (btn.dataset.disabled === 'true') return;
 
-                        colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
-                        btn.classList.add('ring-2', 'ring-red-500');
-
                         selectedColor = btn.dataset.colorId;
                         colorInput.value = selectedColor;
+
+                        colorButtons.forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
+                        btn.classList.add('ring-2', 'ring-red-500');
 
                         document.getElementById('color-error')?.classList.add('hidden');
 
                         updateProductImage();
+                        updateStock();
                     });
                 });
 
-                // --- Form submit validation
                 form.addEventListener('submit', e => {
                     let valid = true;
 
@@ -247,14 +287,11 @@
                     if (!valid) e.preventDefault();
                 });
 
-                // --- Quantity Handler
                 function updateQuantity(action) {
-                    const qtyInput = document.getElementById('qty');
-                    const qtyDisplay = document.getElementById('quantity-display');
                     let qty = parseInt(qtyInput.value);
-                    const stock = {{ $stockNumber ?? 10 }};
+                    const maxStock = parseInt(qtyInput.max || 99);
 
-                    if (action === 'increment' && qty < stock) qty++;
+                    if (action === 'increment' && qty < maxStock) qty++;
                     else if (action === 'decrement' && qty > 1) qty--;
 
                     qtyInput.value = qty;
@@ -263,8 +300,10 @@
 
                 document.addEventListener('DOMContentLoaded', () => {
                     updateColorsBySize();
+                    updateStock();
                 });
-        </script>
+            </script>
         @endpush
+
 
 </x-customer.layout.layout>

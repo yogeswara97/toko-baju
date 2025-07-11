@@ -11,57 +11,67 @@
                 <x-customer.layout.nav-link href="{{ route('customer.products.index') }}">All Products
                 </x-customer.layout.nav-link>
                 @foreach ($navbarCategories as $category)
-                <x-customer.layout.nav-link
-                    href="{{ route('customer.products.index', ['category[]' => $category->slug]) }}">
-                    {{ $category->name }}
-                </x-customer.layout.nav-link>
+                    <x-customer.layout.nav-link
+                        href="{{ route('customer.products.index', ['category[]' => $category->slug]) }}">
+                        {{ $category->name }}
+                    </x-customer.layout.nav-link>
                 @endforeach
 
             </div>
 
             {{-- CENTER: Brand Title --}}
             @if (!request()->routeIs('customer.home'))
-            <div class="absolute left-1/2 -translate-x-1/2">
-                <a href="{{ route('customer.home') }}"
-                    class="text-4xl font-extrabold tracking-tighter text-primary uppercase">
-                    {{ config('app.name') }}
-                </a>
-            </div>
+                <div class="absolute left-1/2 -translate-x-1/2">
+                    <a href="{{ route('customer.home') }}"
+                        class="text-4xl font-extrabold tracking-tighter text-primary uppercase">
+                        {{ config('app.name') }}
+                    </a>
+                </div>
             @endif
 
             {{-- RIGHT: Icons --}}
             @php
-            $iconClass = request()->routeIs('customer.home') ? 'text-secondary' : 'text-gray-700';
+                $iconClass = request()->routeIs('customer.home') ? 'text-secondary' : 'text-gray-700';
             @endphp
 
             <div class="flex items-center gap-4 shrink-0">
                 @if (auth()->check())
-                {{-- <a href="#" class="hover:text-gray-700 transition {{ $iconClass }}">
-                    <i class="fas fa-search"></i>
-                </a> --}}
-                <a href="{{ route('customer.profile.index') }}" class="hover:text-gray-700 transition {{ $iconClass }}">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="{{ route('customer.cart.index') }}"
-                    class="relative hover:text-gray-700 transition {{ $iconClass }}">
-                    <i class="fas fa-shopping-bag"></i>
-                    @if ($cartCount > 0)
-                    <div @class([ 'absolute -top-2 -right-2 w-4 h-4 text-[10px] rounded-full flex items-center justify-center'
-                        , 'bg-primary-light text-black'=> request()->routeIs('customer.home'),
-                        'bg-primary text-white' => !request()->routeIs('customer.home'),
-                        ])>
-                        {{ $cartCount }}
-                    </div>
-                    @endif
+                    {{-- User Profile --}}
+                    <a href="{{ route('customer.profile.index') }}" class="hover:text-gray-700 transition {{ $iconClass }}">
+                        <i class="fas fa-user"></i>
+                    </a>
 
-                </a>
+                    {{-- Cart --}}
+                    <a href="{{ route('customer.cart.index') }}"
+                        class="relative hover:text-gray-700 transition {{ $iconClass }}">
+                        <i class="fas fa-shopping-bag"></i>
+                        @if ($cartCount > 0)
+                            <div @class([
+                                'absolute -top-2 -right-2 w-4 h-4 text-[10px] rounded-full flex items-center justify-center',
+                                'bg-primary-light text-black' => request()->routeIs('customer.home'),
+                                'bg-primary text-white' => !request()->routeIs('customer.home'),
+                            ])>
+                            {{ $cartCount }}
+                            </div>
+                        @endif
+                    </a>
+
+                    {{-- Admin Panel (only for admin/super.admin) --}}
+                    @if (in_array(auth()->user()->role, ['admin', 'super.admin']))
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="px-3 py-2 rounded-md text-sm font-semibold bg-gray-900 text-white hover:bg-gray-800 transition">
+                            Admin Panel
+                        </a>
+                    @endif
                 @else
-                <a href="{{ route('login') }}"
-                    class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
-                    Login
-                </a>
+                    {{-- Login --}}
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
+                        Login
+                    </a>
                 @endif
             </div>
+
 
 
         </div>
@@ -72,10 +82,10 @@
             {{-- App Name --}}
             <div>
                 @if (!request()->routeIs('customer.home'))
-                <a href="{{ route('customer.home') }}"
-                    class="text-4xl tracking-widest font-semibold uppercase text-primary">
-                    {{ config('app.name') ?: 'MyStore' }}
-                </a>
+                    <a href="{{ route('customer.home') }}"
+                        class="text-4xl tracking-widest font-semibold uppercase text-primary">
+                        {{ config('app.name') ?: 'MyStore' }}
+                    </a>
                 @endif
             </div>
 
@@ -104,32 +114,32 @@ flex flex-col gap-4 px-4 py-6 bg-white text-black fixed top-0 left-0 right-0 z-5
             </x-customer.layout.nav-link>
 
             @foreach ($navbarCategories as $category)
-            <x-customer.layout.nav-link
-                href="{{ route('customer.products.index', ['category[]' => $category->slug]) }}">
-                {{ $category->name }}
-            </x-customer.layout.nav-link>
+                <x-customer.layout.nav-link
+                    href="{{ route('customer.products.index', ['category[]' => $category->slug]) }}">
+                    {{ $category->name }}
+                </x-customer.layout.nav-link>
             @endforeach
 
             {{-- USER / LOGIN --}}
             <div class="flex items-center gap-4 mt-4">
                 @if (auth()->check())
-                {{-- <a href="#"><i class="fas fa-search"></i></a> --}}
-                <a href="{{ route('customer.profile.index') }}"><i class="fas fa-user"></i></a>
-                <a href="{{ route('customer.cart.index') }}" class="relative">
-                    <i class="fas fa-shopping-bag"></i>
-                    @if ($cartCount > 0)
-                    <div
-                        class="absolute -top-2 -right-2 w-4 h-4 bg-primary text-white text-[10px] rounded-full flex items-center justify-center">
-                        {{ $cartCount }}
-                    </div>
-                    @endif
+                    {{-- <a href="#"><i class="fas fa-search"></i></a> --}}
+                    <a href="{{ route('customer.profile.index') }}"><i class="fas fa-user"></i></a>
+                    <a href="{{ route('customer.cart.index') }}" class="relative">
+                        <i class="fas fa-shopping-bag"></i>
+                        @if ($cartCount > 0)
+                            <div
+                                class="absolute -top-2 -right-2 w-4 h-4 bg-primary text-white text-[10px] rounded-full flex items-center justify-center">
+                                {{ $cartCount }}
+                            </div>
+                        @endif
 
-                </a>
+                    </a>
                 @else
-                <a href="{{ route('login') }}"
-                    class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
-                    Login
-                </a>
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-2 rounded-md bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition">
+                        Login
+                    </a>
                 @endif
             </div>
         </div>
@@ -139,8 +149,8 @@ flex flex-col gap-4 px-4 py-6 bg-white text-black fixed top-0 left-0 right-0 z-5
     </div>
 
     @push('scripts')
-    <script>
-        const toggleBtn = document.getElementById('menu-toggle');
+        <script>
+            const toggleBtn = document.getElementById('menu-toggle');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileOverlay = document.getElementById('mobile-overlay');
 
@@ -179,7 +189,7 @@ flex flex-col gap-4 px-4 py-6 bg-white text-black fixed top-0 left-0 right-0 z-5
                     mobileOverlay.classList.add('hidden');
                 }, 300);
             });
-    </script>
+        </script>
     @endpush
 
 

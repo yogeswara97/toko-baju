@@ -1,7 +1,13 @@
 <nav class="bg-white fixed top-0 w-full h-16 z-20 border-b border-gray-200">
     <div class="flex items-center justify-end mx-auto sm:px-10 h-full">
-        <div class="flex items-center space-x-4 relative text-gray-800"> <!-- Ganti dari text-white -->
-
+        <div class="flex items-center space-x-4 relative text-gray-800">
+            <!-- Ganti dari text-white -->
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('customer.home') }}"
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
+                    <i class="fas fa-home mr-2"></i> Dashboard
+                </a>
+            </div>
             <!-- Profile Dropdown Button -->
             <button type="button" class="flex items-center text-sm rounded-full focus:outline-none"
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"

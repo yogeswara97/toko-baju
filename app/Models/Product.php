@@ -12,7 +12,6 @@ class Product extends Model
         'slug',
         'description',
         'price',
-        'qty',
         'image',
         'is_active',
         'is_stock',

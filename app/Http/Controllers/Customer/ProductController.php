@@ -68,10 +68,9 @@ class ProductController extends Controller
     public function show(string $slug)
     {
         $product = Product::where('slug', $slug)
-            ->with(['variants.size', 'variants.color']) // include relasi size & color
+            ->with(['variants.size', 'variants.color'])
             ->firstOrFail();
 
-        // Ambil unique sizes & colors sebagai objek model
         $sizes = $product->variants->pluck('size')->unique('id');
         $colors = $product->variants->pluck('color')->unique('id');
 

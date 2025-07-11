@@ -11,7 +11,7 @@ Route::name('customer.')->group(function () {
         Route::get('/{slug}', [\App\Http\Controllers\Customer\ProductController::class, 'show'])->name('show');
     });
 
-    Route::middleware(['auth', 'role:customer'])->group(function () {
+    Route::middleware(['auth', 'role:admin,customer'])->group(function () {
 
         Route::prefix('cart')->name('cart.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Customer\CartController::class, 'index'])->name('index');
