@@ -26,9 +26,13 @@ Route::name('customer.')->group(function () {
         Route::prefix('checkout')->name('checkout.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Customer\CheckoutController::class, 'index'])->name('index');
             Route::post('/set-address', [\App\Http\Controllers\Customer\CheckoutController::class, 'setAddress'])->name('set-address');
-            Route::get('/order', [\App\Http\Controllers\Customer\CheckoutController::class, 'order'])->name('order');
-            Route::get('/payment', [\App\Http\Controllers\Customer\PaymentController::class, 'index'])->name('payment');
-            Route::get('/checkout/status/{status}/{order_code}', [\App\Http\Controllers\Customer\CheckoutController::class, 'status'])->name('status');
+            Route::post('/order', [\App\Http\Controllers\Customer\CheckoutController::class, 'order'])->name('order');
+            Route::get('/status/{status}/{order_code}', [\App\Http\Controllers\Customer\CheckoutController::class, 'status'])->name('status');
+        });
+
+        Route::prefix('payment')->name('payment.')->group(function () {
+            Route::get('/payment', [\App\Http\Controllers\Customer\PaymentController::class, 'pay'])->name('pay');
+            Route::post('/payment/cancel', [\App\Http\Controllers\Customer\PaymentController::class, 'cancel'])->name('cancel');
         });
 
         Route::resource('address', \App\Http\Controllers\Customer\AddressController::class);

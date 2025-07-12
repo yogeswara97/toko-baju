@@ -74,103 +74,101 @@ class CheckoutController extends Controller
     {
         $user = Auth::user();
 
+        // Cek pesanan pending
         $hasPendingOrder = Order::where('user_id', $user->id)
             ->where('status', 'pending')
             ->exists();
 
         if ($hasPendingOrder) {
-            return back()->with('error', 'Kamu masih punya pesanan yang belum selesai. Selesaikan dulu sebelum melakukan pemesanan baru ya!');
+            return back()->with('error', 'Kamu masih punya pesanan yang belum selesai.');
         }
+
+        // Validasi input minimal
         $request->validate([
-            'total' => 'required|numeric|min:0',
-            'subtotal' => 'required|numeric|min:0',
-            'discount' => 'required|numeric|min:0',
             'raja_ongkir_id' => 'required|integer',
-            'shipping_cost' => 'required|integer|min:0',
             'shipping_address' => 'required|string',
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|integer|exists:products,id',
-            'items.*.product_variant_id' => 'required|integer|exists:product_variants,id',
-            'items.*.product_name' => 'required|string|max:255',
-            'items.*.variant_color' => 'nullable|string|max:50',
-            'items.*.variant_size' => 'nullable|string|max:50',
-            'items.*.price' => 'required|numeric|min:0',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.subtotal' => 'required|numeric|min:0',
+            'shipping_cost' => 'required|integer|min:0',
         ]);
 
+        // Ambil ulang cart dari DB
+        $cartItems = Cart::with(['product', 'variant.color', 'variant.size'])
+            ->where('user_id', $user->id)
+            ->get();
 
-
-        if ((int) $request->shipping_cost <= 0) {
-            return back()->with('error', 'Silakan pilih layanan pengiriman terlebih dahulu.');
+        if ($cartItems->isEmpty()) {
+            return back()->with('error', 'Keranjang kamu kosong.');
         }
 
+        $subtotal = $cartItems->sum(fn($item) => $item->variant->price * $item->quantity);
 
+        $shippingCost = $request->shipping_cost;
+        $discount = 0;
+        $promo = session('promo');
 
+        if ($promo) {
+            $discount = $promo['type'] === 'percentage'
+                ? $subtotal * ($promo['value'] / 100)
+                : $promo['value'];
+        }
+
+        $total = $subtotal - $discount + $shippingCost;
+
+        // Buat Order
         $orderCode = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5));
-
         $order = Order::create([
             'user_id' => $user->id,
             'order_code' => $orderCode,
-            'subtotal' => (int) $request->subtotal,
-            'discount' => (int) $request->discount,
-            'total_amount' => (int) $request->total,
+            'subtotal' => $subtotal,
+            'discount' => $discount,
+            'total_amount' => $total,
             'status' => 'pending',
             'raja_ongkir_id' => $request->raja_ongkir_id,
-            'shipping_cost' => (int) $request->shipping_cost,
+            'shipping_cost' => $shippingCost,
             'shipping_address' => $request->shipping_address,
             'payment_method' => 'midtrans',
         ]);
 
-        foreach ($request->items as $item) {
+        // Simpan Order Items dan kurangi stok
+        foreach ($cartItems as $item) {
             $order->items()->create([
-                'product_id' => $item['product_id'],
-                'product_variant_id' => $item['product_variant_id'],
-                'product_name' => $item['product_name'],
-                'variant_color' => $item['variant_color'] ?? null,
-                'variant_size' => $item['variant_size'] ?? null,
-                'price' => (int) $item['price'],
-                'quantity' => $item['quantity'],
-                'subtotal' => (int) $item['subtotal'],
+                'product_id' => $item->product_id,
+                'product_variant_id' => $item->variant->id,
+                'product_name' => $item->product->name,
+                'variant_color' => $item->variant->color->name ?? null,
+                'variant_size' => $item->variant->size->name ?? null,
+                'price' => $item->variant->price,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->variant->price * $item->quantity,
             ]);
 
-            $variant = ProductVariant::find($item['product_variant_id']);
-            if ($variant) {
-                $variant->decrement('qty', $item['quantity']);
-            }
+            $item->variant->decrement('qty', $item->quantity);
         }
 
-        if (session()->has('promo')) {
-            $promoData = session('promo');
-            $promo = PromoCode::find($promoData['id']);
-
-            if ($promo) {
-                $promo->incrementUsageForUser($user->id);
-            }
-
+        // Promo
+        if ($promo) {
+            PromoCode::find($promo['id'])?->incrementUsageForUser($user->id);
             session()->forget('promo');
         }
 
+        // Hapus cart
         Cart::where('user_id', $user->id)->delete();
 
-        // Generate Snap Token
+        // Midtrans
         $midtrans = new MidtransService();
         $snapToken = $midtrans->createTransaction($order, $user);
 
-        // Save to payments table
         Payment::create([
             'user_id' => $user->id,
             'order_id' => $order->id,
-            'gross_amount' => (int) $order->total_amount,
+            'order_code' => $order->order_code,
+            'gross_amount' => $total,
             'transaction_status' => 'pending',
             'snap_token' => $snapToken,
         ]);
 
-        return view('customer.orders.payment', [
-            'snapToken' => $snapToken,
-            'order' => $order,
-        ]);
+        return view('customer.orders.payment', compact('snapToken', 'order'));
     }
+
 
 
     public function status($status, $order_code, Request $request)
@@ -181,6 +179,7 @@ class CheckoutController extends Controller
         }
         $status = strtolower($status);
 
+        $snapToken = $request->query('snap_token');
 
         if (!in_array($status, ['success', 'pending', 'failed'])) {
             abort(404);
@@ -198,6 +197,7 @@ class CheckoutController extends Controller
         return view('customer.orders.status', [
             'status' => $status,
             'orderCode' => $order->order_code,
+            'snapToken'
         ]);
     }
 }

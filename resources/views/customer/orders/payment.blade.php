@@ -29,15 +29,19 @@
         const snapToken = "{{ $snapToken }}";
         const orderCode = "{{ $order->order_code }}";
 
-        // route dari Laravel (pakai dummy value biar nanti bisa diganti)
         const statusRouteTemplate = "{{ route('customer.checkout.status', ['status' => ':status', 'order_code' => ':orderCode']) }}";
 
         function redirectToStatus(status) {
-            const redirectUrl = statusRouteTemplate
+            let baseUrl = statusRouteTemplate
                 .replace(':status', status)
                 .replace(':orderCode', orderCode);
 
+            // Tambahin snap_token ke SEMUA status
+            const redirectUrl = `${baseUrl}?snap_token=${snapToken}`;
+
             window.location.href = redirectUrl;
+
+            window.location.replace(redirectUrl);
         }
 
         const startPayment = () => {
@@ -52,7 +56,29 @@
                 },
                 onError: function (result) {
                     console.error("Error pembayaran", result);
-                    redirectToStatus('failed');
+
+                    // 1. Panggil API cancel ke server
+                    fetch("{{ route('customer.payment.cancel') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({ order_code: orderCode })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            console.log("Cancel success:", res);
+
+                            // 2. Baru redirect ke status failed
+                            redirectToStatus('failed');
+                        })
+                        .catch(err => {
+                            console.error("Cancel error:", err);
+
+                            // Tetap redirect walau gagal update di backend
+                            redirectToStatus('failed');
+                        });
                 },
                 onClose: function () {
                     // Redirect ke route 'pending' tapi juga kasih pesan warning via query string (biar bisa ditampung jadi session)

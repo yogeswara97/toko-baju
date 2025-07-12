@@ -86,7 +86,7 @@
                     @if ($order->status === 'pending')
                     <div class="text-center my-6">
                         <p class="text-gray-600">Pesanan kamu belum dibayar.</p>
-                        <a href="{{ route('customer.checkout.payment', ['order_code' => $order->order_code, 'snapToken' => $snapToken]) }}"
+                        <a href="{{ route('customer.payment.pay', ['order_code' => $order->order_code, 'snapToken' => $snapToken]) }}"
                             class="inline-block mt-4 bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
                             🔁 Bayar Sekarang
                         </a>

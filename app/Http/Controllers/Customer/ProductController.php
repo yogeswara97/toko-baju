@@ -86,7 +86,11 @@ class ProductController extends Controller
             ];
         });
 
-        $products = Product::take(4)->get();
+        $products = Product::where('is_active', true)
+            ->where('is_stock', true)
+            ->where('slug', '!=', $slug)
+            ->take(4)
+            ->get();
 
         return view('customer.products.show', compact('product', 'sizes', 'colors', 'variants', 'products'));
     }

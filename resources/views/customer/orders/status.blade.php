@@ -19,7 +19,7 @@
             'buttonClass' => 'bg-yellow-600 hover:bg-yellow-700',
             'button' => [
                 'text' => 'Selesaikan Pembayaran',
-                'route' => url()->previous(),
+                'route' => route('customer.payment.pay', ['order_code' => $orderCode]),
             ]
         ],
         'failed' => [

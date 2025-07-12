@@ -29,13 +29,14 @@
             </div>
 
             {{-- Order Summary --}}
-            <form action="{{ route('customer.checkout.order') }}" class="lg:w-1/3" method="">
+
+
+
+            <div class="lg:w-1/3">
                 <div class=" p-6">
                     <h2 class="text-xl font-semibold mb-6">Order Summary</h2>
-
-                    {{-- Cart Items --}}
                     <div class="space-y-4 mb-6">
-                        @foreach ($cartItems as $index => $item)
+                        @foreach ($cartItems as $item)
                         <div class="flex items-center">
                             <img src="{{ $item->product->image }}" alt="{{ $item->product->name }}"
                                 class="w-12 h-12 object-cover rounded">
@@ -50,46 +51,31 @@
                                 Rp{{ number_format($item->variant->price * $item->quantity, 0, ',', '.') }}
                             </span>
                         </div>
-
-                        {{-- Hidden per item --}}
-                        <input type="hidden" name="items[{{ $index }}][product_id]" value="{{ $item->product->id }}">
-                        <input type="hidden" name="items[{{ $index }}][product_variant_id]"
-                            value="{{ $item->variant->id }}">
-                        <input type="hidden" name="items[{{ $index }}][product_name]"
-                            value="{{ $item->product->name }}">
-                        <input type="hidden" name="items[{{ $index }}][variant_color]"
-                            value="{{ $item->variant->color->name ?? '' }}">
-                        <input type="hidden" name="items[{{ $index }}][variant_size]"
-                            value="{{ $item->variant->size->name ?? '' }}">
-                        <input type="hidden" name="items[{{ $index }}][price]" value="{{ $item->variant->price }}">
-                        <input type="hidden" name="items[{{ $index }}][quantity]" value="{{ $item->quantity }}">
-                        <input type="hidden" name="items[{{ $index }}][subtotal]"
-                            value="{{ $item->variant->price * $item->quantity }}">
                         @endforeach
                     </div>
-                    <x-customer.orders.price-summary :subtotal="$subtotal" :shipping="0"
+
+                    <x-customer.orders.price-summary :subtotal="$subtotal" :shipping="$shippingCost ?? 0"
                         :discount="$discount" :total="$total" />
 
-                    @if ($defaultAddress)
-                    <input type="hidden" name="raja_ongkir_id" value="{{ $defaultAddress->raja_ongkir_id }}">
-                    <input type="hidden" name="shipping_address" id="shipping_address"
-                        value="{{ $defaultAddress->address_line1 }}{{ $defaultAddress->address_line2 ? ', ' . $defaultAddress->address_line2 : '' }}">
-                    @endif
-                    <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                    <input type="hidden" name="discount" value="{{ $discount }}">
-                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="0">
+                    <form action="{{ route('customer.checkout.order') }}" method="POST">
+                        @csrf
 
+                        @if ($defaultAddress)
+                        <input type="hidden" name="raja_ongkir_id" value="{{ $defaultAddress->raja_ongkir_id }}">
+                        <input type="hidden" name="shipping_address"
+                            value="{{ $defaultAddress->address_line1 }}{{ $defaultAddress->address_line2 ? ', ' . $defaultAddress->address_line2 : '' }}">
+                        @endif
 
-                    <input type="hidden" name="total" id="total-amount-value" value="{{ $total }}">
-                    <button id="pay-button" type="submit"
-                        class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition">Pay
-                        with Midtrans</button>
+                        <input type="hidden" name="shipping_cost" id="shipping_cost" value="{{ $shippingCost ?? 0 }}">
 
-                    <div class="mt-4 text-center text-sm text-gray-600 flex items-center justify-center gap-2">
-                        <i class="fas fa-lock"></i><span>Secure payment powered by Midtrans</span>
-                    </div>
+                        <button type="submit"
+                            class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition">
+                            Pay with Midtrans
+                        </button>
+                    </form>
                 </div>
-            </form>
+            </div>
+
         </div>
 
 
