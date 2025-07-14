@@ -45,7 +45,11 @@ Route::name('customer.')->group(function () {
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Customer\CustomerController::class, 'profile'])->name('index');
             Route::get('/order/{order_code}', [\App\Http\Controllers\Customer\OrderController::class, 'show'])->name('order');
+
+            Route::get('/edit', [\App\Http\Controllers\Customer\ProfileController::class, 'edit'])->name('edit');
+            Route::put('/update', [\App\Http\Controllers\Customer\ProfileController::class, 'update'])->name('update');
+            Route::post('/delete-image', [\App\Http\Controllers\Customer\ProfileController::class, 'deleteImage'])->name('delete-image');
+
         });
     });
-
 });

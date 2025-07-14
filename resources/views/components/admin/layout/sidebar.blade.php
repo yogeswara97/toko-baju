@@ -7,13 +7,15 @@
 </button>
 
 <aside id="default-sidebar"
-    class="fixed top-0 left-0 z-40 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-transform -translate-x-full sm:translate-x-0"
+    class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-transform -translate-x-full sm:translate-x-0"
     aria-label="Sidebar">
     <div class="h-full flex flex-col px-4 py-6 overflow-y-auto">
         <!-- Brand -->
-        <a href="/" class="flex items-center space-x-3 mb-3">
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 mb-3">
             <span class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {{ config('app.name') }}
+                <span class="uppercase">
+                    {{ config('app.name') }}
+                </span>
             </span>
         </a>
 

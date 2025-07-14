@@ -15,7 +15,7 @@
     {{-- TABLE BODY --}}
 
     <div class="overflow-x-auto rounded-b-lg shadow bg-white">
-        <x-admin.table.table :headers="['image','Name', 'Category', 'Price', 'Stock', 'Action']">
+        <x-admin.table.table :headers="['image','Name', 'Category', 'in Acttive', 'in Stock', 'Action']">
             @foreach ($products as $product)
             <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
 
@@ -30,12 +30,15 @@
                     Rp{{ number_format($product->price, 0, ',', '.') }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ $product->qty }}
-                </td>
-                <td class="px-6 py-4">
                     <span class="px-2 py-1 rounded text-xs font-semibold
                             {{ $product->is_active ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
                         {{ $product->is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded text-xs font-semibold
+                            {{ $product->is_stock ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                        {{ $product->is_stock ? 'Active' : 'Inactive' }}
                     </span>
                 </td>
                 <td class="px-6 py-4">

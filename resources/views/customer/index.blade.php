@@ -6,8 +6,10 @@
             <section class="relative flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
                 <!-- Judul -->
                 <h1
-                    class="absolute top-0 text-white font-bold text-[5rem] md:text-[10rem] xl:text-[14rem] tracking-tight z-0 leading-none text-center w-full opacity-80 drop-shadow-lg uppercase">
-                    {{ config('app.name') }}
+                    class="absolute top-0 text-white font-bold text-[5rem] md:text-[10rem] xl:text-[14rem] tracking-tight z-0 leading-none text-center w-full opacity-80 drop-shadow-lg ">
+                    <span class="uppercase">
+                        {{ config('app.name') }}
+                    </span>
                 </h1>
                 <h1
                     class="absolute top-30 md:top-60 text-white font-bold text-[1rem] md:text-[2rem] xl:text-[3rem] tracking-tight z-0 leading-none text-center w-full opacity-80 drop-shadow-lg">

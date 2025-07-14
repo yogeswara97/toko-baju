@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User; // Pastikan model User sudah ada
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -18,40 +19,46 @@ class AuthController extends Controller
         return view('auth.login', compact('title'));
     }
 
-    public function login(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+public function login(Request $request): RedirectResponse
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    $remember = $request->boolean('remember');
+
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+
+        session([
+            'user' => [
+                'id' => Auth::id(),
+                'name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'role' => Auth::user()->role,
+            ],
         ]);
 
-        $remember = $request->boolean('remember');
-
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-
-            session([
-                'user' => [
-                    'id' => Auth::id(),
-                    'name' => Auth::user()->name,
-                    'email' => Auth::user()->email,
-                    'role' => Auth::user()->role,
-                ],
-            ]);
-
-            $role = Auth::user()->role;
-            return match ($role) {
-                'admin' => redirect('/admin'),
-                'customer' => redirect('/'),
-                default => redirect('/'),
-            };
-        }
-
-        return back()
-            ->withErrors(['email' => 'Email atau password salah. Silakan coba lagi.'])
-            ->withInput($request->only('email', 'remember'));
+        $role = Auth::user()->role;
+        return match ($role) {
+            'admin' => redirect('/admin'),
+            'customer' => redirect('/'),
+            default => redirect('/'),
+        };
     }
 
+    // Gagal login
+    dd([
+        'auth_attempt' => false,
+        'remember' => $remember,
+        'email' => $credentials['email'],
+    ]);
+
+    return back()
+        ->withErrors(['email' => 'Email atau password salah. Silakan coba lagi.'])
+        ->withInput($request->only('email', 'remember'));
+}
 
 
     // Menampilkan halaman registrasi

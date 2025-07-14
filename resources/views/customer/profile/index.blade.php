@@ -10,12 +10,12 @@
                 <div class=" border border-gray-200 rounded-xl p-6">
                     <div class="flex justify-center mb-4">
                         @php
-                        $photo = auth()->user()->photo ?? null;
+                        $image = auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg');
                         @endphp
 
-                        @if ($photo)
+                        @if ($image)
                         <img class="w-24 h-24 rounded-full ring-2 ring-gray-200 object-cover bg-gray-200"
-                            src="{{ $photo }}" alt="Profile">
+                            src="{{ $image }}" alt="Profile">
                         @else
                         <div
                             class="w-24 h-24 rounded-full ring-2 ring-gray-200 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
@@ -43,10 +43,10 @@
                     </div>
 
                     <div class="flex justify-center space-x-3 mt-6">
-                        <button
+                        <a href="{{ route('customer.profile.edit') }}"
                             class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 text-sm transition">
                             Edit Profile
-                        </button>
+                        </a>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"

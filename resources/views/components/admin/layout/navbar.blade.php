@@ -9,43 +9,78 @@
                 </a>
             </div>
             <!-- Profile Dropdown Button -->
-            <button type="button" class="flex items-center text-sm rounded-full focus:outline-none"
+            <button type="button"
+                class="flex items-center gap-3 sm:gap-4 px-2 py-1 sm:px-3 sm:py-2 rounded-full hover:bg-gray-100 cursor-pointer"
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                 data-dropdown-placement="bottom-end">
 
                 <!-- Profile Image -->
-                <span class="h-9 w-9 rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover rounded-full bg-gray-300 p-1"
-                        src="{{ asset('assets/static-images/no-image.jpg') }}" alt="User Photo">
-                </span>
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-gray-300 shadow-sm bg-white">
+                    <img class="w-full h-full object-cover"
+                        src="{{ auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
+                        alt="User Photo">
+                </div>
 
                 <!-- User Info -->
-                <span class="ml-4 flex flex-col items-start leading-tight hidden sm:block">
-                    <span class="text-sm font-semibold text-gray-800">
+                <div class="hidden sm:flex flex-col items-start leading-tight">
+                    <span class="text-sm font-medium text-gray-900">
                         {{ session('user')['name'] ?? 'Guest' }}
                     </span>
-                    <span class="text-xs text-gray-500 mt-0.5">
+                    <span class="text-xs text-gray-500">
                         {{ session('user')['role'] == 'super.admin' ? 'Super Admin' : 'Admin' }}
                     </span>
-                </span>
+                </div>
 
-                <i class="fa fa-angle-down ml-3 text-gray-500 hidden sm:block"></i>
+                <!-- Dropdown Icon -->
+                <i class="fa fa-angle-down text-gray-500 text-sm hidden sm:inline-block"></i>
             </button>
 
+
             <!-- Dropdown Menu -->
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <div class="z-50 hidden absolute right-0 top-full mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg"
-                    id="user-dropdown">
-                    <ul class="py-2 text-sm text-gray-700" aria-labelledby="user-menu-button">
-                        <li>
-                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100">
-                                Sign out
-                            </button>
-                        </li>
-                    </ul>
+            <div class="z-50 hidden absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-xl"
+                id="user-dropdown">
+                <!-- Header Profile -->
+                <div class="px-4 py-4 border-b border-gray-100">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                            <img class="w-full h-full object-cover"
+                                src="{{ auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
+                                alt="Profile Picture">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-gray-800">
+                                {{ auth()->user()->name ?? 'Guest' }}
+                            </span>
+                            <span class="text-xs text-gray-500">
+                                {{ auth()->user()->email ?? '-' }}
+                            </span>
+                            <span class="text-xs text-gray-400 mt-1">
+                                Role: {{ session('user')['role'] == 'super.admin' ? 'Super Admin' : 'Admin' }}
+                            </span>
+                            <span class="text-xs text-gray-400">
+                                Joined: {{ \Carbon\Carbon::parse(auth()->user()->created_at)->format('d M Y') }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </form>
+
+                <!-- Menu Items -->
+                <ul class="py-2 text-sm text-gray-700">
+                    <li>
+                        <a href="{{ route('customer.profile.edit') }}" class="block px-4 py-2 hover:bg-gray-100">
+                            <i class="fas fa-user mr-2 text-gray-500"></i> Profile
+                        </a>
+                    </li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2 text-gray-500"></i> Sign out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
