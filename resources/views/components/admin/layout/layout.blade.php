@@ -57,7 +57,7 @@
         <x-admin.layout.navbar></x-admin.layout.navbar>
         <x-admin.layout.sidebar></x-admin.layout.sidebar>
 
-        <main class="mt-10 sm:mt-17 min-h-[calc(100vh-138px)] ">
+        <main class=" sm:mt-10 min-h-[calc(100vh-138px)] ">
             <div class="p-4 sm:ml-52 xl:ml-64">
                 {{ $slot }}
             </div>

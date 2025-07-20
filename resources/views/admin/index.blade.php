@@ -56,29 +56,31 @@
                 <a href="#" class="text-blue-600 font-semibold text-sm">View detail</a>
             </div>
 
-            <x-admin.table.table :headers="['Customer Name', 'Status', 'Total', 'Action']">
-                @for ($i = 1; $i <= 5; $i++) @php $names=['John Doe', 'Jane Smith' , 'Michael Jordan' , 'Tony Stark'
-                    , 'Bruce Wayne' ]; $statuses=['new', 'quotation' , 'invoice' ]; $status=$statuses[$i % 3];
-                    $statusColor=match($status) { 'new'=> 'bg-blue-400 text-blue-950',
-                    'quotation' => 'bg-yellow-400 text-yellow-950',
-                    'invoice' => 'bg-green-400 text-green-950',
-                    };
-                    @endphp
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $names[$i - 1] }}</td>
-                        <td class="px-6 py-4">
-                            <span class="p-2 rounded-md {{ $statusColor }} bg-opacity-60">
-                                {{ $status }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">Rp{{ number_format($i * 100000, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4 flex gap-2">
-                            <a href="#" class="button-mini-show"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="button-mini-edit"><i class="fas fa-pencil"></i></a>
-                        </td>
-                    </tr>
-                    @endfor
-            </x-admin.table.table>
+            <div class="overflow-auto">
+                <x-admin.table.table :headers="['Customer Name', 'Status', 'Total', 'Action']">
+                    @for ($i = 1; $i <= 5; $i++) @php $names=['John Doe', 'Jane Smith' , 'Michael Jordan' , 'Tony Stark'
+                        , 'Bruce Wayne' ]; $statuses=['new', 'quotation' , 'invoice' ]; $status=$statuses[$i % 3];
+                        $statusColor=match($status) { 'new'=> 'bg-blue-400 text-blue-950',
+                        'quotation' => 'bg-yellow-400 text-yellow-950',
+                        'invoice' => 'bg-green-400 text-green-950',
+                        };
+                        @endphp
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ $names[$i - 1] }}</td>
+                            <td class="px-6 py-4">
+                                <span class="p-2 rounded-md {{ $statusColor }} bg-opacity-60">
+                                    {{ $status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">Rp{{ number_format($i * 100000, 0, ',', '.') }}</td>
+                            <td class="px-6 py-4 flex gap-2">
+                                <a href="#" class="button-mini-show"><i class="fas fa-eye"></i></a>
+                                <a href="#" class="button-mini-edit"><i class="fas fa-pencil"></i></a>
+                            </td>
+                        </tr>
+                        @endfor
+                </x-admin.table.table>
+            </div>
         </div>
 
         <div class="space-y-6">

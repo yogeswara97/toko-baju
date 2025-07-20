@@ -19,46 +19,39 @@ class AuthController extends Controller
         return view('auth.login', compact('title'));
     }
 
-public function login(Request $request): RedirectResponse
-{
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
-
-    $remember = $request->boolean('remember');
-
-    if (Auth::attempt($credentials, $remember)) {
-        $request->session()->regenerate();
-
-        session([
-            'user' => [
-                'id' => Auth::id(),
-                'name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-                'role' => Auth::user()->role,
-            ],
+    public function login(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        $role = Auth::user()->role;
-        return match ($role) {
-            'admin' => redirect('/admin'),
-            'customer' => redirect('/'),
-            default => redirect('/'),
-        };
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
+            session([
+                'user' => [
+                    'id' => Auth::id(),
+                    'name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
+                    'role' => Auth::user()->role,
+                ],
+            ]);
+
+            $role = Auth::user()->role;
+            return match ($role) {
+                'admin' => redirect('/admin'),
+                'customer' => redirect('/'),
+                default => redirect('/'),
+            };
+        }
+
+        return back()
+            ->withErrors(['email' => 'Email atau password salah. Silakan coba lagi.'])
+            ->withInput($request->only('email', 'remember'));
     }
-
-    // Gagal login
-    dd([
-        'auth_attempt' => false,
-        'remember' => $remember,
-        'email' => $credentials['email'],
-    ]);
-
-    return back()
-        ->withErrors(['email' => 'Email atau password salah. Silakan coba lagi.'])
-        ->withInput($request->only('email', 'remember'));
-}
 
 
     // Menampilkan halaman registrasi

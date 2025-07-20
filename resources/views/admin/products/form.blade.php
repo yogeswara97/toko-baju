@@ -23,7 +23,7 @@
                     <div
                         class="w-32 h-50 rounded border border-dashed border-gray-300 flex items-center justify-center bg-gray-100 overflow-hidden">
                         <img id="image-preview"
-                            src="{{ !empty($product->image) ? asset($product->image) : 'https://via.placeholder.com/120x120?text=Preview' }}"
+                            src="{{ !empty($product->image) ? asset($product->image) :  asset('assets/static-images/no-image.jpg') }}"
                             alt="Preview" class="w-full h-full object-cover" />
                     </div>
 

@@ -55,7 +55,7 @@
                                 {{ auth()->user()->email ?? '-' }}
                             </span>
                             <span class="text-xs text-gray-400 mt-1">
-                                Role: {{ session('user')['role'] == 'super.admin' ? 'Super Admin' : 'Admin' }}
+                                Role: {{ optional(session('user'))['role'] == 'super.admin' ? 'Super Admin' : 'Admin' }}
                             </span>
                             <span class="text-xs text-gray-400">
                                 Joined: {{ \Carbon\Carbon::parse(auth()->user()->created_at)->format('d M Y') }}
@@ -67,7 +67,7 @@
                 <!-- Menu Items -->
                 <ul class="py-2 text-sm text-gray-700">
                     <li>
-                        <a href="{{ route('customer.profile.edit') }}" class="block px-4 py-2 hover:bg-gray-100">
+                        <a href="{{ route('admin.profile.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                             <i class="fas fa-user mr-2 text-gray-500"></i> Profile
                         </a>
                     </li>
