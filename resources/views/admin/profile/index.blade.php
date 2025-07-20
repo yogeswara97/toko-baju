@@ -54,7 +54,7 @@
             <div class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm space-y-6">
                 <h2 class="text-lg font-semibold text-gray-800">Saved Addresses</h2>
 
-                @forelse ($admin->addressesimprov as $address)
+                @forelse ($admin->addresses as $address)
                     <div class="border border-gray-200 rounded p-4 space-y-1">
                         <div class="font-medium text-sm text-gray-800">{{ $address->name }}</div>
                         <div class="text-sm text-gray-600">{{ $address->address_line1 }}</div>
