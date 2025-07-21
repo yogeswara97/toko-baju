@@ -10,6 +10,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 
     Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
+    Route::patch('orders/{order}/cancel', [\App\Http\Controllers\Admin\OrderController::class, 'cancel'])->name('orders.cancel');
+
     // === 🔐 Admin Profile ===
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');

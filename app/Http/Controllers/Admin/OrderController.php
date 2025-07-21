@@ -54,4 +54,17 @@ class OrderController extends Controller
 
         return back()->with('success', 'Order deleted.');
     }
+
+    public function cancel(Order $order)
+    {
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Order hanya bisa dibatalkan saat status masih pending.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->route('admin.orders.show', $order->id)
+            ->with('success', 'Order berhasil dibatalkan.');
+    }
 }
