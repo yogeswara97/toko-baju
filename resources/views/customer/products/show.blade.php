@@ -7,7 +7,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-                <img id="main-product-image" src="{{ asset($product->image) }}" alt="{{ $product->name }}"
+                <img id="main-product-image" src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}"
                     class="w-full max-w-md mx-auto object-cover rounded-xl shadow-md">
 
                 <div>
@@ -20,40 +20,40 @@
 
 
                     @if ($sizes->filter()->isNotEmpty())
-                    <hr class="my-6 border-gray-300">
-                    <div class="mb-3">
-                        <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
-                        <div class="flex space-x-2 mb-2">
-                            @foreach ($sizes->filter() as $size)
-                            <button
-                                class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
-                                data-size-id="{{ $size->id }}">{{ $size->name }}</button>
-                            @endforeach
+                        <hr class="my-6 border-gray-300">
+                        <div class="mb-3">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Product Sizes</p>
+                            <div class="flex space-x-2 mb-2">
+                                @foreach ($sizes->filter() as $size)
+                                    <button
+                                        class="size-btn border border-gray-400 text-gray-800 font-bold py-2 px-5 hover:bg-gray-200"
+                                        data-size-id="{{ $size->id }}">{{ $size->name }}</button>
+                                @endforeach
+                            </div>
+                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
                         </div>
-                        <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
-                    </div>
                     @endif
 
                     @if ($colors->filter()->isNotEmpty())
-                    <div id="color-section">
-                        <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
-                        <div class="flex flex-col space-x-2 mb-2">
-                            <div class="flex flex-wrap gap-2 mb-2">
-                                @foreach ($colors->filter() as $color)
-                                <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
-                                    <div class="w-10 h-10 border-2 rounded-full"
-                                        style="background-color: {{ $color->hex_code ?? '#ccc' }};">
-                                    </div>
-                                    <div
-                                        class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
-                                        <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
-                                    </div>
+                        <div id="color-section">
+                            <p class="text-lg font-semibold text-gray-800 mb-3">Color</p>
+                            <div class="flex flex-col space-x-2 mb-2">
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    @foreach ($colors->filter() as $color)
+                                        <div class="color-btn relative group cursor-pointer" data-color-id="{{ $color->id }}">
+                                            <div class="w-10 h-10 border-2 rounded-full"
+                                                style="background-color: {{ $color->hex_code ?? '#ccc' }};">
+                                            </div>
+                                            <div
+                                                class="slash hidden absolute inset-0 flex justify-center items-center pointer-events-none">
+                                                <div class="w-full h-0.5 bg-red-600 rotate-45"></div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
+                                <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                             </div>
-                            <p id="color-error" class="text-red-500 text-sm mt-1 hidden">Silahkan Pilih Warna</p>
                         </div>
-                    </div>
                     @endif
 
 
@@ -61,8 +61,8 @@
 
                     <div class="flex items-end space-x-3 mb-6">
                         {{-- <p class="text-gray-400 line-through text-2xl">$ 129.00</p> --}}
-                        <p class="text-gray-800 font-bold text-4xl">Rp
-                            {{ number_format($product->price, 0, ',', '.') }}
+                        <p id="product-price" class="text-gray-800 font-bold text-4xl">
+                            Rp {{ number_format($product->price, 0, ',', '.') }}
                         </p>
                     </div>
 
@@ -121,9 +121,9 @@
                 <x-customer.page-header title="More Products" description="Discover our complete collection" />
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="products-grid">
                     @foreach ($products as $product)
-                    <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
-                        :description="Str::limit($product->description, 60)" :price="$product->price"
-                        :is_stock="$product->is_stock" />
+                        <x-customer.product-card :slug="$product->slug" :image="$product->image" :name="$product->name"
+                            :description="Str::limit($product->description, 60)" :price="$product->price"
+                            :is_stock="$product->is_stock" />
                     @endforeach
                 </div>
             </div>
@@ -135,8 +135,8 @@
 
         {{-- Scripts --}}
         @push('scripts')
-        <script>
-            const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
+            <script>
+                const hasSizes = {{ $sizes->filter()->isNotEmpty() ? 'true' : 'false' }};
                 const hasColors = {{ $colors->filter()->isNotEmpty() ? 'true' : 'false' }};
 
                 const form = document.getElementById('add-to-cart-form');
@@ -190,7 +190,7 @@
                     );
 
                     if (variant && variant.image) {
-                        imgEl.src = '/' + variant.image;
+                        imgEl.src = '/storage/' + variant.image;
                     }
                 }
 
@@ -235,6 +235,19 @@
                     }
                 }
 
+                function updatePrice() {
+                    if (!selectedSize || !selectedColor) return;
+
+                    const variant = variants.find(v =>
+                        v.size_id == selectedSize && v.color_id == selectedColor
+                    );
+
+                    if (variant) {
+                        const priceEl = document.getElementById('product-price');
+                        priceEl.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(variant.price);
+                    }
+                }
+
                 sizeButtons.forEach(btn => {
                     btn.addEventListener('click', () => {
                         selectedSize = btn.dataset.sizeId;
@@ -252,6 +265,7 @@
                         updateColorsBySize();
                         updateProductImage();
                         updateStock();
+                        updatePrice();
                     });
                 });
 
@@ -269,6 +283,7 @@
 
                         updateProductImage();
                         updateStock();
+                        updatePrice();
                     });
                 });
 
@@ -303,7 +318,7 @@
                     updateColorsBySize();
                     updateStock();
                 });
-        </script>
+            </script>
         @endpush
 
 

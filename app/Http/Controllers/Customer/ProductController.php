@@ -83,6 +83,7 @@ class ProductController extends Controller
                 'color_id' => $variant->product_color_id,
                 'qty' => $variant->qty,
                 'image' => $variant->image,
+                'price' => $variant->price,
             ];
         });
 

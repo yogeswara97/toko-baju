@@ -8,7 +8,7 @@
 ])
 
 @php
-    $finalImage = empty($image) ? asset('/assets/images/product.png') : asset($image);
+    $finalImage = empty($image) ? asset('/assets/images/product.png') : asset('storage/'.$image);
 @endphp
 
 <div class="w-full flex flex-col gap-4">

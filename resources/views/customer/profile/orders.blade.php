@@ -57,7 +57,7 @@
                             @foreach ($order->items as $item)
                             <div class="flex items-center border-b border-gray-200 pb-4">
 
-                                <img src="{{ $item->product->image ? asset($item->product->image) : asset('assets/static-images/no-image.jpg') }}"
+                                <img src="{{ $item->product->image ? asset('storage/'.$item->product->image) : asset('assets/static-images/no-image.jpg') }}"
                                     alt="{{ $item->product->name }}"
                                     class="w-20 h-28 object-cover rounded border border-gray-200" />
 
@@ -120,7 +120,7 @@
                         <!-- 👇 Tambahkan tombol-tombol di sini -->
                         <div class="mt-6 pt-4 flex flex-col w-full gap-4">
                             <button
-                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                class="w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary transition duration-200">
                                 <i class="fas fa-redo mr-2"></i>Reorder
                             </button>
                             <button

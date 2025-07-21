@@ -9,6 +9,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Resource lainnya
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
     // === 🔐 Admin Profile ===
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');

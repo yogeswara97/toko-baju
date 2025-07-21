@@ -7,7 +7,7 @@
 </button>
 
 <aside id="default-sidebar"
-    class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-transform -translate-x-full sm:translate-x-0"
+    class="fixed top-0 left-0 z-40 w-64 h-screen bg-admin-primary border-r border-gray-200 dark:border-gray-700 transition-transform -translate-x-full sm:translate-x-0"
     aria-label="Sidebar">
     <div class="h-full flex flex-col px-4 py-6 overflow-y-auto">
         <!-- Brand -->
@@ -35,6 +35,11 @@
             <x-admin.layout.side-link href="{{ route('admin.products.index') }}"
                 :active="request()->is('admin/products*')" icon="fas fa-box">
                 Products
+            </x-admin.layout.side-link>
+
+            <x-admin.layout.side-link href="{{ route('admin.orders.index') }}"
+                :active="request()->is('admin/orders*')" icon="fas fa-box">
+                Orders
             </x-admin.layout.side-link>
 
             <!-- Tambahin menu lainnya di sini -->

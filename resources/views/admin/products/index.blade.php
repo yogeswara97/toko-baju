@@ -20,7 +20,8 @@
             <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
 
                 <td class="px-6 py-4">
-                    <img src="{{ $product->image ? asset($product->image) : asset('assets/static-images/no-image.jpg') }}"
+                    <img
+                        src="{{ !empty($product->image) ? asset('storage/' . $product->image) : asset('assets/static-images/no-image.jpg') }}"
                         class="w-20 h-28 rounded object-cover" />
                 </td>
                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">

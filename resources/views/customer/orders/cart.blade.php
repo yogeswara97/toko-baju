@@ -20,8 +20,9 @@
                         @forelse ($cartItems as $item)
 
                         <div class="flex items-center border-b border-gray-200 pb-6 mb-6">
-                            <img src="{{ $item->variant->image ?? asset('assets/static-images/no-image.jpg') }}"
+                            <img src="{{ $item->variant?->image ? asset('storage/' . $item->variant->image) : asset('assets/static-images/no-image.jpg') }}"
                                 alt="{{ $item->product->name }}" class="w-20 h-28 object-cover rounded">
+
 
                             <div class="ml-4 flex-1">
                                 <h3 class="font-semibold text-gray-900">{{ $item->product->name }}</h3>
@@ -155,7 +156,7 @@
 
                             <!-- Hidden Inputs -->
                             @if (!empty($promo) && isset($promo['code']))
-                                <input type="text" name="promo_code" value="{{ $promo['code'] }}">
+                            <input type="text" name="promo_code" value="{{ $promo['code'] }}">
                             @endif
 
                             <button type="submit"

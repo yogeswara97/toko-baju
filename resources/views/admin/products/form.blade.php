@@ -1,4 +1,5 @@
 <x-admin.layout.layout :title="$product ? 'Edit Product' : 'Create Product'">
+
     <x-admin.layout.header :title="$product ? 'Edit Product' : 'Add Product'" :breadcrumbs="[
         ['label' => 'Home', 'url' => route('admin.dashboard')],
         ['label' => 'Products', 'url' => route('admin.products.index')],
@@ -6,6 +7,7 @@
     ]" />
 
     <div class="wrapper">
+
         <form method="POST"
             action="{{ $product ? route('admin.products.update', $product) : route('admin.products.store') }}"
             enctype="multipart/form-data" class="space-y-8">
@@ -23,7 +25,7 @@
                     <div
                         class="w-32 h-50 rounded border border-dashed border-gray-300 flex items-center justify-center bg-gray-100 overflow-hidden">
                         <img id="image-preview"
-                            src="{{ !empty($product->image) ? asset($product->image) :  asset('assets/static-images/no-image.jpg') }}"
+                            src="{{ !empty($product->image) ? asset('storage/' . $product->image) : asset('assets/static-images/no-image.jpg') }}"
                             alt="Preview" class="w-full h-full object-cover" />
                     </div>
 
@@ -50,7 +52,10 @@
                     <select name="category_id" id="category_id" class="select" required>
                         <option value="">-- Pilih --</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id ?? '') == $category->id)>
+                            <option value="{{ $category->id }}" @selected(
+                                old('category_id', $product->category_id ?? '') ==
+                                $category->id
+                            )>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -68,16 +73,20 @@
                 <div class="flex flex-col md:flex-row gap-4 mt-2">
                     {{-- Is Active --}}
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_active" class="sr-only peer"
-                            {{ old('is_active', $product->is_active ?? true) ? 'checked' : '' }}>
+                        <input type="checkbox" name="is_active" class="sr-only peer" {{ old(
+    'is_active',
+    $product->is_active ?? true
+) ? 'checked' : '' }}>
                         <div class="toggle-switch"></div>
                         <span class="ml-3 text-sm font-medium text-gray-900">Active</span>
                     </label>
 
                     {{-- Is Stock --}}
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_stock" class="sr-only peer"
-                            {{ old('is_stock', $product->is_stock ?? true) ? 'checked' : '' }}>
+                        <input type="checkbox" name="is_stock" class="sr-only peer" {{ old(
+    'is_stock',
+    $product->is_stock ?? true
+) ? 'checked' : '' }}>
                         <div class="toggle-switch"></div>
                         <span class="ml-3 text-sm font-medium text-gray-900">Stock</span>
                     </label>
@@ -91,7 +100,8 @@
                 {{-- DESCRIPTION --}}
                 <div>
                     <label for="description" class="block mb-1 font-semibold">Description</label>
-                    <textarea name="description" id="description" rows="5" class="input">{{ old('description', $product->description ?? '') }}</textarea>
+                    <textarea name="description" id="description" rows="5"
+                        class="input">{{ old('description', $product->description ?? '') }}</textarea>
                 </div>
             </div>
 
@@ -121,7 +131,7 @@
                                     {{-- File Input --}}
                                     <div class="flex-1">
                                         <input type="file" name="variants[{{ $index }}][image]"
-                                            class="file-input"
+                                            class="file-input variant-image-input"
                                             data-preview-id="variant-preview-{{ $index }}" accept="image/*">
                                         <p class="text-xs text-gray-500 mt-1">Max 2MB</p>
                                     </div>
@@ -135,7 +145,12 @@
                                 <select name="variants[{{ $index }}][color_id]" class="select" required>
                                     <option value="">-- Pilih --</option>
                                     @foreach ($colors as $color)
-                                        <option value="{{ $color->id }}" @selected((isset($variant['product_color_id']) && $variant['product_color_id'] == $color->id) || (isset($variant['color_id']) && $variant['color_id'] == $color->id) || old("variants.$index.color_id") == $color->id)>
+                                        <option value="{{ $color->id }}" @selected(
+                                            (isset($variant['product_color_id']) &&
+                                                $variant['product_color_id'] == $color->id) || (isset($variant['color_id']) &&
+                                                $variant['color_id'] == $color->id) || old("variants.$index.color_id") ==
+                                            $color->id
+                                        )>
                                             {{ $color->name }}
                                         </option>
                                     @endforeach
@@ -148,7 +163,11 @@
                                 <select name="variants[{{ $index }}][size_id]" class="select">
                                     <option value="">-- Pilih --</option>
                                     @foreach ($sizes as $size)
-                                        <option value="{{ $size->id }}" @selected((isset($variant['product_size_id']) && $variant['product_size_id'] == $size->id) || (isset($variant['size_id']) && $variant['size_id'] == $size->id) || old("variants.$index.size_id") == $size->id)>
+                                        <option value="{{ $size->id }}" @selected(
+                                            (isset($variant['product_size_id']) &&
+                                                $variant['product_size_id'] == $size->id) || (isset($variant['size_id']) &&
+                                                $variant['size_id'] == $size->id) || old("variants.$index.size_id") == $size->id
+                                        )>
                                             {{ $size->name }}
                                         </option>
                                     @endforeach
@@ -165,8 +184,8 @@
                             {{-- Price --}}
                             <div>
                                 <label class="block mb-1 font-semibold">Price (optional)</label>
-                                <input type="number" step="0.01" name="variants[{{ $index }}][price]"
-                                    class="input" value="{{ $variant->price ?? old(" variants.$index.price") }}">
+                                <input type="number" step="0.01" name="variants[{{ $index }}][price]" class="input"
+                                    value="{{ $variant->price ?? old(" variants.$index.price") }}">
                             </div>
                         </div>
                     @endforeach
@@ -193,15 +212,17 @@
     {{-- === SCRIPT PREVIEW === --}}
     @push('scripts')
         <script>
-            // Main Image Preview
+            // Main Product Image Preview
             document.getElementById('image')?.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
-                    document.getElementById('image-preview').src = URL.createObjectURL(file);
+                    const preview = document.getElementById('image-preview');
+                    preview.src = URL.createObjectURL(file);
+                    preview.onload = () => URL.revokeObjectURL(preview.src);
                 }
             });
 
-            // Add Variant
+            // Add Variant Button
             document.getElementById('add-variant').addEventListener('click', () => {
                 const wrapper = document.getElementById('variant-wrapper');
                 const index = wrapper.children.length;
@@ -213,58 +234,63 @@
                     "p-4 bg-gray-50 border border-gray-200 rounded-md shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4 items-end variant-item";
 
                 variant.innerHTML = `
-                        <div class="md:col-span-1">
-                            <label class="block font-semibold mb-1">Image</label>
-                            <div class="flex items-center gap-4">
-                                <div class="w-24 h-38 rounded border border-dashed border-gray-300 flex items-center justify-center bg-gray-100 overflow-hidden">
-                                    <img id="variant-preview-${index}" src="{{ asset('assets/static-images/no-image.jpg') }}" alt="Preview" class="w-full h-full object-cover" />
-                                </div>
-                                <div class="flex-1">
-                                    <input type="file" name="variants[${index}][image]" accept="image/*"
-                                        class="file-input"
-                                        data-preview-id="variant-preview-${index}">
-                                    <p class="text-xs text-gray-500 mt-1">Max 2MB</p>
-                                </div>
-                            </div>
+                <div class="md:col-span-1">
+                    <label class="block font-semibold mb-1">Image</label>
+                    <div class="flex items-center gap-4">
+                        <div class="w-24 h-38 rounded border border-dashed border-gray-300 flex items-center justify-center bg-gray-100 overflow-hidden">
+                            <img id="variant-preview-${index}" src="{{ asset('assets/static-images/no-image.jpg') }}" alt="Preview" class="w-full h-full object-cover" />
                         </div>
+                        <div class="flex-1">
+                            <input type="file" name="variants[${index}][image]" accept="image/*"
+                                class="file-input variant-image-input"
+                                data-preview-id="variant-preview-${index}">
+                            <p class="text-xs text-gray-500 mt-1">Max 2MB</p>
+                        </div>
+                    </div>
+                </div>
 
-                        <div>
-                            <label class="block mb-1 font-semibold">Color</label>
-                            <select name="variants[${index}][color_id]" class="select" required>
-                                <option value="">-- Pilih --</option>
-                                ${colors.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block mb-1 font-semibold">Size</label>
-                            <select name="variants[${index}][size_id]" class="select">
-                                <option value="">-- Pilih --</option>
-                                ${sizes.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block mb-1 font-semibold">Qty</label>
-                            <input type="number" name="variants[${index}][qty]" class="input">
-                        </div>
-                        <div>
-                            <label class="block mb-1 font-semibold">Price (optional)</label>
-                            <input type="number" step="0.01" name="variants[${index}][price]" class="input">
-                        </div>
+                <div>
+                    <label class="block mb-1 font-semibold">Color</label>
+                    <select name="variants[${index}][color_id]" class="select" required>
+                        <option value="">-- Pilih --</option>
+                        ${colors.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                    </select>
+                </div>
 
-                    `;
+                <div>
+                    <label class="block mb-1 font-semibold">Size</label>
+                    <select name="variants[${index}][size_id]" class="select">
+                        <option value="">-- Pilih --</option>
+                        ${sizes.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-1 font-semibold">Qty</label>
+                    <input type="number" name="variants[${index}][qty]" class="input">
+                </div>
+
+                <div>
+                    <label class="block mb-1 font-semibold">Price (optional)</label>
+                    <input type="number" step="0.01" name="variants[${index}][price]" class="input">
+                </div>
+            `;
                 wrapper.appendChild(variant);
             });
 
-            // Global listener for all variant image inputs
-            document.addEventListener('change', function(e) {
+            // Dynamic Image Preview for All Variant Images
+            document.addEventListener('change', function (e) {
                 if (e.target.matches('.variant-image-input')) {
                     const file = e.target.files[0];
                     const previewId = e.target.getAttribute('data-preview-id');
                     if (file && previewId) {
-                        document.getElementById(previewId).src = URL.createObjectURL(file);
+                        const preview = document.getElementById(previewId);
+                        preview.src = URL.createObjectURL(file);
+                        preview.onload = () => URL.revokeObjectURL(preview.src);
                     }
                 }
             });
         </script>
     @endpush
+
 </x-admin.layout.layout>

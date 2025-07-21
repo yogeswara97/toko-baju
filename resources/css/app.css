@@ -22,6 +22,9 @@
     --color-primary-light: #dcefd8;
     --color-secondary: #faf7f0;
 
+    --color-admin-primary: #101828;
+    --color-admin-secondary:#305999;
+
     --animate-fade-in-scale: fade-in-scale 0.3s ease-out;
     --animate-slide-down: slide-down 0.4s ease-out;
 
