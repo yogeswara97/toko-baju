@@ -57,29 +57,9 @@
                 onError: function (result) {
                     console.error("Error pembayaran", result);
 
-                    // 1. Panggil API cancel ke server
-                    fetch("{{ route('customer.payment.cancel') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({ order_code: orderCode })
-                    })
-                        .then(res => res.json())
-                        .then(res => {
-                            console.log("Cancel success:", res);
-
-                            // 2. Baru redirect ke status failed
-                            redirectToStatus('failed');
-                        })
-                        .catch(err => {
-                            console.error("Cancel error:", err);
-
-                            // Tetap redirect walau gagal update di backend
-                            redirectToStatus('failed');
-                        });
+                    window.location.href = "{{ route('customer.payment.cancel') }}?order_code=" + orderCode;
                 },
+
                 onClose: function () {
                     // Redirect ke route 'pending' tapi juga kasih pesan warning via query string (biar bisa ditampung jadi session)
                     const warningUrl = statusRouteTemplate

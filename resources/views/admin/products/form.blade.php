@@ -110,9 +110,8 @@
                 <h3 class="text-lg font-bold mb-4">Product Variants</h3>
                 <div id="variant-wrapper" class="space-y-6">
                     @php
-                        $variants = old('variants', $product->variants ?? []);
+                        $variants = $product->variants;
                     @endphp
-
                     @foreach ($variants as $index => $variant)
                         <div
                             class="p-4 bg-gray-50 border border-gray-200 rounded-md shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4 items-end variant-item">
@@ -124,7 +123,7 @@
                                     <div
                                         class="w-24 h-38 rounded border border-dashed border-gray-300 flex items-center justify-center bg-gray-100 overflow-hidden">
                                         <img id="variant-preview-{{ $index }}"
-                                            src="{{ !empty($variant->image) ? asset($variant->image) : asset('assets/static-images/no-image.jpg') }}"
+                                            src="{{ !empty($variant->image) ? asset('storage/' .$variant->image) : asset('assets/static-images/no-image.jpg') }}"
                                             alt="Preview" class="w-full h-full object-cover" />
                                     </div>
 

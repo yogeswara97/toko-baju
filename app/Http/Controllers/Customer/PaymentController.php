@@ -38,17 +38,33 @@ class PaymentController extends Controller
 
     public function cancel(Request $request)
     {
-        $orderCode = $request->order_code;
+        $orderCode = $request->query('order_code'); // pakai query karena kita redirect, bukan JSON
 
-        $order = Order::where('order_code', $orderCode)->where('user_id', Auth::id())->first();
+        $order = Order::where('order_code', $orderCode)
+            ->where('user_id', Auth::id())
+            ->first();
 
-        if ($order && in_array($order->status, ['pending', 'unpaid'])) {
-            $order->status = 'cancelled';
-            $order->save();
-
-            return response()->json(['message' => 'Order cancelled.']);
+        if (!$order) {
+            return redirect()->route('customer.checkout.status', [
+                'status' => 'failed',
+                'order_code' => $orderCode,
+            ])->with('error', 'Order tidak ditemukan.');
         }
 
-        return response()->json(['message' => 'Order not found or cannot be cancelled.'], 404);
+        // Kalau sudah cancel/success, langsung redirect juga
+        if (in_array($order->status, ['cancelled', 'success'])) {
+            return redirect()->route('customer.checkout.status', [
+                'status' => 'failed',
+                'order_code' => $orderCode,
+            ])->with('warning', 'Order tidak bisa di-cancel.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->route('customer.checkout.status', [
+            'status' => 'failed',
+            'order_code' => $orderCode,
+        ])->with('success', 'Order dibatalkan.');
     }
 }

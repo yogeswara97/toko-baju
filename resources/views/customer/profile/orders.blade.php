@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Order Header -->
             <div class="rounded-lg border border-gray-200 p-6 mb-6">
-                <div class="flex justify-between items-start mb-4">
+                <div class="flex justify-between items-start">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">Order #{{ $order->order_code }}</h1>
                         <p class="text-gray-600">Placed on {{ $order->created_at->format('F d, Y') }}</p>
@@ -24,6 +24,7 @@
                 </div>
 
                 <!-- Order Progress -->
+                @if (strtolower($order->status) !== 'cancelled')
                 @php
                 $steps = ['Order Placed', 'Processing', 'Shipped', 'Delivered'];
                 $activeIndex = array_search(ucfirst($order->status), $steps);
@@ -36,15 +37,17 @@
                             <i class="fas fa-check text-sm"></i>
                         </div>
                         <span
-                            class="ml-2 text-sm font-medium {{ $index <= $activeIndex ? 'text-green-600' : 'text-gray-400' }}">{{
-                            $step }}</span>
+                            class="ml-2 text-sm font-medium {{ $index <= $activeIndex ? 'text-green-600' : 'text-gray-400' }}">
+                            {{ $step }}
+                        </span>
                     </div>
                     @if (!$loop->last)
-                    <div class="flex-1 h-1 {{ $index < $activeIndex ? 'bg-green-500' : 'bg-gray-300' }} mx-4">
-                    </div>
+                    <div class="flex-1 h-1 {{ $index < $activeIndex ? 'bg-green-500' : 'bg-gray-300' }} mx-4"></div>
                     @endif
                     @endforeach
                 </div>
+                @endif
+
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

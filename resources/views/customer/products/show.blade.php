@@ -7,7 +7,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
-                <img id="main-product-image" src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}"
+                <img id="main-product-image" src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                     class="w-full max-w-md mx-auto object-cover rounded-xl shadow-md">
 
                 <div>
@@ -30,7 +30,7 @@
                                         data-size-id="{{ $size->id }}">{{ $size->name }}</button>
                                 @endforeach
                             </div>
-                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu ya 🤏</p>
+                            <p id="size-error" class="text-red-500 text-sm hidden">Pilih ukuran dulu</p>
                         </div>
                     @endif
 
@@ -289,19 +289,26 @@
 
                 form.addEventListener('submit', e => {
                     let valid = true;
+                    console.log('Form submitted');
 
                     if (hasSizes && !sizeInput.value) {
+                        console.log('Ukuran belum dipilih');
                         document.getElementById('size-error')?.classList.remove('hidden');
                         valid = false;
                     }
 
                     if (hasColors && !colorInput.value) {
+                        console.log('Warna belum dipilih');
                         document.getElementById('color-error')?.classList.remove('hidden');
                         valid = false;
                     }
 
-                    if (!valid) e.preventDefault();
+                    if (!valid) {
+                        console.log('Form diblokir karena belum lengkap');
+                        e.preventDefault();
+                    }
                 });
+
 
                 function updateQuantity(action) {
                     let qty = parseInt(qtyInput.value);

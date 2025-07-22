@@ -53,12 +53,14 @@
 </head>
 
 <body class="h-full bg-secondary/40 text-slate-800 flex flex-col font-inter-sans">
+
     <div class="flex-grow flex flex-col">
         <x-admin.layout.navbar></x-admin.layout.navbar>
         <x-admin.layout.sidebar></x-admin.layout.sidebar>
 
         <main class=" sm:mt-10 min-h-[calc(100vh-138px)] ">
             <div class="p-4 sm:ml-52 xl:ml-64">
+                <x-alert.default />
                 {{ $slot }}
             </div>
         </main>
