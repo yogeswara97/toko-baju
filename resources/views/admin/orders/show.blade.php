@@ -59,8 +59,65 @@
                     @endif
                 </div>
 
+                {{-- Shipping Progress --}}
+                @php
+                $shippingSteps = [
+                'requested' => 'Shipping Requested',
+                'picked_up' => 'Courier Picked Up',
+                'in_transit' => 'In Transit',
+                'out_for_delivery' => 'Out for Delivery',
+                'delivered' => 'Delivered',
+                ];
+
+                $currentShippingIndex = array_search($order->shipping_status, array_keys($shippingSteps));
+                @endphp
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white shadow space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800">Shipping Progress</h2>
+
+                        {{-- Status Badge jika Confirmed --}}
+                        @if ($order->shipping_status === 'Confirmed')
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                            ✅ Confirmed
+                        </span>
+                        @endif
+                    </div>
+
+                    @if ($order->shipping_status !== 'confirmed')
+                    <form action="{{ route('admin.orders.update', $order->id) }}" method="POST"
+                        class="flex flex-wrap gap-3 items-end">
+                        @csrf
+                        @method('PATCH')
+
+                        <div>
+                            <select name="shipping_status" id="shipping_status"
+                                class="select w-full rounded-xl border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                @foreach ($shippingSteps as $key => $label)
+                                <option value="{{ $key }}" {{ $order->shipping_status === $key ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all">
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                    @else
+                    <p class="text-sm text-gray-500 italic mt-2">Status sudah <strong>Confirmed</strong>, tidak dapat
+                        diubah.</p>
+                    @endif
+                </div>
+
+
                 {{-- Shipping Address --}}
-                <div class="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm space-y-3">
+                <div class="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm">
                     <h2 class="text-lg font-semibold text-gray-800">Shipping Address</h2>
                     <p class="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
                         {{ $order->shipping_address }}
@@ -69,7 +126,8 @@
             </div>
 
             {{-- KANAN --}}
-            <div class="lg:w-2/3">
+            <div class="lg:w-2/3 space-y-6">
+
                 <div class="p-6 rounded-2xl border border-gray-100 bg-white shadow-sm">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Order Items</h2>
 

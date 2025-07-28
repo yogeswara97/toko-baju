@@ -49,7 +49,9 @@ Route::name('customer.')->group(function () {
             Route::get('/edit', [\App\Http\Controllers\Customer\ProfileController::class, 'edit'])->name('edit');
             Route::put('/update', [\App\Http\Controllers\Customer\ProfileController::class, 'update'])->name('update');
             Route::post('/delete-image', [\App\Http\Controllers\Customer\ProfileController::class, 'deleteImage'])->name('delete-image');
-
+            Route::patch('/orders/{order}/confirm-shipping', [\App\Http\Controllers\Customer\OrderController::class, 'confirmShipping'])
+                ->name('order.confirmShipping');
         });
     });
+
 });

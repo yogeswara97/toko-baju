@@ -25,17 +25,22 @@ class Product extends Model
     public function sizes()
     {
         return $this->belongsToMany(ProductSize::class, 'product_variants')
-                    ->distinct();
+            ->distinct();
     }
 
     public function colors()
     {
         return $this->belongsToMany(ProductColor::class, 'product_variants')
-                    ->distinct();
+            ->distinct();
     }
 
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

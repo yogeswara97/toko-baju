@@ -21,6 +21,14 @@ return new class extends Migration
             $table->unsignedBigInteger('discount')->default(0);
 
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
+            $table->enum('shipping_status', [
+                'requested',
+                'picked_up',
+                'in_transit',
+                'out_for_delivery',
+                'delivered',
+                'confirmed'
+            ])->default('requested');
             $table->integer('raja_ongkir_id');
             $table->unsignedBigInteger('shipping_cost');
 

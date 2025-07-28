@@ -17,12 +17,18 @@
     {{-- STATS CARD --}}
     {{-- STATS CARD --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-        <x-admin.dashbaord.stats label="Total Revenue" value="$612,839" change="16%" color="green" icon="up" />
-        <x-admin.dashbaord.stats label="New Users" value="12,421" change="4%" color="green" icon="up" />
-        <x-admin.dashbaord.stats label="Pending Orders" value="1,839" change="6%" color="red" icon="down" />
-        <x-admin.dashbaord.stats label="Cart Abandoned" value="3,904" change="12%" color="red" icon="down" />
-        <x-admin.dashbaord.stats label="Repeat Customers" value="76%" change="3%" color="green" icon="up" />
-        <x-admin.dashbaord.stats label="Avg. Order Value" value="$89.50" change="1.5%" color="green" icon="up" />
+        <x-admin.dashbaord.stats label="Total Revenue" value="Rp{{ number_format($revenue, 0, ',', '.') }}" change="-"
+            color="green" icon="up" />
+        <x-admin.dashbaord.stats label="New Users" value="{{ $newUsers }}" change="-" color="green" icon="up" />
+        <x-admin.dashbaord.stats label="Pending Orders" value="{{ $pendingOrders }}" change="-" color="red"
+            icon="down" />
+        <x-admin.dashbaord.stats label="Cart Abandoned" value="{{ $abandonedCarts }}" change="-" color="red"
+            icon="down" />
+        <x-admin.dashbaord.stats label="Repeat Customers" value="{{ $repeatCustomers }}%" change="-" color="green"
+            icon="up" />
+        <x-admin.dashbaord.stats label="Avg. Order Value" value="Rp{{ number_format($avgOrderValue, 2, ',', '.') }}"
+            change="-" color="green" icon="up" />
+
     </div>
 
 

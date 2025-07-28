@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Payment;
 use App\Models\PromoCode;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -17,45 +18,59 @@ class DashboardController extends Controller
     {
         $title = 'Dashboard';
 
-        $userCount = User::count();
-        $adminCount = User::where('role', 'admin')->count();
-        $activeUserCount = User::where('is_active', true)->count();
+        // STATS
+        $revenue = Payment::where('transaction_status', 'settlement')->sum('gross_amount');
+        $newUsers = User::whereDate('created_at', '>=', now()->subDays(7))->count();
+        $pendingOrders = Order::where('status', 'pending')->count();
+        $abandonedCarts = Order::where('status', 'cart')->count(); // asumsi 'cart' status
+        $repeatCustomers = $this->calculateRepeatCustomerPercentage();
+        $avgOrderValue = Order::count() > 0 ? round($revenue / Order::count(), 2) : 0;
 
-        $productCount = Product::count();
-        $lowStockCount = Product::where('qty', '<', 10)->count(); // stok rendah
+        // REVENUE GROWTH - weekly (7 hari terakhir)
+        $weeklyRevenue = Payment::where('transaction_status', 'settlement')
+            ->whereDate('created_at', '>=', now()->subDays(6))
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->created_at)->format('D');
+            })->map(function ($group) {
+                return $group->sum('gross_amount');
+            });
 
-        $orderCount = Order::count();
-        $orderStats = Order::selectRaw("status, COUNT(*) as count")
-            ->groupBy('status')
-            ->pluck('count', 'status');
 
-        $revenue = Payment::where('transaction_status', 'settlement')
-            ->sum('gross_amount');
+        // TOP TRANSACTIONS (mock)
+        $topTransactions = Order::with('user')->latest()->take(5)->get();
 
-        $promoCount = PromoCode::count();
-
-        $monthlyRevenue = [];
-        $months = [];
-
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i)->format('Y-m');
-            $months[] = Carbon::now()->subMonths($i)->format('M Y');
-
-            $monthlyRevenue[] = Payment::where('transaction_status', 'settlement')
-                ->whereYear('created_at', substr($month, 0, 4))
-                ->whereMonth('created_at', substr($month, 5, 2))
-                ->sum('gross_amount');
-        }
-
-        // New creative card data
-        $avgRevenue = $revenue > 0 && $orderCount > 0 ? $revenue / $orderCount : 0;
-        $recentUsers = User::latest()->take(5)->get(['name', 'email', 'created_at']);
+        // TOP PRODUCTS
+        $topProducts = Product::withCount('items')
+            ->orderBy('order_items_count', 'desc')
+            ->take(2)
+            ->get();
 
         return view('admin.index', compact(
-            'title', 'userCount', 'adminCount', 'activeUserCount',
-            'productCount', 'lowStockCount', 'orderCount',
-            'orderStats', 'revenue', 'promoCount',
-            'monthlyRevenue', 'months', 'avgRevenue', 'recentUsers'
+            'title',
+            'revenue',
+            'newUsers',
+            'pendingOrders',
+            'abandonedCarts',
+            'repeatCustomers',
+            'avgOrderValue',
+            'weeklyRevenue',
+            'topTransactions',
+            'topProducts'
         ));
+    }
+
+    private function calculateRepeatCustomerPercentage()
+    {
+        $totalCustomers = User::where('role', 'customer')->count();
+        if ($totalCustomers === 0) return 0;
+
+        $repeatCustomers = Order::select('user_id')
+            ->groupBy('user_id')
+            ->havingRaw('count(*) > 1')
+            ->pluck('user_id')
+            ->count();
+
+        return round(($repeatCustomers / $totalCustomers) * 100);
     }
 }

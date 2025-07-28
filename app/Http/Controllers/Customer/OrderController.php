@@ -22,4 +22,16 @@ class OrderController extends Controller
         }
         return view('customer.profile.orders', compact('order', 'snapToken'));
     }
+    public function confirmShipping(Order $order)
+{
+    // Cek status sekarang harus sudah delivered dulu
+    if ($order->shipping_status !== 'delivered') {
+        return back()->with('error', 'Pengiriman belum selesai. Tidak bisa dikonfirmasi.');
+    }
+
+    $order->shipping_status = 'confirmed';
+    $order->save();
+
+    return back()->with('success', 'Pesanan berhasil dikonfirmasi diterima.');
+}
 }

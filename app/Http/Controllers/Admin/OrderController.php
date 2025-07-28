@@ -4,15 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
-    {
-        $orders = Order::with('user')->latest()->paginate(10);
-        return view('admin.orders.index', compact('orders'));
+   public function index(Request $request)
+{
+    $query = Order::with('user')->latest();
+
+    // Filter by user_id jika ada
+    if ($request->filled('user_id')) {
+        $query->where('user_id', $request->user_id);
     }
+
+    $orders = $query->paginate(10)->withQueryString(); // ✅ jaga query tetap ada pas pagination
+    $userNames = User::pluck('name', 'id'); // ['1' => 'Asep', '2' => 'Budi']
+
+    return view('admin.orders.index', compact('orders', 'userNames'));
+}
+
 
     public function show(Order $order)
     {
@@ -39,14 +50,26 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,paid,shipped,completed,cancelled',
+            'status' => 'nullable|in:pending,paid,shipped,completed,cancelled',
+            'shipping_status' => 'nullable|in:requested,picked_up,in_transit,out_for_delivery,delivered,confirmed',
         ]);
 
-        $order->status = $request->status;
+        // Update status jika dikirim
+        if ($request->filled('status')) {
+            $order->status = $request->status;
+        }
+
+        // Update shipping status jika dikirim
+        if ($request->filled('shipping_status')) {
+            $order->shipping_status = $request->shipping_status;
+        }
+
         $order->save();
 
-        return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully.');
+        return redirect()->route('admin.orders.show', $order->id)
+            ->with('success', 'Order updated successfully.');
     }
+
 
     public function destroy(Order $order)
     {
