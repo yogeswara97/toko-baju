@@ -73,4 +73,14 @@ class User extends Authenticatable
             ->where('address_type', 'billing')
             ->where('is_default', true);
     }
+
+    public function promoCodeUsages()
+    {
+        return $this->hasMany(PromoCodeUsage::class);
+    }
+
+    public function promoCodes()
+    {
+        return $this->hasManyThrough(PromoCode::class, PromoCodeUsage::class);
+    }
 }

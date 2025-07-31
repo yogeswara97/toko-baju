@@ -37,11 +37,15 @@
                 Products
             </x-admin.layout.side-link>
 
-            <x-admin.layout.side-link href="{{ route('admin.orders.index') }}"
-                :active="request()->is('admin/orders*')" icon="fas fa-box">
+            <x-admin.layout.side-link href="{{ route('admin.orders.index') }}" :active="request()->is('admin/orders*')"
+                icon="fas fa-box">
                 Orders
             </x-admin.layout.side-link>
 
+            <x-admin.layout.side-link href="{{ route('admin.users.index') }}" :active="request()->is('admin/users*')"
+                icon="fas fa-users">
+                Users
+            </x-admin.layout.side-link>
             <!-- Tambahin menu lainnya di sini -->
         </nav>
 
