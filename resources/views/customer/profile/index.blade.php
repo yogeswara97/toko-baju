@@ -10,7 +10,7 @@
                 <div class=" border border-gray-200 rounded-xl p-6">
                     <div class="flex justify-center mb-4">
                         @php
-                        $image = auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg');
+                        $image = auth()->user()->image ? asset('storage/'.auth()->user()->image) : asset('assets/static-images/no-image.jpg');
                         @endphp
 
                         @if ($image)

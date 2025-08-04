@@ -17,7 +17,7 @@
                 <!-- Profile Image -->
                 <div class="h-9 w-9 rounded-full overflow-hidden border border-gray-300 shadow-sm bg-white">
                     <img class="w-full h-full object-cover"
-                        src="{{ auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
+                        src="{{ auth()->user()->image ? asset('storage/' .auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
                         alt="User Photo">
                 </div>
 
@@ -44,7 +44,7 @@
                     <div class="flex items-center space-x-3">
                         <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
                             <img class="w-full h-full object-cover"
-                                src="{{ auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
+                                src="{{ auth()->user()->image ? asset('storage/'.auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
                                 alt="Profile Picture">
                         </div>
                         <div class="flex flex-col">

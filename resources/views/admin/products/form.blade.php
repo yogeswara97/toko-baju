@@ -6,10 +6,6 @@
         ['label' => $product ? 'Edit Product' : 'Add Product'],
     ]" />
 
-    {{-- Include CropperJS --}}
-    <link href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
-    <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
-
     <div class="wrapper">
 
         <form method="POST"

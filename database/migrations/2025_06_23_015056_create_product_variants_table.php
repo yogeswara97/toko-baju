@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->unique(['product_id', 'product_color_id', 'product_size_id']);
+            // $table->index(['product_id', 'product_color_id', 'product_size_id']);
         });
     }
 

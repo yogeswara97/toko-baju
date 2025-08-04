@@ -24,56 +24,55 @@
                 </div>
 
                 @php
-    $shippingSteps = [
-        'requested' => 'Shipping Requested',
-        'picked_up' => 'Courier Picked Up',
-        'in_transit' => 'In Transit',
-        'out_for_delivery' => 'Out for Delivery',
-        'delivered' => 'Delivered',
-        'confirmed' => 'Confirmed',
-    ];
+                    $shippingSteps = [
+                        'requested' => 'Shipping Requested',
+                        'picked_up' => 'Courier Picked Up',
+                        'in_transit' => 'In Transit',
+                        'out_for_delivery' => 'Out for Delivery',
+                        'delivered' => 'Delivered',
+                        'confirmed' => 'Confirmed',
+                    ];
 
-    $statusColors = [
-        'requested' => 'requested',
-        'picked_up' => 'picked_up',
-        'in_transit' => 'in_transit',
-        'out_for_delivery' => 'out_for_delivery',
-        'delivered' => 'delivered',
-        'confirmed' => 'confirmed',
-    ];
+                    $statusColors = [
+                        'requested' => 'requested',
+                        'picked_up' => 'picked_up',
+                        'in_transit' => 'in_transit',
+                        'out_for_delivery' => 'out_for_delivery',
+                        'delivered' => 'delivered',
+                        'confirmed' => 'confirmed',
+                    ];
 
-    $statusKeys = array_keys($shippingSteps);
-    $currentShippingIndex = array_search(strtolower($order->shipping_status), $statusKeys);
-@endphp
+                    $statusKeys = array_keys($shippingSteps);
+                    $currentShippingIndex = array_search(strtolower($order->shipping_status), $statusKeys);
+                @endphp
 
-<div class="mt-8">
-    <h3 class="text-base font-semibold text-gray-700 mb-4">Shipping Progress</h3>
-    <div class="flex items-center justify-between">
-        @foreach ($shippingSteps as $key => $label)
-            @php $color = $statusColors[$key] ?? 'gray'; @endphp
+                <div class="mt-8">
+                    <h3 class="text-base font-semibold text-gray-700 mb-4">Shipping Progress</h3>
+                    <div class="flex items-center justify-between">
+                        @foreach ($shippingSteps as $key => $label)
+                            @php $color = $statusColors[$key] ?? 'gray'; @endphp
 
-            <x-order-progress
-                :number="$loop->index + 1"
-                :label="$label"
-                :active="$loop->index === $currentShippingIndex"
-                :completed="$loop->index < $currentShippingIndex"
-                :color="$color"
-            />
+                            <x-order-progress :number="$loop->index + 1" :label="$label" :active="$loop->index === $currentShippingIndex" :completed="$loop->index < $currentShippingIndex"
+                                :color="$color" />
 
-            @if (!$loop->last)
-                <div class="flex-1 h-1 mx-4 {{ $loop->index < $currentShippingIndex ? match($color) {
-                    'requested' => 'bg-slate-500',
-                    'picked_up' => 'bg-blue-500',
-                    'in_transit' => 'bg-cyan-500',
-                    'out_for_delivery' => 'bg-amber-500',
-                    'delivered' => 'bg-green-500',
-                    'confirmed' => 'bg-emerald-500',
-                    default => 'bg-gray-300'
-                } : 'bg-gray-300' }}"></div>
-            @endif
-        @endforeach
-    </div>
-</div>
+                            @if (!$loop->last)
+                                <div
+                                    class="flex-1 h-1 mx-4 {{ $loop->index < $currentShippingIndex
+                                        ? match ($color) {
+                                            'requested' => 'bg-slate-500',
+                                            'picked_up' => 'bg-blue-500',
+                                            'in_transit' => 'bg-cyan-500',
+                                            'out_for_delivery' => 'bg-amber-500',
+                                            'delivered' => 'bg-green-500',
+                                            'confirmed' => 'bg-emerald-500',
+                                            default => 'bg-gray-300',
+                                        }
+                                        : 'bg-gray-300' }}">
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
 
 
 

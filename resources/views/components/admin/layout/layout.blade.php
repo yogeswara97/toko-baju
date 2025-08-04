@@ -53,6 +53,9 @@
 </head>
 
 <body class="h-full bg-secondary/40 text-slate-800 flex flex-col font-inter-sans">
+    {{-- Include CropperJS --}}
+    <link href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
 
     <div class="flex-grow flex flex-col">
         <x-admin.layout.navbar></x-admin.layout.navbar>

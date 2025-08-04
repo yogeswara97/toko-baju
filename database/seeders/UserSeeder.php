@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'admin',
             'is_active' => true,
+            'phone_number' => '081234567890',
             'remember_token' => Str::random(10),
         ]);
 
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'admin',
             'is_active' => true,
+            'phone_number' => '081234567891',
             'remember_token' => Str::random(10),
         ]);
 
@@ -41,6 +43,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'customer',
             'is_active' => true,
+            'phone_number' => '081234567892',
             'remember_token' => Str::random(10),
         ]);
     }

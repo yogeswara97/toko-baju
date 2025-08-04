@@ -41,10 +41,10 @@ class DashboardController extends Controller
         $topTransactions = Order::with('user')->latest()->take(5)->get();
 
         // TOP PRODUCTS
-        $topProducts = Product::withCount('items')
-            ->orderBy('order_items_count', 'desc')
-            ->take(2)
-            ->get();
+        // $topProducts = Product::withCount('items')
+        //     ->orderBy('order_items_count', 'desc')
+        //     ->take(2)
+        //     ->get();
 
         return view('admin.index', compact(
             'title',
@@ -56,7 +56,7 @@ class DashboardController extends Controller
             'avgOrderValue',
             'weeklyRevenue',
             'topTransactions',
-            'topProducts'
+            // 'topProducts'
         ));
     }
 

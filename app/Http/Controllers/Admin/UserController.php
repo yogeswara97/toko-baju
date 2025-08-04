@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -35,20 +36,40 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('user_images', 'public');
+            $validated['image'] = $request->file('image')->store('users/images', 'public');
         }
 
         $validated['password'] = bcrypt($validated['password']);
 
         User::create($validated);
 
-        return redirect()->route('users.index')->with('success', 'User created!');
+        return redirect()->route('admin.users.index')->with('success', 'User created!');
     }
 
     public function show(User $user)
     {
-        $user->load(['addresses', 'orders', 'promoCodeUsages.promoCode']);
-        return view('admin.users.show', compact('user'));
+        $user->load([
+            'addresses',
+            'orders.items', // load order_items via orders
+            'promoCodeUsages.promoCode'
+        ]);
+
+        // Kumpulkan semua order items dari user
+        $orderItems = $user->orders->flatMap->items;
+        // Group berdasarkan nama produk dan jumlahkan qty-nya
+        $topProducts = $orderItems
+            ->groupBy('product_name')
+            ->map(function ($items) {
+                return [
+                    'product_name' => $items->first()->product_name,
+                    'total_quantity' => $items->sum('quantity'),
+                ];
+            })
+            ->sortByDesc('total_quantity')
+            ->take(5)
+            ->values();
+
+        return view('admin.users.show', compact('user', 'topProducts'));
     }
 
 
@@ -70,8 +91,15 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('user_images', 'public');
+            // Hapus gambar lama (jika ada)
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+
+            // Upload gambar baru
+            $validated['image'] = $request->file('image')->store('users/images', 'public');
         }
+
 
         if ($request->filled('password')) {
             $validated['password'] = bcrypt($validated['password']);
@@ -81,11 +109,16 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('users.index')->with('success', 'User updated!');
+        return redirect()->route('admin.users.index')->with('success', 'User updated!');
     }
 
     public function destroy(User $user)
     {
+        // Hapus gambar jika ada
+        if ($user->image && Storage::disk('public')->exists($user->image)) {
+            Storage::disk('public')->delete($user->image);
+        }
+
         $user->delete();
 
         return back()->with('success', 'User deleted!');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -26,15 +27,14 @@ class ProfileController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        // Handle foto
         if ($request->hasFile('image')) {
-            if ($user->image && file_exists(public_path(parse_url($user->image, PHP_URL_PATH)))) {
-                @unlink(public_path(parse_url($user->image, PHP_URL_PATH)));
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
             }
 
-            $imagePath = $request->file('image')->store('users/images', 'public');
-            $validated['image'] = asset('storage/' . $imagePath);
+            $validated['image'] = $request->file('image')->store('users/images', 'public');
         }
+
 
         // Handle password
         if (!empty($validated['password'])) {
@@ -52,8 +52,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->image && file_exists(public_path(parse_url($user->image, PHP_URL_PATH)))) {
-            @unlink(public_path(parse_url($user->image, PHP_URL_PATH)));
+        if ($user->image && Storage::disk('public')->exists($user->image)) {
+            Storage::disk('public')->delete($user->image);
         }
 
         $user->update(['image' => null]);

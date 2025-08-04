@@ -9,20 +9,31 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-   public function index(Request $request)
-{
-    $query = Order::with('user')->latest();
+    public function index(Request $request)
+    {
+        $query = Order::with('user')->latest();
 
-    // Filter by user_id jika ada
-    if ($request->filled('user_id')) {
-        $query->where('user_id', $request->user_id);
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->filled('user_email')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->user_email . '%');
+            });
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
+        $userNames = User::pluck('name', 'id');
+
+        return view('admin.orders.index', compact('orders', 'userNames'));
     }
-
-    $orders = $query->paginate(10)->withQueryString(); // ✅ jaga query tetap ada pas pagination
-    $userNames = User::pluck('name', 'id'); // ['1' => 'Asep', '2' => 'Budi']
-
-    return view('admin.orders.index', compact('orders', 'userNames'));
-}
 
 
     public function show(Order $order)

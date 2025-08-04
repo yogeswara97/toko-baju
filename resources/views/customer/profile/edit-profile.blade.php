@@ -13,7 +13,7 @@
                 <div class="flex flex-col items-center gap-4">
                     <!-- Foto Preview -->
                     <img id="image-preview"
-                        src="{{ auth()->user()->image ? asset(auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
+                        src="{{ auth()->user()->image ? asset('storage/' . auth()->user()->image) : asset('assets/static-images/no-image.jpg') }}"
                         class="w-32 h-32 rounded-full object-cover ring-2 ring-gray-300" alt="Profile Picture">
 
                     <!-- Upload Foto -->
@@ -25,11 +25,11 @@
 
                     <!-- Tombol Hapus -->
                     @if (auth()->user()->image)
-                    <button
-                        onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: { id: 'delete-photo' } }))"
-                        type="button" class="text-sm text-red-600 hover:underline transition">
-                        Hapus Foto
-                    </button>
+                        <button
+                            onclick="window.dispatchEvent(new CustomEvent('open-modal', { detail: { id: 'delete-photo' } }))"
+                            type="button" class="text-sm text-red-600 hover:underline transition">
+                            Hapus Foto
+                        </button>
                     @endif
                 </div>
 
@@ -93,6 +93,21 @@
                 </div>
             </div>
         </form>
+        <!-- Cropper Modal -->
+        <div id="cropper-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-4 rounded shadow-lg max-w-lg w-full">
+                <h2 class="font-bold mb-4 text-lg">Crop Gambar Profil</h2>
+                <div>
+                    <img id="cropper-image" class="max-w-full max-h-[500px]" />
+                </div>
+                <div class="mt-4 flex justify-end gap-2">
+                    <button id="cancel-crop" class="px-4 py-2 text-sm bg-gray-300 rounded">Batal</button>
+                    <button id="confirm-crop" class="px-4 py-2 text-sm bg-primary text-white rounded">Crop &
+                        Simpan</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Modal konfirmasi hapus foto -->
         <x-alert.confirm-modal id="delete-photo" title="Hapus Foto Profil?"
@@ -105,8 +120,8 @@
             cancelText="Batal" action="{{ route('customer.profile.update') }}" method="PUT" />
 
         @push('scripts')
-        <script>
-            const input = document.getElementById('image-input');
+            <script>
+                const input = document.getElementById('image-input');
                 const preview = document.getElementById('image-preview');
 
                 input.addEventListener('change', function (e) {
@@ -115,7 +130,62 @@
                         preview.src = URL.createObjectURL(file);
                     }
                 });
-        </script>
+            </script>
         @endpush
+
+        @push('scripts')
+            <script>
+                let cropper;
+                const imageInput = document.getElementById('image-input');
+                const imagePreview = document.getElementById('image-preview');
+                const cropperModal = document.getElementById('cropper-modal');
+                const cropperImage = document.getElementById('cropper-image');
+                const confirmCrop = document.getElementById('confirm-crop');
+                const cancelCrop = document.getElementById('cancel-crop');
+
+                imageInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        cropperImage.src = reader.result;
+                        cropperModal.classList.remove('hidden');
+
+                        if (cropper) cropper.destroy();
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 1,
+                            viewMode: 1,
+                            background: false
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                confirmCrop.addEventListener('click', () => {
+                    const canvas = cropper.getCroppedCanvas({ width: 300, height: 300 });
+                    canvas.toBlob(blob => {
+                        const croppedFile = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(croppedFile);
+                        imageInput.files = dataTransfer.files;
+
+                        // Preview langsung
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            imagePreview.src = reader.result;
+                            cropperModal.classList.add('hidden');
+                        };
+                        reader.readAsDataURL(croppedFile);
+                    });
+                });
+
+                cancelCrop.addEventListener('click', () => {
+                    cropperModal.classList.add('hidden');
+                    cropper?.destroy();
+                });
+            </script>
+        @endpush
+
     </section>
 </x-customer.layout.layout>

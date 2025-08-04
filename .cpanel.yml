@@ -1,0 +1,5 @@
+---
+deployment:
+tasks:
+- export DEPLOYPATH=/home/admf5139/public_html/stylehub.adminbalibaci.my.id
+- /bin/cp -r * $DEPLOYPATH

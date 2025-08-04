@@ -156,7 +156,7 @@
 
                             <!-- Hidden Inputs -->
                             @if (!empty($promo) && isset($promo['code']))
-                            <input type="text" name="promo_code" value="{{ $promo['code'] }}">
+                            <input type="hidden" name="promo_code" value="{{ $promo['code'] }}">
                             @endif
 
                             <button type="submit"
