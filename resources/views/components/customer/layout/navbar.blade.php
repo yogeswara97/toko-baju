@@ -55,7 +55,6 @@
                             </div>
                         @endif
                     </a>
-
                     {{-- Admin Panel (only for admin/super.admin) --}}
                     @if (in_array(auth()->user()->role, ['admin', 'super.admin']))
                         <a href="{{ route('admin.dashboard') }}"

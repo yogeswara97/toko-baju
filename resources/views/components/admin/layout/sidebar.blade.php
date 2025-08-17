@@ -42,12 +42,29 @@
                 Orders
             </x-admin.layout.side-link>
 
-            <x-admin.layout.side-link href="{{ route('admin.users.index') }}" :active="request()->is('admin/users*')"
-                icon="fas fa-users">
-                Users
-            </x-admin.layout.side-link>
             <!-- Tambahin menu lainnya di sini -->
         </nav>
+        <!-- Section Label -->
+        <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">USERS</div>
+
+        <!-- Navigation -->
+        <nav class="flex flex-col space-y-1 text-sm">
+
+            <x-admin.layout.side-link href="{{ route('admin.customers.index') }}"
+                :active="request()->is('admin/customers*')" icon="fas fa-users">
+                Customers
+            </x-admin.layout.side-link>
+
+            <x-admin.layout.side-link href="{{ route('admin.admin.index') }}" :active="request()->is('admin/admin*')"
+                icon="fas fa-user-shield">
+                Admin
+            </x-admin.layout.side-link>
+
+            <!-- Tambahin menu lainnya di sini -->
+        </nav>
+
+
+
 
         <!-- Footer (optional) -->
         <div class="mt-auto pt-6 text-xs text-gray-400">

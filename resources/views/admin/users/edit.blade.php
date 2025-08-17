@@ -1,11 +1,14 @@
-<x-admin.layout.layout :title="'Edit User: ' . $user->name">
-    <x-admin.layout.header :title="'Edit User'" :breadcrumbs="[
-        ['label' => 'Home', 'url' => route('admin.dashboard')],
-        ['label' => 'Users', 'url' => route('admin.users.index')],
-        ['label' => 'Edit'],
-    ]" />
+<x-admin.layout.layout :title="'Edit ' . ucfirst($user->role_label) . ': ' . $user->name">
+    <x-admin.layout.header :title="'Edit ' . ucfirst($user->role_label)"
+        :breadcrumbs="[
+            ['label' => 'Home', 'url' => route('admin.dashboard')],
+            ['label' => ucfirst($user->role_label) . 's', 'url' => $user->role === 'customer' ? route('admin.customers.index') : route('admin.admin.index')],
+            ['label' => 'Edit'],
+        ]"
+    />
 
-    <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
+    <form action="{{ $user->role === 'customer' ? route('admin.customers.update', $user->id) : route('admin.admin.update', $user->id) }}"
+        method="POST" enctype="multipart/form-data"
         class="bg-white rounded-xl shadow-md p-6 max-w-3xl space-y-6 text-sm">
         @csrf
         @method('PUT')
@@ -62,10 +65,9 @@
 
         <!-- Submit -->
         <div class="flex justify-end mt-4">
-            <a href="{{ route('admin.users.index') }}"
+            <a href="{{ $user->role === 'customer' ? route('admin.customers.index') : route('admin.admin.index') }}"
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm mr-2">Cancel</a>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 text-sm">Update
-                User</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 text-sm">Update User</button>
         </div>
     </form>
 

@@ -50,6 +50,12 @@ class User extends Authenticatable
         ];
     }
 
+    public function getRoleLabelAttribute()
+    {
+        return str_replace('.', ' ', ucfirst($this->role));
+    }
+
+
     public function orders()
     {
         return $this->hasMany(Order::class);

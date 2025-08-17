@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'yoges@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
-            'role' => 'admin',
+            'role' => 'super.admin',
             'is_active' => true,
             'phone_number' => '081234567890',
             'remember_token' => Str::random(10),

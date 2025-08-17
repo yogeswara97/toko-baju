@@ -1,9 +1,12 @@
-<x-admin.layout.layout :title="'User Detail: ' . $user->name">
-    <x-admin.layout.header :title="'User Detail'" :breadcrumbs="[
-        ['label' => 'Home', 'url' => route('admin.dashboard')],
-        ['label' => 'Users', 'url' => route('admin.users.index')],
-        ['label' => $user->name],
-    ]" />
+<x-admin.layout.layout :title="ucfirst($user->role_label) . ' Detail: ' . $user->name">
+    <x-admin.layout.header :title="ucfirst($user->role_label) . ' Detail'"
+        :breadcrumbs="[
+            ['label' => 'Home', 'url' => route('admin.dashboard')],
+            ['label' => ucfirst($user->role_label), 'url' => $user->role === 'customer' ? route('admin.customers.index') : route('admin.admin.index')],
+            ['label' => $user->name],
+        ]"
+    />
+
 
     <div class="flex flex-col md:flex-row gap-6 mb-6">
 

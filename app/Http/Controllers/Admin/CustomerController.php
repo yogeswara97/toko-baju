@@ -7,15 +7,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class AdminController extends Controller
+class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::whereIn('role', ['admin', 'super.admin'])
+        $users = User::where('role', 'customer')
             ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%"))
             ->paginate(10);
 
-        return view('admin.users.index', ['users' => $users, 'role' => 'admin']);
+        return view('admin.users.index', ['users' => $users, 'role' => 'customer']);
     }
 
     public function create()
@@ -29,7 +29,7 @@ class AdminController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => 'required|in:admin,super.admin', // hanya boleh admin / super.admin
+            'role' => 'required|in:customer', // cuma boleh customer
             'phone_number' => 'nullable|string',
             'is_active' => 'boolean',
             'image' => 'nullable|image|max:2048',
@@ -43,13 +43,12 @@ class AdminController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('admin.admins.index')->with('success', 'Admin created!');
+        return redirect()->route('admin.customers.index')->with('success', 'Customer created!');
     }
 
     public function show(User $user)
     {
-        // Pastikan hanya admin / super.admin
-        if (!in_array($user->role, ['admin', 'super.admin'])) {
+        if ($user->role !== 'customer') {
             abort(403);
         }
 
@@ -75,7 +74,7 @@ class AdminController extends Controller
 
     public function edit(User $user)
     {
-        if (!in_array($user->role, ['admin', 'super.admin'])) {
+        if ($user->role !== 'customer') {
             abort(403);
         }
 
@@ -84,7 +83,7 @@ class AdminController extends Controller
 
     public function update(Request $request, User $user)
     {
-        if (!in_array($user->role, ['admin', 'super.admin'])) {
+        if ($user->role !== 'customer') {
             abort(403);
         }
 
@@ -92,7 +91,7 @@ class AdminController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
-            'role' => 'required|in:admin,super.admin',
+            'role' => 'required|in:customer', // tetep customer
             'phone_number' => 'nullable|string',
             'is_active' => 'boolean',
             'image' => 'nullable|image|max:2048',
@@ -102,7 +101,6 @@ class AdminController extends Controller
             if ($user->image && Storage::disk('public')->exists($user->image)) {
                 Storage::disk('public')->delete($user->image);
             }
-
             $validated['image'] = $request->file('image')->store('users/images', 'public');
         }
 
@@ -114,12 +112,12 @@ class AdminController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('admin.admins.index')->with('success', 'Admin updated!');
+        return redirect()->route('admin.customers.index')->with('success', 'Customer updated!');
     }
 
     public function destroy(User $user)
     {
-        if (!in_array($user->role, ['admin', 'super.admin'])) {
+        if ($user->role !== 'customer') {
             abort(403);
         }
 
@@ -129,6 +127,6 @@ class AdminController extends Controller
 
         $user->delete();
 
-        return back()->with('success', 'Admin deleted!');
+        return back()->with('success', 'Customer deleted!');
     }
 }

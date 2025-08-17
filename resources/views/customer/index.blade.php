@@ -35,15 +35,19 @@
 
 
                 <!-- Gambar -->
-                <img src="{{ asset('assets/static-images/hero_no_bg.png') }}" alt="Man Sitting"
-                    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-[600px] md:h-[90vh] object-cover xl:object-contain z-10" />
+                <img src="{{ asset('assets/static-images/hero_no_bg_2.png') }}" alt="Man Sitting" class="absolute bottom-0 left-1/2 -translate-x-1/2
+            h-auto max-h-[80vh] w-auto
+            sm:max-h-[90vh] sm:h-full
+            object-contain z-10 max-w-full" />
+
+
             </section>
         </div>
     </div>
 
 
     <section class="container-custom mx-auto lg:px-10 py-20 flex flex-col space-y-20">
-    @foreach ($categories as $cat)
+        @foreach ($categories as $cat)
         <div class="flex flex-col {{ $loop->index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-10">
             <!-- Gambar -->
             <div class="w-full lg:w-1/2">
@@ -54,7 +58,8 @@
             </div>
 
             <!-- Teks -->
-            <div class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $loop->index % 2 === 1 ? 'lg:text-left' : 'lg:text-right' }}">
+            <div
+                class="w-full lg:w-1/2 mt-10 lg:mt-0 text-center {{ $loop->index % 2 === 1 ? 'lg:text-left' : 'lg:text-right' }}">
                 <h2 class="text-3xl sm:text-4xl md:text-8xl font-black tracking-tight leading-tight">
                     {!! nl2br(e($cat->title)) !!}
                 </h2>
@@ -68,8 +73,8 @@
                 </a>
             </div>
         </div>
-    @endforeach
-</section>
+        @endforeach
+    </section>
 
 
 

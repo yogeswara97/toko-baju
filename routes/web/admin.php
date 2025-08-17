@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin,super.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Resource lainnya
@@ -12,6 +12,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
     Route::patch('orders/{order}/cancel', [\App\Http\Controllers\Admin\OrderController::class, 'cancel'])->name('orders.cancel');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+
+    Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class);
+    Route::resource('admin', \App\Http\Controllers\Admin\AdminController::class);
+
     // === 🔐 Admin Profile ===
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');
